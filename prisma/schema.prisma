@@ -64,3 +64,16 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+
+model Category{
+    label String @id
+    subCategories SubCategory[]
+}
+
+
+model SubCategory{
+    label String @id
+    categoryLabel String 
+    category Category @relation(fields: [categoryLabel], references: [label], onDelete: Cascade)
+}

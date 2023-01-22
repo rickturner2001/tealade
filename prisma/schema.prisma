@@ -69,6 +69,7 @@ model VerificationToken {
 model Category{
     label String @id
     subCategories SubCategory[]
+    products Product[]
 }
 
 
@@ -76,4 +77,52 @@ model SubCategory{
     label String @id
     categoryLabel String 
     category Category @relation(fields: [categoryLabel], references: [label], onDelete: Cascade)
+    products Product[]
 }
+
+
+ model Product {
+    pid String @id
+    name String 
+    tags ProductTags[]
+    categoryLabel String?
+    category Category? @relation(fields: [categoryLabel], references: [label])
+    subCategoryLabel String?
+    subCategory SubCategory? @relation(fields: [subCategoryLabel], references: [label])
+    description String
+    variants ProductVariant[]
+    defaultThumbnail String
+    imageSet String[]
+    isStore Boolean @default(false)
+    shipments Shipment[]
+    isImport Boolean @default(false)
+ }
+
+
+model Shipment{
+    id String @id @default(cuid())
+    courier String
+    est String
+    cost Float
+    productId String 
+    product Product @relation(fields: [productId], references: [pid])
+
+    
+
+}
+
+model ProductVariant{
+    vid String @id
+    thumbnail String
+    productId String
+    Product Product  @relation(fields: [productId], references: [pid])
+    price Float
+}
+
+
+
+ model ProductTags{
+    label String @id
+    productId String
+    products Product[]
+ }

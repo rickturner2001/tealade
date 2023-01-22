@@ -1,4 +1,5 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
 import { Language } from "../../types";
 import { api } from "../../utils/api";
 import CategoryScrolldown from "./subComponents/dropdowns";
@@ -15,13 +16,20 @@ const copy = {
   },
 };
 
-export default function Main({ language }: { language: Language }) {
+export default function Main({
+  language,
+  children,
+}: {
+  language: Language;
+  children?: JSX.Element;
+}) {
   const currentCopy = language === "english" ? copy.en : copy.ita;
 
   const { data: categories } = api.products.getAllCategories.useQuery();
+  const [productSpecificPid, setProductSpecificPid] = useState("");
 
   return (
-    <main className="w-full bg-blue-50">
+    <main className="flex h-full w-full flex-col bg-blue-50">
       <div className="flex w-full flex-col">
         <div className="bg-gradient-to-r from-blue-700 to-blue-500 py-12 px-24">
           <h1 className="text-2xl font-semibold text-white">
@@ -53,7 +61,7 @@ export default function Main({ language }: { language: Language }) {
             )}
           </div>
         </div>
-        <ListProductDisplay language={language} />
+        {children ? children : <ListProductDisplay language={language} />}
       </div>
     </main>
   );

@@ -1,5 +1,7 @@
 import { CjProduct, Language } from "../../../types";
 import { api } from "../../../utils/api";
+import { motion } from "framer-motion";
+import { useState } from "react";
 
 const ListProductDisplay = ({ language }: { language: Language }) => {
   const { data, isFetched } = api.cjApi.getListProducts.useQuery({});
@@ -12,11 +14,12 @@ const ListProductDisplay = ({ language }: { language: Language }) => {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-x-12 gap-y-12 py-6 px-12">
+    <div className="lg-grid-cols-3 grid grid-cols-1 gap-x-12 gap-y-12  py-6 px-12 md:grid-cols-2 xl:grid-cols-4">
       {data.data.list.map((prod) => {
         return (
           <ProductCard
             category={prod.categoryName}
+            pid={prod.pid}
             image={prod.productImage}
             language={language}
             name={prod.productNameEn}
@@ -33,16 +36,27 @@ const ProductCard = ({
   category,
   name,
   price,
+  pid,
   language,
 }: {
   image: string;
+  pid: string;
   name: string;
   category: string;
   price: number;
   language: Language;
 }) => {
+  const [isButtonVisible, setIsButtonVisible] = useState(false);
+
   return (
-    <div className="flex max-w-3xl flex-col items-center justify-center space-y-8 rounded-2xl bg-white py-12 px-12 shadow-md">
+    <motion.a
+      href={`/admin/product/${pid}`}
+      whileHover={{ scale: 1.05 }}
+      onHoverStart={() => setIsButtonVisible(true)}
+      onHoverEnd={() => setIsButtonVisible(false)}
+      transition={{ type: "tween", duration: 0.25 }}
+      className="relative flex max-w-lg cursor-pointer flex-col items-center justify-center space-y-8 rounded-2xl bg-white py-12 px-12 shadow-md"
+    >
       <div className="flex items-center justify-center">
         <img src={image} className="h-48 object-contain" />
       </div>
@@ -58,7 +72,13 @@ const ProductCard = ({
           {language === "english" ? "Product Cost" : "Costo del prodotto"}
         </p>
       </div>
-    </div>
+      <motion.button
+        animate={isButtonVisible ? { opacity: 1 } : { opacity: 0 }}
+        className="absolute -bottom-5 left-0 w-full rounded-b-xl bg-emerald-400  py-4 px-5 text-sm font-semibold text-white"
+      >
+        Add to import list
+      </motion.button>
+    </motion.a>
   );
 };
 export default ListProductDisplay;

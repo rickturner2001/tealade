@@ -10,7 +10,14 @@ export const productRouter = createTRPCRouter({
         name: z.string(),
         description: z.string(),
         variants: z
-          .object({ vid: z.string(), price: z.number(), image: z.string() })
+          .object({
+            vid: z.string(),
+            price: z.number(),
+            name: z.string(),
+            image: z.string(),
+            height: z.number(),
+            width: z.number(),
+          })
           .array(),
         defaultThumbnail: z.string(),
         imageSet: z.string().array(),
@@ -33,6 +40,9 @@ export const productRouter = createTRPCRouter({
               data: input.variants.map((variant) => {
                 return {
                   price: variant.price,
+                  variantName: variant.name,
+                  height: variant.height,
+                  width: variant.width,
                   vid: variant.vid,
                   thumbnail: variant.image,
                 };
@@ -54,6 +64,16 @@ export const productRouter = createTRPCRouter({
       });
     }),
 
+  deleteProduct: publicProcedure
+    .input(z.object({ pid: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.product.delete({
+        where: {
+          pid: input.pid,
+        },
+      });
+    }),
+
   getAllProducts: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.product.findMany();
   }),
@@ -63,8 +83,38 @@ export const productRouter = createTRPCRouter({
       where: {
         isImport: true,
       },
+      include: {
+        tags: true,
+        variants: true,
+        shipments: true,
+      },
     });
   }),
+
+  // Tags
+  addNewTag: publicProcedure
+    .input(z.object({ label: z.string(), pid: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.productTag.create({
+        data: {
+          label: input.label,
+          productId: input.pid,
+        },
+      });
+    }),
+
+  deleteTag: publicProcedure
+    .input(z.object({ label: z.string(), pid: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.productTag.delete({
+        where: {
+          label_productId: {
+            label: input.label,
+            productId: input.pid,
+          },
+        },
+      });
+    }),
 
   // Categories
 

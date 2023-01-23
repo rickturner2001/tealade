@@ -1,4 +1,10 @@
+import { Product, ProductTag, ProductVariant, Shipment } from "@prisma/client";
+
 export type NonEmptyArray<T> = [T, ...T[]];
+export type NonNullableArrayIndex<T> = T extends any[]
+  ? Required<T[number]>
+  : never;
+
 export type Language = "english" | "italian";
 
 export type CJResponseListProducts = {
@@ -134,4 +140,10 @@ export type ShippingItem = {
   logisticPrice: number;
   logisticPriceCn: number;
   logisticName: string;
+};
+
+export type ProductWithTags = Product & {
+  tags: ProductTag[];
+  variants: ProductVariant[];
+  shipments: Shipment[];
 };

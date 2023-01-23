@@ -15,7 +15,7 @@ export default function Navbar({
   const { status, data: sessionData } = useSession();
 
   return (
-    <nav className="sticky top-0 flex justify-between border-b bg-gray-50 p-6 shadow-md">
+    <nav className="sticky top-0 z-40 flex justify-between border-b bg-gray-50 p-6 shadow-md">
       {/* LOGO */}
       <div>
         <p className="text-2xl">Tealade</p>
@@ -30,7 +30,9 @@ export default function Navbar({
           </div>
         ) : (
           <button
-            onClick={() => signIn("google")}
+            onClick={() => {
+              signIn("google").catch((error) => console.error(error));
+            }}
             type="button"
             className="mr-2  rounded-lg bg-gray-800 px-5 py-2 text-sm font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 "
           >

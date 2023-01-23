@@ -8,7 +8,13 @@ import {
   Language,
   NonEmptyArray,
 } from "../../../types";
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { CheckIcon } from "@heroicons/react/24/solid";
 
 const copy = {
@@ -29,13 +35,47 @@ type ShipmentData = {
   price: number;
 };
 
-const ProductSpecifics = () => {
+const ProductSpecificsWrapper = () => {
+  const router = useRouter();
+  const { pid } = router.query;
+
+  const [language, setLanguage] = useState<Language>("english");
+
+  if (!pid) {
+    return (
+      <Dashboard
+        language={language}
+        setLanguage={setLanguage}
+        title={
+          language === "english" ? "Product details" : "Dettagli del prodotto"
+        }
+      >
+        <div className="flex h-full w-full items-center justify-center">
+          loading...
+        </div>
+      </Dashboard>
+    );
+  }
+  return (
+    <ProductSpecifics
+      pid={pid as string}
+      language={language}
+      setLanguage={setLanguage}
+    />
+  );
+};
+
+const ProductSpecifics = ({
+  pid,
+  setLanguage,
+  language,
+}: {
+  pid: string;
+  language: Language;
+  setLanguage: Dispatch<SetStateAction<Language>>;
+}) => {
   const [currentSubMenu, setCurrentSubMenu] = useState<SubMenu>("shipping");
   const utils = api.useContext();
-
-  const router = useRouter();
-  const [language, setLanguage] = useState<Language>("english");
-  const { pid } = router.query;
 
   const [economyShipping, setEconomyShipping] = useState<
     undefined | ShipmentData
@@ -50,17 +90,23 @@ const ProductSpecifics = () => {
     isLoading,
   } = api.products.registerProduct.useMutation({
     onSuccess: () => {
-      utils.products.invalidate();
+      utils.products.invalidate().catch((error) => console.error(error));
     },
   });
 
   const { data: productData } = api.cjApi.requestProductByID.useQuery({
-    pid: pid as string,
+    pid: pid,
   });
 
   if (!productData) {
     return (
-      <Dashboard language={language} setLanguage={setLanguage}>
+      <Dashboard
+        language={language}
+        setLanguage={setLanguage}
+        title={
+          language === "english" ? "Product details" : "Dettagli del prodotto"
+        }
+      >
         <div className="flex h-full w-full items-center justify-center">
           loading...
         </div>
@@ -70,20 +116,29 @@ const ProductSpecifics = () => {
 
   if ((productData && !productData.data) || productData.data === undefined) {
     return (
-      <Dashboard language={language} setLanguage={setLanguage}>
+      <Dashboard
+        language={language}
+        setLanguage={setLanguage}
+        title={
+          language === "english" ? "Product details" : "Dettagli del prodotto"
+        }
+      >
         <div>Unable to find Product Data</div>
       </Dashboard>
     );
   }
 
-  console.log(economyShipping);
-  console.log(regularShipping);
-
   const product = productData.data;
   const currentCopy = language === "english" ? copy.en : copy.it;
 
   return (
-    <Dashboard language={language} setLanguage={setLanguage}>
+    <Dashboard
+      language={language}
+      setLanguage={setLanguage}
+      title={
+        language === "english" ? "Product details" : "Dettagli del prodotto"
+      }
+    >
       <div className="py-12 px-24">
         <div className="w-full rounded-xl bg-white py-8 px-24 shadow-lg">
           {/* Outermost flex */}
@@ -115,6 +170,7 @@ const ProductSpecifics = () => {
                 className="text-sm text-blue-400 underline underline-offset-2"
                 href={`https://cjdropshipping.com/product/-p-${product.pid}.html`}
                 target={"_blank"}
+                rel="noreferrer"
               >
                 {language === "english" ? "View more" : "Scopri altro"}
               </a>
@@ -195,7 +251,7 @@ const ProductSpecifics = () => {
                     ) : (
                       <button
                         onClick={() => {
-                          if (economyShipping && regularShipping) {
+                          if (economyShipping) {
                             registerNewProduct({
                               defaultThumbnail: product.productImageSet[0],
                               description: product.productNameEn,
@@ -207,9 +263,15 @@ const ProductSpecifics = () => {
                                   image: variant.variantImage,
                                   price: variant.variantSellPrice,
                                   vid: variant.vid,
+                                  name:
+                                    variant.variantNameEn ?? product.entryName,
+                                  height: variant.variantHeight,
+                                  width: variant.variantWidth,
                                 };
                               }),
-                              shipments: [regularShipping, economyShipping],
+                              shipments: regularShipping
+                                ? [regularShipping, economyShipping]
+                                : [economyShipping],
                             });
                           }
                         }}
@@ -233,8 +295,6 @@ const ProductSpecifics = () => {
     </Dashboard>
   );
 };
-
-export default ProductSpecifics;
 
 const shipmentCopy = {
   en: {
@@ -277,6 +337,35 @@ const ShipmentTable = ({
     vid: vid,
   });
 
+  useEffect(() => {
+    if (
+      !economyShipping &&
+      !regularShipping &&
+      shipmentData &&
+      shipmentData.data
+    ) {
+      const economy = shipmentData.data[0];
+      if (economy) {
+        setEconomyShippingData({
+          courier: economy.logisticName,
+          est: economy.logisticAging,
+          price: economy.logisticPrice,
+        });
+        setEconomyShipping(0);
+      }
+
+      const regular = shipmentData.data[1];
+      if (regular) {
+        setRegularShippingData({
+          courier: regular.logisticName,
+          est: regular.logisticAging,
+          price: regular.logisticPrice,
+        });
+        setRegularShipping(1);
+      }
+    }
+  }, [shipmentData]);
+
   if (!shipmentData || !shipmentData.data) {
     return <div>Loading...</div>;
   }
@@ -297,16 +386,18 @@ const ShipmentTable = ({
         >
           {currentCopy.selectEconomy}
         </button>
-        <button
-          onClick={() => setShpmentSelection("regular")}
-          className={`rounded-lg border ${
-            shipmentSelection === "regular"
-              ? "bg-blue-500 text-white"
-              : "bg-transparent text-blue-500"
-          } border-blue-500 py-2 px-4 text-sm font-bold  hover:bg-blue-500 hover:text-white`}
-        >
-          {currentCopy.selectRegular}
-        </button>
+        {shipmentData.data.length > 1 && (
+          <button
+            onClick={() => setShpmentSelection("regular")}
+            className={`rounded-lg border ${
+              shipmentSelection === "regular"
+                ? "bg-blue-500 text-white"
+                : "bg-transparent text-blue-500"
+            } border-blue-500 py-2 px-4 text-sm font-bold  hover:bg-blue-500 hover:text-white`}
+          >
+            {currentCopy.selectRegular}
+          </button>
+        )}
       </div>
       <table className="`w-full">
         <thead className="border-b py-2 text-left">
@@ -548,7 +639,7 @@ const ProductSpecificImages = ({
               {imageSet.map((img, idx) => {
                 if (idx !== currentImage) {
                   return (
-                    <div className="rounded-xl">
+                    <div key={idx} className="rounded-xl">
                       <img
                         className={"h-12 w-12 object-contain"}
                         src={img}
@@ -575,3 +666,5 @@ const ProductSpecificImages = ({
     </>
   );
 };
+
+export default ProductSpecificsWrapper;

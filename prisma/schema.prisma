@@ -84,7 +84,7 @@ model SubCategory{
  model Product {
     pid String @id
     name String 
-    tags ProductTags[]
+    tags ProductTag[]
     categoryLabel String?
     category Category? @relation(fields: [categoryLabel], references: [label])
     subCategoryLabel String?
@@ -105,7 +105,7 @@ model Shipment{
     est String
     cost Float
     productId String 
-    product Product @relation(fields: [productId], references: [pid])
+    product Product @relation(fields: [productId], references: [pid], onDelete: Cascade)
 
     
 
@@ -113,16 +113,20 @@ model Shipment{
 
 model ProductVariant{
     vid String @id
+    variantName String
     thumbnail String
     productId String
-    Product Product  @relation(fields: [productId], references: [pid])
+    Product Product  @relation(fields: [productId], references: [pid], onDelete: Cascade)
     price Float
+    height Float
+    width Float
 }
 
 
 
- model ProductTags{
-    label String @id
+ model ProductTag{
+    label String 
     productId String
-    products Product[]
+    products Product  @relation(fields: [productId], references: [pid], onDelete: Cascade)
+  @@id([label, productId])
  }

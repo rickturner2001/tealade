@@ -20,7 +20,7 @@ export const cjApiRouter = createTRPCRouter({
         }
       );
 
-      const cjJsonresponse: CJResponseListProducts = await response.json();
+      const cjJsonresponse = (await response.json()) as CJResponseListProducts;
       return cjJsonresponse;
     }),
 
@@ -37,7 +37,8 @@ export const cjApiRouter = createTRPCRouter({
         }
       );
 
-      const cjJsonresponse: CjResponseProductSpecifics = await response.json();
+      const cjJsonresponse =
+        (await response.json()) as CjResponseProductSpecifics;
       return cjJsonresponse;
     }),
 
@@ -65,7 +66,7 @@ export const cjApiRouter = createTRPCRouter({
         }
       );
 
-      const jsonResponse: CJShippingResponse = await response.json();
+      const jsonResponse = (await response.json()) as CJShippingResponse;
       return jsonResponse;
     }),
 });

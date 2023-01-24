@@ -23,16 +23,11 @@ const StoredProducts = () => {
         <Fragment>
           <ContextMenu />
           <div className="flex flex-col ">
-            {importedProducts &&
-              importedProducts.map((prod) => {
-                return (
-                  <LayoutGroup key={prod.pid}>
-                    <motion.div layout key={prod.pid} className="px-24 py-12">
-                      <StoreProductGrid />
-                    </motion.div>
-                  </LayoutGroup>
-                );
-              })}
+            <LayoutGroup>
+              <motion.div layout className="px-24 py-12">
+                <StoreProductGrid />
+              </motion.div>
+            </LayoutGroup>
           </div>
         </Fragment>
       </Dashboard>

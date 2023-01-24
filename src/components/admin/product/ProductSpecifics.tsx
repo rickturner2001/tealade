@@ -1,0 +1,243 @@
+import { CheckIcon } from "@heroicons/react/24/solid";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { Language } from "../../../types";
+import { api } from "../../../utils/api";
+import LanguageContext from "../../context/LanugageContext";
+import Dashboard from "../Dashboard";
+import ProductSpecificImages from "./ProductSpecificImages";
+import { LoadingProductList } from "./ProductSpecificWrapper";
+import ShipmentTable from "./ShipmentTable";
+import VariantsTable from "./VariantsTable";
+const copy = {
+  en: {
+    shipping: "Shipping",
+    variants: "Variants",
+  },
+  it: {
+    shipping: "Spedizione",
+    variants: "Varianti",
+  },
+};
+type SubMenu = "shipping" | "variants";
+type ShipmentData = {
+  courier: string;
+  est: string;
+  price: number;
+};
+
+const ProductSpecifics = ({
+  pid,
+  setLanguage,
+}: {
+  pid: string;
+  setLanguage: Dispatch<SetStateAction<Language>>;
+}) => {
+  const { language } = useContext(LanguageContext);
+
+  const [currentSubMenu, setCurrentSubMenu] = useState<SubMenu>("shipping");
+  const utils = api.useContext();
+
+  const [economyShipping, setEconomyShipping] = useState<
+    undefined | ShipmentData
+  >(undefined);
+
+  const [regularShipping, setRegularShipping] = useState<
+    undefined | ShipmentData
+  >(undefined);
+  const {
+    mutate: registerNewProduct,
+    isSuccess,
+    isLoading,
+  } = api.products.registerProduct.useMutation({
+    onSuccess: () => {
+      utils.products.invalidate().catch((error) => console.error(error));
+    },
+  });
+
+  const { data: productData } = api.cjApi.requestProductByID.useQuery({
+    pid: pid,
+  });
+
+  if (!productData) {
+    return <LoadingProductList setLanguage={setLanguage} language={language} />;
+  }
+
+  if ((productData && !productData.data) || productData.data === undefined) {
+    return (
+      <Dashboard
+        language={language}
+        setLanguage={setLanguage}
+        title={
+          language === "english" ? "Product details" : "Dettagli del prodotto"
+        }
+      >
+        <div>Unable to find Product Data</div>
+      </Dashboard>
+    );
+  }
+
+  const product = productData.data;
+  const currentCopy = language === "english" ? copy.en : copy.it;
+
+  return (
+    <Dashboard
+      language={language}
+      setLanguage={setLanguage}
+      title={
+        language === "english" ? "Product details" : "Dettagli del prodotto"
+      }
+    >
+      <div className="py-12 px-24">
+        <div className="w-full rounded-xl bg-white py-8 px-24 shadow-lg">
+          {/* Outermost flex */}
+          <div className="flex items-start space-x-24">
+            {/* left side */}
+            <div className="flex flex-col justify-center space-y-8 ">
+              <ProductSpecificImages
+                imageSet={product.productImageSet}
+                alt={product.description}
+              />
+            </div>
+            {/* right side */}
+            <div className="w-full">
+              <h2 className="text-2xl font-semibold capitalize text-gray-800">
+                {product.entryNameEn}
+              </h2>
+              <p className="py-3 text-sm">
+                {language === "english" ? "Supplier:" : "Rivenditore:"}{" "}
+                <span className="text-sm font-semibold text-gray-800">
+                  {product.supplierName ?? language === "english"
+                    ? "Unknown"
+                    : "Sconosciuto"}
+                </span>
+              </p>
+              <p className="py-4 text-sm text-gray-600">
+                {product.productNameEn}
+              </p>
+              <a
+                className="text-sm text-blue-400 underline underline-offset-2"
+                href={`https://cjdropshipping.com/product/-p-${product.pid}.html`}
+                target={"_blank"}
+                rel="noreferrer"
+              >
+                {language === "english" ? "View more" : "Scopri altro"}
+              </a>
+              <div className="mt-24">
+                <p className="text-sm text-gray-700">
+                  {language === "english"
+                    ? "Product cost"
+                    : "Costo del prodotto"}
+                </p>
+                <p className="py-2 text-2xl font-semibold text-gray-800">
+                  ${product.sellPrice}
+                </p>
+                <div className="mt-24 w-full">
+                  <div className="flex w-full space-x-12 bg-gray-100 px-6 py-4 text-lg font-bold">
+                    <p
+                      className={`cursor-pointer ${
+                        currentSubMenu === "shipping"
+                          ? "text-gray-800"
+                          : "text-gray-500"
+                      }`}
+                      onClick={() => setCurrentSubMenu("shipping")}
+                    >
+                      {currentCopy.shipping}
+                    </p>
+                    <p
+                      className={`cursor-pointer ${
+                        currentSubMenu === "variants"
+                          ? "text-gray-800"
+                          : "text-gray-500"
+                      }`}
+                      onClick={() => setCurrentSubMenu("variants")}
+                    >
+                      {currentCopy.variants}
+                    </p>
+                  </div>
+                  {currentSubMenu === "shipping" ? (
+                    <ShipmentTable
+                      vid={product.variants[0].vid}
+                      setRegularShippingData={setRegularShipping}
+                      setEconomyShippingData={setEconomyShipping}
+                    />
+                  ) : (
+                    <VariantsTable variants={product.variants} />
+                  )}
+                  <div className="w-1/2items-center mt-12 flex justify-start space-x-4 px-12">
+                    {isLoading ? (
+                      <button className="w-1/2 rounded-md bg-emerald-400 py-4 px-5 text-sm font-bold text-white ">
+                        <svg
+                          aria-hidden="true"
+                          role="status"
+                          className="mr-2 inline h-4 w-4 animate-spin text-gray-200 "
+                          viewBox="0 0 100 101"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                            fill="currentColor"
+                          />
+                          <path
+                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                            fill="#1C64F2"
+                          />
+                        </svg>
+                        {language === "english"
+                          ? "Loading..."
+                          : "Caricamento..."}
+                      </button>
+                    ) : isSuccess ? (
+                      <button className="w-1/2 rounded-md bg-emerald-400 py-4 px-5 text-sm font-bold text-white ">
+                        <CheckIcon className=" mr-2 inline h-4 w-4 text-white" />
+                        {language === "english" ? "Successful" : "Successo"}
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          if (economyShipping) {
+                            registerNewProduct({
+                              defaultThumbnail: product.productImageSet[0],
+                              description: product.productNameEn,
+                              name: product.entryNameEn,
+                              imageSet: product.productImageSet,
+                              pid: product.pid,
+                              variants: product.variants.map((variant) => {
+                                return {
+                                  image: variant.variantImage,
+                                  price: variant.variantSellPrice,
+                                  vid: variant.vid,
+                                  name:
+                                    variant.variantNameEn ?? product.entryName,
+                                  height: variant.variantHeight,
+                                  width: variant.variantWidth,
+                                };
+                              }),
+                              shipments: regularShipping
+                                ? [regularShipping, economyShipping]
+                                : [economyShipping],
+                            });
+                          }
+                        }}
+                        className="w-1/2 rounded-md bg-emerald-400 py-4 px-5 text-sm font-bold text-white"
+                      >
+                        {language === "english"
+                          ? "Add to import list"
+                          : "Aggiungi alla lista degli importi"}
+                      </button>
+                    )}
+                    <button className="w-1/2 rounded-md  bg-white py-3 px-5 text-sm font-bold text-gray-800 ring ring-gray-200">
+                      {language === "english" ? "Coming soon" : "In arrivo"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Dashboard>
+  );
+};
+
+export default ProductSpecifics;

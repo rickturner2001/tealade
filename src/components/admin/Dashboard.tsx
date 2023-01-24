@@ -20,7 +20,7 @@ export default function Dashboard({
   return (
     <section>
       <Navbar language={language} setLanguage={setLanguage} />
-      <div className="flex h-full w-full">
+      <div className="flex h-full w-full bg-gray-100">
         <SideMenu language={language} />
         <Main
           title={title}

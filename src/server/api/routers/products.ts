@@ -124,12 +124,12 @@ export const productRouter = createTRPCRouter({
   }),
   // Categories Mutations
   blukCreateNewCategory: publicProcedure
-    .input(z.object({ label: z.string() }))
+    .input(z.object({ label: z.string().array() }))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.category.createMany({
-        data: {
-          label: input.label,
-        },
+        data: input.label.map((label) => {
+          return { label: label };
+        }),
       });
     }),
 
@@ -140,6 +140,55 @@ export const productRouter = createTRPCRouter({
         data: {
           categoryLabel: input.category,
           label: input.label,
+        },
+      });
+    }),
+
+  finalizeProductListing: publicProcedure
+    .input(
+      z.object({
+        pid: z.string(),
+        name: z.string(),
+        description: z.string(),
+        variants: z
+          .object({
+            vid: z.string(),
+            price: z.number(),
+            name: z.string(),
+            image: z.string(),
+            height: z.number(),
+            width: z.number(),
+          })
+          .array(),
+        imageSet: z.string().array(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.product.update({
+        where: {
+          pid: input.pid,
+        },
+        data: {
+          description: input.description,
+          imageSet: input.imageSet,
+          isImport: false,
+          isStore: true,
+          name: input.name,
+          variants: {
+            set: [],
+            createMany: {
+              data: input.variants.map((variant) => {
+                return {
+                  height: variant.height,
+                  price: variant.price,
+                  thumbnail: variant.image,
+                  variantName: variant.name,
+                  vid: variant.vid,
+                  width: variant.width,
+                };
+              }),
+            },
+          },
         },
       });
     }),

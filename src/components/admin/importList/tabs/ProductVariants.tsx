@@ -1,14 +1,17 @@
-import { ProductVariant } from "@prisma/client";
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { Product, ProductVariant } from "@prisma/client";
 import {
   ChangeEvent,
   Dispatch,
   SetStateAction,
+  useCallback,
   useContext,
   useEffect,
   useState,
 } from "react";
 import { NonNullableArrayIndex, ProductWithTags } from "../../../../types";
 import LanguageContext from "../../../context/LanugageContext";
+import SalesPriceMenu from "./SalesPriceMenu";
 
 const copy = {
   en: {
@@ -37,18 +40,42 @@ const ProductVariants = ({
   variantPrices,
   setVariantPrices,
 }: {
-  product: ProductWithTags;
+  product: Readonly<ProductWithTags>;
   variantPrices: number[];
   setVariantPrices: Dispatch<SetStateAction<number[]>>;
 }) => {
   const { language } = useContext(LanguageContext);
 
-  const currentCopy = language === "english" ? copy.en : copy.it;
-  const variants = product.variants;
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [isSalesPriceMenu, setIsSalesPriceMenu] = useState(false);
 
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (!isButtonClicked) {
+        const innerComponent = document.getElementById(
+          "salesPriceMenu_" + product.pid
+        );
+        if (
+          innerComponent &&
+          !innerComponent.contains(e.target as Node) &&
+          (e.target as HTMLElement).id !== "salesPriceMenu_" + product.pid
+        ) {
+          setIsSalesPriceMenu(false);
+        }
+      } else {
+        setIsButtonClicked(false);
+      }
+    };
+    document.addEventListener("click", handleClick);
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [setIsSalesPriceMenu, isSalesPriceMenu, isButtonClicked]);
+
+  const currentCopy = language === "english" ? copy.en : copy.it;
   return (
     <div className="w-full p-12">
-      <table className="text-sm">
+      <table className="text-xs">
         <thead>
           <tr>
             <th className="p-4 font-medium"></th>
@@ -57,12 +84,34 @@ const ProductVariants = ({
             <th className="p-4 font-medium">{currentCopy.width}</th>
             <th className="p-4 font-medium">{currentCopy.cost}</th>
             <th className="p-4 font-medium">{currentCopy.shipping}</th>
-            <th className="p-4 font-medium">{currentCopy.salesPrice}</th>
+            <th className="p-4 font-medium">
+              <span className="relative  inline-flex items-center">
+                {currentCopy.salesPrice}{" "}
+                <button
+                  onClick={() => {
+                    {
+                      setIsButtonClicked(true);
+                      setIsSalesPriceMenu(true);
+                    }
+                  }}
+                  className="ml-2"
+                >
+                  <PencilSquareIcon className="h-4 w-4" />
+                </button>
+                <SalesPriceMenu
+                  setVariantPrices={setVariantPrices}
+                  language={language}
+                  variants={product.variants}
+                  isVisible={isSalesPriceMenu}
+                  id={"salesPriceMenu_" + product.pid}
+                />
+              </span>
+            </th>
             <th className="p-4 font-medium">{currentCopy.profit}</th>
           </tr>
         </thead>
         <tbody>
-          {variants.map((variant, idx) => {
+          {product.variants.map((variant, idx) => {
             return (
               <VariantRow
                 key={idx}
@@ -88,32 +137,42 @@ const VariantRow = ({
   product,
 }: {
   index: NonNullableArrayIndex<number[]>;
-  variant: ProductVariant;
   variantPrices: number[];
+  variant: Readonly<ProductVariant>;
   setVariantPrices: Dispatch<SetStateAction<number[]>>;
-  product: ProductWithTags;
+  product: Readonly<ProductWithTags>;
 }) => {
   const regularShipment = product.shipments[0];
   const economyShipment = product.shipments[1];
 
-  const salesPrice =
-    (variantPrices[index] as NonNullable<(typeof variantPrices)[number]>) +
-    (economyShipment?.cost ?? 0);
+  const [inputValue, setInputValue] = useState(
+    ((variantPrices[index] as number) + (economyShipment?.cost ?? 0)).toString()
+  );
 
-  const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const profit = (variantPrices[index] ?? 0) - variant.price;
 
+  useEffect(() => {
+    setInputValue(
+      (
+        (variantPrices[index] as number) + (economyShipment?.cost ?? 0)
+      ).toString()
+    );
+  }, [variantPrices]);
+
+  const handlePriceChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setInputValue(e.target.value);
+    },
+    [setInputValue]
+  );
+
+  const handleBlur = useCallback(() => {
     setVariantPrices((prev) => {
       const currentPrices = [...prev];
-      currentPrices[index] = +value;
+      currentPrices[index] = +inputValue;
       return currentPrices;
     });
-  };
-  const profit =
-    (variantPrices[index] as NonNullable<(typeof variantPrices)[number]>) -
-    variant.price -
-    (economyShipment?.cost ?? 0);
-
+  }, [index, inputValue, setVariantPrices]);
   return (
     <tr className="border-t border-b p-4 text-center text-xs">
       <td className="p-2">
@@ -143,8 +202,9 @@ const VariantRow = ({
           <input
             className="ml-4 w-24 bg-gray-100 p-2 focus:outline-none"
             type={"number"}
-            defaultValue={salesPrice.toFixed(2)}
+            value={inputValue}
             onChange={handlePriceChange}
+            onBlur={handleBlur}
           />
         </span>
       </td>

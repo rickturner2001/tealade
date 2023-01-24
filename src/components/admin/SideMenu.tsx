@@ -27,10 +27,10 @@ export default function SideMenu({ language }: { language: Language }) {
   const currentCopy = language === "english" ? copy.en : copy.ita;
 
   return (
-    <aside className=" flex min-h-[91vh]  w-72 flex-col space-y-6 border-r bg-gray-50 py-6 px-4 shadow-lg ">
+    <aside className=" sticky top-24 left-0  flex h-[90.5vh] w-72 flex-col space-y-6 border-r bg-gray-50 py-6 px-4 shadow-lg ">
       <Link
         href="/"
-        className="flex w-full  cursor-pointer items-center justify-center space-x-2 border border-dashed border-teal-800 px-5 py-2 text-teal-800 transition-all duration-200 hover:bg-gray-50"
+        className=" flex w-full  cursor-pointer items-center justify-center space-x-2 border border-dashed border-teal-800 px-5 py-2 text-teal-800 transition-all duration-200 hover:bg-gray-50"
       >
         <ShoppingBagIcon className="h-5 w-5" />
         <span className="text-center text-sm font-medium">

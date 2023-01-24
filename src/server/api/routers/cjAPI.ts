@@ -1,72 +1,89 @@
 import { z } from "zod";
-import { env } from "../../../env/server.mjs";
 import {
-  CJResponseListProducts,
-  CjResponseProductSpecifics,
-  CJShippingResponse,
-} from "../../../types.js";
+  requestProductById,
+  requestProductList,
+  requestShipmentByVid,
+} from "../../../functions";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const cjApiRouter = createTRPCRouter({
   getListProducts: publicProcedure
-    .input(z.object({}))
+    .input(
+      z.object({
+        pageNum: z.number(),
+        perPage: z.number(),
+        categoryKeyword: z.string().nullable(),
+      })
+    )
     .query(async ({ input }) => {
-      const response = await fetch(
-        `https://developers.cjdropshipping.com/api2.0/v1/product/list`,
-        {
-          headers: {
-            "CJ-Access-Token": env.CJ_TOKEN,
-          },
-        }
+      return await requestProductList(
+        input.perPage,
+        input.pageNum,
+        input.categoryKeyword
       );
-
-      const cjJsonresponse = (await response.json()) as CJResponseListProducts;
-      return cjJsonresponse;
     }),
 
   // Send a request to the CjAPI
   requestProductByID: publicProcedure
     .input(z.object({ pid: z.string() }))
     .query(async ({ input }) => {
-      const response = await fetch(
-        `https://developers.cjdropshipping.com/api2.0/v1/product/query?pid=${input.pid}`,
-        {
-          headers: {
-            "CJ-Access-Token": env.CJ_TOKEN,
-          },
-        }
-      );
-
-      const cjJsonresponse =
-        (await response.json()) as CjResponseProductSpecifics;
-      return cjJsonresponse;
+      return await requestProductById(input.pid);
     }),
 
   requestShipmentByVid: publicProcedure
     .input(z.object({ vid: z.string() }))
     .query(async ({ input }) => {
-      const response = await fetch(
-        "https://developers.cjdropshipping.com/api2.0/v1/logistic/freightCalculate",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "CJ-Access-Token": env.CJ_TOKEN,
-          },
-          body: JSON.stringify({
-            startCountryCode: "CN",
-            endCountryCode: "IT",
-            products: [
-              {
-                quantity: 1,
-                vid: input.vid,
-              },
-            ],
-          }),
-        }
-      );
+      return await requestShipmentByVid(input.vid);
+    }),
 
-      const jsonResponse = (await response.json()) as CJShippingResponse;
-      return jsonResponse;
+  blindProductRegistration: publicProcedure
+    .input(z.object({ pid: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const productData = await requestProductById(input.pid);
+
+      if (productData.data) {
+        const shipmentData = await requestShipmentByVid(
+          productData.data.variants[0].vid
+        );
+        if (shipmentData.data) {
+          const product = productData.data;
+          const shipments = shipmentData.data;
+          return await ctx.prisma.product.create({
+            data: {
+              pid: product.pid,
+              defaultThumbnail: product.productImageSet[0],
+              isImport: true,
+              description: product.description,
+              name: product.entryNameEn,
+              imageSet: product.productImageSet,
+              variants: {
+                createMany: {
+                  data: product.variants.map((variant) => {
+                    return {
+                      price: variant.variantSellPrice,
+                      variantName: variant.variantNameEn,
+                      height: variant.variantHeight,
+                      width: variant.variantWidth,
+                      vid: variant.vid,
+                      thumbnail: variant.variantImage,
+                    };
+                  }),
+                },
+              },
+              shipments: {
+                createMany: {
+                  data: shipments.map((shipment) => {
+                    return {
+                      cost: shipment.logisticPrice,
+                      courier: shipment.logisticName,
+                      est: shipment.logisticAging,
+                    };
+                  }),
+                },
+              },
+            },
+          });
+        }
+      }
     }),
 });

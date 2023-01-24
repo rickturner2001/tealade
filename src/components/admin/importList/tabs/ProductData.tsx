@@ -1,6 +1,13 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { Category } from "@prisma/client";
-import { Dispatch, SetStateAction, useContext, useRef, useState } from "react";
+import {
+  Dispatch,
+  RefObject,
+  SetStateAction,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 import { ProductWithTags, NonEmptyArray } from "../../../../types";
 import { api } from "../../../../utils/api";
 import LanguageContext from "../../../context/LanugageContext";
@@ -9,11 +16,13 @@ import CategoryScrolldown from "../../subComponents/dropdowns";
 
 const ProductData = ({
   product,
+
   selectedCategory,
   setSelectedCategory,
+  productNameRef,
 }: {
   product: ProductWithTags;
-
+  productNameRef: RefObject<HTMLInputElement>;
   selectedCategory: Category | null;
   setSelectedCategory: Dispatch<SetStateAction<Category | null>>;
 }) => {
@@ -76,6 +85,7 @@ const ProductData = ({
         </label>
         <input
           type="text"
+          ref={productNameRef}
           id="productName"
           className="w-full rounded-md bg-gray-100 p-2 text-sm text-gray-600 focus:outline-none"
           defaultValue={product.name}

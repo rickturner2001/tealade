@@ -1,14 +1,14 @@
 import { LayoutGroup, motion } from "framer-motion";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Language } from "../../../types";
 import { api } from "../../../utils/api";
 import LanguageContext from "../../context/LanugageContext";
 import Dashboard from "../Dashboard";
 import ProductTab from "./ProductTab";
+import categoriesData from "../../../../categories.json";
 
 const ImportList = () => {
   const [language, setLanguage] = useState<Language>("english");
-
   const { data: importedProducts } =
     api.products.getAllImportedProducts.useQuery();
 

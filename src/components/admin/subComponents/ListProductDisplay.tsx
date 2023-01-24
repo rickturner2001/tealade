@@ -1,12 +1,32 @@
-import { CjProduct, Language } from "../../../types";
-import { api } from "../../../utils/api";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Product } from "@prisma/client";
-import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import {
+  CheckIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
+import Link from "next/link";
+import { api } from "../../../utils/api";
+import Spinner from "../../../components/Spinner";
+import { Language } from "../../../types";
+import { useRouter } from "next/router";
 
-const ListProductDisplay = ({ language }: { language: Language }) => {
-  const { data, isFetched } = api.cjApi.getListProducts.useQuery({});
+const ListProductDisplay = ({
+  language,
+  pageNumber,
+}: {
+  language: Language;
+  pageNumber: number;
+}) => {
+  const [perPage, setPerPage] = useState(20);
+
+  const { data, isFetched } = api.cjApi.getListProducts.useQuery({
+    pageNum: (pageNumber ? (+pageNumber as number | undefined) : 1) ?? 1,
+    perPage: perPage,
+    categoryKeyword: null,
+  });
   const { data: registeredProducts } = api.products.getAllProducts.useQuery();
 
   if (!data || !registeredProducts) {
@@ -45,7 +65,7 @@ const ListProductDisplay = ({ language }: { language: Language }) => {
                   <path
                     fill-rule="evenodd"
                     d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   ></path>
                 </svg>
                 <div>
@@ -65,22 +85,45 @@ const ListProductDisplay = ({ language }: { language: Language }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-x-12 gap-y-12 py-6  px-12 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {data.data.list.map((prod) => {
-        return (
-          <ProductCard
-            key={prod.pid}
-            category={prod.categoryName}
-            pid={prod.pid}
-            image={prod.productImage}
-            language={language}
-            name={prod.productNameEn}
-            registeredProducts={registeredProducts}
-            price={prod.sellPrice}
-          />
-        );
-      })}
-    </div>
+    <>
+      <div className="grid grid-cols-1 gap-x-12 gap-y-12 py-6  px-12 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {data.data.list.map((prod) => {
+          return (
+            <ProductCard
+              key={prod.pid}
+              category={prod.categoryName}
+              pid={prod.pid}
+              image={prod.productImage}
+              language={language}
+              name={prod.productNameEn}
+              registeredProducts={registeredProducts}
+              price={prod.sellPrice}
+            />
+          );
+        })}
+      </div>
+      <div className="my-12  flex w-full items-center justify-center space-x-4">
+        {pageNumber && +pageNumber > 1 && (
+          <Link
+            href={`/admin/find-products/${+pageNumber - 1}`}
+            className="rounded-md border bg-gray-100  p-2 text-sm font-bold text-gray-800"
+          >
+            <ChevronLeftIcon className="h-4 w-4" />
+          </Link>
+        )}
+        <button className="rounded-md border bg-gray-100 px-8 py-2 text-sm font-bold text-gray-800">
+          {pageNumber}
+        </button>
+        {pageNumber && (
+          <Link
+            href={`/admin/find-products/${+pageNumber + 1}`}
+            className="rounded-md border bg-gray-100 p-2 text-sm font-bold text-gray-800"
+          >
+            <ChevronRightIcon className="h-4 w-4" />
+          </Link>
+        )}
+      </div>
+    </>
   );
 };
 
@@ -104,11 +147,18 @@ const ProductCard = ({
   const [isButtonVisible, setIsButtonVisible] = useState(false);
   const isListed = registeredProducts.map((prod) => prod.pid).includes(pid);
   const utils = api.useContext();
-  const { mutate: removeProduct } = api.products.deleteProduct.useMutation({
-    onSuccess: () => {
-      utils.products.invalidate().catch((error) => console.error(error));
-    },
-  });
+  const { mutate: removeProduct, isLoading: loadingRemoval } =
+    api.products.deleteProduct.useMutation({
+      onSuccess: () => {
+        utils.products.invalidate().catch((error) => console.error(error));
+      },
+    });
+  const { mutate: blindProductListing, isLoading: loadingRegistration } =
+    api.cjApi.blindProductRegistration.useMutation({
+      onSuccess: () => {
+        utils.products.invalidate().catch((error) => console.error(error));
+      },
+    });
 
   return (
     <motion.div
@@ -116,7 +166,7 @@ const ProductCard = ({
       onHoverEnd={() => setIsButtonVisible(false)}
       className={`relative z-10 flex  max-w-lg  flex-col items-center justify-center space-y-8 rounded-2xl  bg-white py-12 px-12 shadow-md`}
     >
-      {isListed && (
+      {isListed && !loadingRegistration && !loadingRemoval && (
         <span
           className={`absolute top-0 left-0 rounded-tl-lg rounded-br-lg ${
             isButtonVisible ? "bg-red-500" : "bg-emerald-400"
@@ -129,43 +179,63 @@ const ProductCard = ({
           )}
         </span>
       )}
-      <div className="flex items-center justify-center">
-        <img src={image} className="h-48 object-contain" />
-      </div>
-      <div className="flex w-full  flex-col items-center justify-center space-y-1 text-center">
-        <p className="w-full overflow-hidden truncate text-ellipsis text-sm font-semibold text-gray-800">
-          {name}
-        </p>
-        <p className="text-xs text-gray-700">{category}</p>
-      </div>
-      <div className="flex flex-col items-center justify-center">
-        <p className="font-semibold ">${price}</p>
-        <p className="font-semibole text-sm">
-          {language === "english" ? "Product Cost" : "Costo del prodotto"}
-        </p>
-      </div>
+      <Link href={`/admin/product/${pid}`} className="h-full w-full">
+        <div className="flex items-center justify-center">
+          <img src={image} className="h-48 object-contain" />
+        </div>
+        <div className="mt-4 flex  w-full flex-col items-center justify-center space-y-1 text-center">
+          <p className="mt-4 w-full overflow-hidden truncate text-ellipsis text-sm font-semibold text-gray-800">
+            {name}
+          </p>
+          <p className="text-xs text-gray-700">{category}</p>
+        </div>
+        <div className="mt-12 flex flex-col items-center justify-center">
+          <p className="font-semibold ">${price}</p>
+          <p className="font-semibole text-sm">
+            {language === "english" ? "Product Cost" : "Costo del prodotto"}
+          </p>
+        </div>
+      </Link>
       {isListed ? (
+        loadingRemoval ? (
+          <motion.button
+            animate={isButtonVisible ? { opacity: 1 } : { opacity: 0 }}
+            className={`absolute -bottom-5 left-0 z-20 w-full rounded-b-xl border-4 border-blue-500 bg-blue-500 py-4 px-5 text-sm font-semibold text-white`}
+          >
+            <Spinner className=" mr-2 inline h-4 w-4 animate-spin text-white" />
+            Loading...
+          </motion.button>
+        ) : (
+          <motion.button
+            onClick={() => {
+              removeProduct({ pid: pid });
+            }}
+            animate={isButtonVisible ? { opacity: 1 } : { opacity: 0 }}
+            className={`absolute -bottom-5 left-0 z-20 w-full rounded-b-xl border-4 py-4 px-5 text-sm font-semibold text-white ${"border-red-500 bg-red-500"}`}
+          >
+            {language === "english"
+              ? "Remove from import list"
+              : "Rimuovi dalla lista importi"}
+          </motion.button>
+        )
+      ) : loadingRegistration ? (
         <motion.button
-          onClick={() => {
-            removeProduct({ pid: pid });
-          }}
           animate={isButtonVisible ? { opacity: 1 } : { opacity: 0 }}
-          className={`absolute -bottom-5 left-0 z-20 w-full rounded-b-xl border-4 py-4 px-5 text-sm font-semibold text-white ${"border-red-500 bg-red-500"}`}
+          className={`absolute -bottom-5 left-0 z-20 w-full rounded-b-xl border-4 border-blue-500 bg-blue-500 py-4 px-5 text-sm font-semibold text-white`}
         >
-          {language === "english"
-            ? "Remove from import list"
-            : "Rimuovi dalla lista importi"}
+          <Spinner className=" mr-2 inline h-4 w-4 animate-spin text-white" />
+          Loading...
         </motion.button>
       ) : (
-        <motion.a
-          href={`/admin/product/${pid}`}
+        <motion.button
+          onClick={() => blindProductListing({ pid: pid })}
           animate={isButtonVisible ? { opacity: 1 } : { opacity: 0 }}
           className={`absolute -bottom-5 left-0 z-20 w-full rounded-b-xl border-4 py-4 px-5 text-center text-sm font-semibold text-white ${"border-emerald-400 bg-emerald-400"}`}
         >
           {language === "english"
             ? "Add to import list"
             : "Aggiungi alla lista importi"}
-        </motion.a>
+        </motion.button>
       )}
     </motion.div>
   );

@@ -12,7 +12,8 @@ const ProductDescription = ({
   product: ProductWithTags;
 }) => {
   useEffect(() => {
-    if (!productDescription) setProductDescription(product.description);
+    if (!productDescription)
+      setProductDescription(product.description.replace(/<img[^>]*>/g, ""));
   }, []);
 
   return (

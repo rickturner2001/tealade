@@ -23,7 +23,6 @@ export default function Main({
           <h1 className="text-2xl font-semibold text-white">{title}</h1>
         </div>
         {children}
-        {isListedProducts && <ListProductDisplay language={language} />}
       </div>
     </main>
   );

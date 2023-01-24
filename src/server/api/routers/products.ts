@@ -83,6 +83,9 @@ export const productRouter = createTRPCRouter({
       where: {
         isStore: true,
       },
+      include: {
+        variants: true,
+      },
     });
   }),
 

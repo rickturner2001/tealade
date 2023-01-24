@@ -1,17 +1,10 @@
 import { motion } from "framer-motion";
 import { useContext, useState } from "react";
-import { Product } from "@prisma/client";
-import {
-  CheckIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/solid";
+import { Product, ProductVariant } from "@prisma/client";
 import Link from "next/link";
 import { api } from "../../../utils/api";
 import Spinner from "../../../components/Spinner";
-import { Language } from "../../../types";
-import { useRouter } from "next/router";
+
 import LanguageContext from "../../context/LanugageContext";
 
 const StoreProductGrid = () => {
@@ -86,10 +79,30 @@ const StoreProductGrid = () => {
   );
 };
 
-const ProductCard = ({ product }: { product: Product }) => {
+const ProductCard = ({
+  product,
+}: {
+  product: Product & {
+    variants: ProductVariant[];
+  };
+}) => {
   const utils = api.useContext();
 
   const { language } = useContext(LanguageContext);
+
+  const evaluatePrice = (variants: ProductVariant[]) => {
+    if (variants.length === 1) {
+      return [variants[0]?.price as number];
+    }
+    const min = Math.min(...variants.map((variant) => variant.price));
+    const max = Math.max(...variants.map((variant) => variant.price));
+
+    if (min === max) {
+      return [min];
+    }
+
+    return [min, max];
+  };
 
   const { mutate: removeProduct, isLoading: loadingRemoval } =
     api.products.deleteProduct.useMutation({
@@ -109,7 +122,9 @@ const ProductCard = ({ product }: { product: Product }) => {
           <p className="mt-4 w-full overflow-hidden truncate text-ellipsis text-sm font-semibold text-gray-800">
             {product.name}
           </p>
-          <p className="text-xs text-gray-700">hey</p>
+          <p className="text-md mt-4 font-medium text-gray-700">
+            ${evaluatePrice(product.variants).join("-")}
+          </p>
         </div>
         <div className="mt-12 flex flex-col items-center justify-center">
           <Link

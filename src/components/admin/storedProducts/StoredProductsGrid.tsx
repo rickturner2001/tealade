@@ -14,7 +14,7 @@ import { Language } from "../../../types";
 import { useRouter } from "next/router";
 import LanguageContext from "../../context/LanugageContext";
 
-const StoreProductGrid = ({}: {}) => {
+const StoreProductGrid = () => {
   const [perPage, setPerPage] = useState(20);
 
   const { data: registeredProducts } =

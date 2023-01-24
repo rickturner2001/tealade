@@ -78,6 +78,14 @@ export const productRouter = createTRPCRouter({
     return await ctx.prisma.product.findMany();
   }),
 
+  getAllStoreProducts: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.product.findMany({
+      where: {
+        isStore: true,
+      },
+    });
+  }),
+
   getAllImportedProducts: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.product.findMany({
       where: {
@@ -175,7 +183,7 @@ export const productRouter = createTRPCRouter({
           isStore: true,
           name: input.name,
           variants: {
-            set: [],
+            deleteMany: {},
             createMany: {
               data: input.variants.map((variant) => {
                 return {

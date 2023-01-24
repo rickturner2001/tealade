@@ -4,9 +4,9 @@ import { Language } from "../../../types";
 import { api } from "../../../utils/api";
 import LanguageContext from "../../context/LanugageContext";
 import Dashboard from "../Dashboard";
-import ProductTab from "./ProductTab";
+import StoreProductGrid from "./StoredProductsGrid";
 
-const ImportList = () => {
+const StoredProducts = () => {
   const [language, setLanguage] = useState<Language>("english");
   const { data: importedProducts } =
     api.products.getAllImportedProducts.useQuery();
@@ -14,7 +14,9 @@ const ImportList = () => {
   return (
     <LanguageContext.Provider value={{ language }}>
       <Dashboard
-        title={language === "english" ? "Import list" : "Lista importi"}
+        title={
+          language === "english" ? "Store Products" : "Prodotti del negozio"
+        }
         language={language}
         setLanguage={setLanguage}
       >
@@ -26,9 +28,7 @@ const ImportList = () => {
                 return (
                   <LayoutGroup key={prod.pid}>
                     <motion.div layout key={prod.pid} className="px-24 py-12">
-                      <div className="w-full rounded-xl bg-white shadow-lg">
-                        <ProductTab product={prod} />
-                      </div>
+                      <StoreProductGrid />
                     </motion.div>
                   </LayoutGroup>
                 );
@@ -46,4 +46,4 @@ const ContextMenu = () => {
   );
 };
 
-export default ImportList;
+export default StoredProducts;

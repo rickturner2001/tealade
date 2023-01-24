@@ -5,6 +5,15 @@ import LanguageContext from "../../../context/LanugageContext";
 import Spinner from "../../../Spinner";
 import { Tabs } from "../ProductTab";
 
+type VariantListing = {
+  height: number;
+  image: string;
+  name: string;
+  price: number;
+  vid: string;
+  width: number;
+};
+
 const TabMenu = ({
   productNameRef,
   productCategory,
@@ -19,7 +28,7 @@ const TabMenu = ({
   productNameRef: RefObject<HTMLInputElement>;
   productDescription: string;
   productImages: string[];
-  productVariants?: ProductVariant[];
+  productVariants: VariantListing[];
   pid: string;
   currentTab: Tabs;
   setCurrentTab: Dispatch<SetStateAction<Tabs>>;
@@ -139,24 +148,24 @@ const TabMenu = ({
           ) : (
             <button
               onClick={() => {
-                // if (productNameRef.current?.value) {
-                //   finalizeListing({
-                //     description: productDescription,
-                //     imageSet: productImages,
-                //     name: productNameRef.current.value,
-                //     pid: pid,
-                //     variants: productVariants.map((variant) => {
-                //       return {
-                //         height: variant.height,
-                //         image: variant.thumbnail,
-                //         name: variant.variantName,
-                //         price: variant.price,
-                //         vid: variant.vid,
-                //         width: variant.width,
-                //       };
-                //     }),
-                //   });
-                // }
+                if (productNameRef.current?.value) {
+                  finalizeListing({
+                    description: productDescription,
+                    imageSet: productImages,
+                    name: productNameRef.current.value,
+                    pid: pid,
+                    variants: productVariants.map((variant) => {
+                      return {
+                        height: variant.height,
+                        image: variant.image,
+                        name: variant.name,
+                        price: variant.price,
+                        vid: variant.vid,
+                        width: variant.width,
+                      };
+                    }),
+                  });
+                }
               }}
               className="my-auto rounded-md bg-emerald-500 py-3 px-8 text-sm font-bold text-white "
             >

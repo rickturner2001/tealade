@@ -28,10 +28,19 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
   );
 
   const [currentTab, setCurrentTab] = useState<Tabs>("product");
-  type ExistingItem = NonNullable<number[][number]>;
   return (
     <>
       <TabMenu
+        productVariants={product.variants.map((variant) => {
+          return {
+            height: variant.height,
+            image: variant.thumbnail,
+            name: variant.variantName,
+            price: variant.price,
+            vid: variant.vid,
+            width: variant.width,
+          };
+        })}
         setCurrentTab={setCurrentTab}
         currentTab={currentTab}
         productNameRef={productNameref}

@@ -79,7 +79,7 @@ const StoreProductGrid = () => {
     <>
       <div className="grid grid-cols-1 gap-x-12 gap-y-12 py-6  px-12 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {registeredProducts.map((prod) => {
-          return <ProductCard product={prod} />;
+          return <ProductCard key={prod.pid} product={prod} />;
         })}
       </div>
     </>

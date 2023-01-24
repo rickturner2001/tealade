@@ -153,9 +153,9 @@ const VariantRow = ({
 
   useEffect(() => {
     setInputValue(
-      (
-        (variantPrices[index] as number) + (economyShipment?.cost ?? 0)
-      ).toString()
+      ((variantPrices[index] as number) + (economyShipment?.cost ?? 0))
+        .toFixed(2)
+        .toString()
     );
   }, [variantPrices]);
 

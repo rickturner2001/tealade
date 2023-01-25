@@ -16,13 +16,14 @@ import CategoryScrolldown from "../../subComponents/dropdowns";
 
 const ProductData = ({
   product,
-
+  productNameValue,
+  setProductNameValue,
   selectedCategory,
   setSelectedCategory,
-  productNameRef,
 }: {
   product: ProductWithTags;
-  productNameRef: RefObject<HTMLInputElement>;
+  productNameValue: string;
+  setProductNameValue: Dispatch<SetStateAction<string>>;
   selectedCategory: Category | null;
   setSelectedCategory: Dispatch<SetStateAction<Category | null>>;
 }) => {
@@ -85,10 +86,10 @@ const ProductData = ({
         </label>
         <input
           type="text"
-          ref={productNameRef}
+          onChange={(e) => setProductNameValue(e.target.value)}
           id="productName"
           className="w-full rounded-md bg-gray-100 p-2 text-xs text-gray-600 focus:outline-none md:text-sm"
-          defaultValue={product.name}
+          defaultValue={productNameValue}
         />
         <label htmlFor="addtag" className="mt-8 mb-2 text-sm font-medium">
           {currentCopy.productTags}

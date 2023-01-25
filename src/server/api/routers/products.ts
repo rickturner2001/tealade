@@ -182,6 +182,7 @@ export const productRouter = createTRPCRouter({
         data: {
           description: input.description,
           imageSet: input.imageSet,
+          defaultThumbnail: input.imageSet[0],
           isImport: false,
           isStore: true,
           name: input.name,

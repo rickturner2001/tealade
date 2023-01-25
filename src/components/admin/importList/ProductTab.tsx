@@ -22,7 +22,7 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
     })
   );
 
-  const productNameref = useRef<HTMLInputElement>(null);
+  const [productNameValue, setProductNameValue] = useState(product.name);
   const [productDescription, setProductDescription] = useState("");
   const [productImages, setProductImages] = useState(
     product.imageSet.map((_) => {
@@ -64,7 +64,7 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
         })}
         setCurrentTab={setCurrentTab}
         currentTab={currentTab}
-        productNameRef={productNameref}
+        productNameValue={productNameValue}
         productDescription={productDescription}
         productCategory={selectedCategory}
         productImages={product.imageSet.filter((image, idx) => {
@@ -76,7 +76,8 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
       />
       {currentTab === "product" ? (
         <ProductData
-          productNameRef={productNameref}
+          productNameValue={productNameValue}
+          setProductNameValue={setProductNameValue}
           product={product}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
@@ -125,30 +126,40 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
         ) : (
           <button
             onClick={() => {
-              if (productNameref.current?.value) {
-                const productVariants = product.variants.map((variant) => {
-                  return {
-                    height: variant.height,
-                    image: variant.thumbnail,
-                    name: variant.variantName,
-                    price: variant.price,
-                    vid: variant.vid,
-                    width: variant.width,
-                  };
-                });
+              const productVariants = product.variants.map((variant) => {
+                return {
+                  height: variant.height,
+                  image: variant.thumbnail,
+                  name: variant.variantName,
+                  price: variant.price,
+                  vid: variant.vid,
+                  width: variant.width,
+                };
+              });
 
-                finalizeListing({
-                  description: productDescription,
-                  imageSet: product.imageSet.filter((src, idx) => {
-                    if (productImages[idx]) {
-                      return src;
-                    }
-                  }),
-                  name: productNameref.current.value,
-                  pid: product.pid,
-                  variants: productVariants,
-                });
-              }
+              console.log("Finalizing with: ");
+              console.table({
+                description: productDescription,
+                imageSet: product.imageSet.filter((src, idx) => {
+                  if (productImages[idx]) {
+                    return src;
+                  }
+                }),
+                name: productNameValue,
+                pid: product.pid,
+                variants: productVariants,
+              });
+              finalizeListing({
+                description: productDescription,
+                imageSet: product.imageSet.filter((src, idx) => {
+                  if (productImages[idx]) {
+                    return src;
+                  }
+                }),
+                name: productNameValue,
+                pid: product.pid,
+                variants: productVariants,
+              });
             }}
             className="my-auto rounded-md bg-emerald-500 py-3 px-8 text-sm font-bold text-white "
           >

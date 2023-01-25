@@ -15,8 +15,8 @@ type VariantListing = {
 };
 
 const TabMenu = ({
-  productNameRef,
   productCategory,
+  productNameValue,
   productDescription,
   productImages,
   productVariants,
@@ -25,7 +25,7 @@ const TabMenu = ({
   pid,
 }: {
   productCategory: Category | null;
-  productNameRef: RefObject<HTMLInputElement>;
+  productNameValue: string;
   productDescription: string;
   productImages: string[];
   productVariants: VariantListing[];
@@ -44,7 +44,6 @@ const TabMenu = ({
       importToStore: "Import to store",
       removeProduct: "Remove product",
     },
-
     it: {
       product: "Prodotton",
       description: "Descrizione",
@@ -128,14 +127,14 @@ const TabMenu = ({
         </li>
         <li className="my-auto ml-auto mr-4 hidden space-x-4 md:flex">
           {isLoading ? (
-            <button className="bold my-auto  rounded-md bg-white py-3 px-8 text-sm  font-bold text-red-500 ring ring-gray-200 ">
+            <button className="bold my-auto  rounded-md border border-gray-200 bg-white py-3  px-8 text-sm font-bold text-red-500 ">
               Loading...
               <Spinner className=" ml-2 inline h-4 w-4 animate-spin text-white" />
             </button>
           ) : (
             <button
               onClick={() => deleteProduct({ pid: pid })}
-              className="bold my-auto  rounded-md bg-white py-3 px-8 text-sm  font-bold text-red-500 ring ring-gray-200 "
+              className="bold my-auto  rounded-md border border-gray-200 bg-white py-3  px-8 text-sm font-bold text-red-500 "
             >
               {currentCopy.removeProduct}
             </button>
@@ -147,27 +146,25 @@ const TabMenu = ({
             </button>
           ) : (
             <button
-              onClick={() => {
-                if (productNameRef.current?.value) {
-                  finalizeListing({
-                    description: productDescription,
-                    imageSet: productImages,
-                    name: productNameRef.current.value,
-                    pid: pid,
-                    variants: productVariants.map((variant) => {
-                      return {
-                        height: variant.height,
-                        image: variant.image,
-                        name: variant.name,
-                        price: variant.price,
-                        vid: variant.vid,
-                        width: variant.width,
-                      };
-                    }),
-                  });
-                }
-              }}
               className="my-auto rounded-md bg-emerald-500 py-3 px-8 text-sm font-bold text-white "
+              onClick={() => {
+                finalizeListing({
+                  description: productDescription,
+                  imageSet: productImages,
+                  name: productNameValue,
+                  pid: pid,
+                  variants: productVariants.map((variant) => {
+                    return {
+                      height: variant.height,
+                      image: variant.image,
+                      name: variant.name,
+                      price: variant.price,
+                      vid: variant.vid,
+                      width: variant.width,
+                    };
+                  }),
+                });
+              }}
             >
               {currentCopy.importToStore}
             </button>

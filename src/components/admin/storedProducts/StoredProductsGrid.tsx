@@ -1,3 +1,4 @@
+import notFound from "../../../../public/media/images/not-found.png";
 import { motion } from "framer-motion";
 import { useContext, useState } from "react";
 import { Product, ProductVariant } from "@prisma/client";
@@ -12,6 +13,19 @@ const StoreProductGrid = () => {
 
   const { data: registeredProducts } =
     api.products.getAllStoreProducts.useQuery();
+
+  const copy = {
+    en: {
+      notFound: "Could not find any products",
+      findProducsts: "Find Products",
+    },
+    it: {
+      notFound: "Nessun prodotto listato",
+      findProducsts: "Trova prodotti",
+    },
+  };
+
+  const { language } = useContext(LanguageContext);
 
   if (!registeredProducts) {
     return (
@@ -65,7 +79,36 @@ const StoreProductGrid = () => {
     );
   }
   if (registeredProducts.length === 0) {
-    return <div>No Products</div>;
+    return (
+      <div className="flex w-full flex-col items-center justify-center px-6 py-12 md:px-24">
+        <img
+          src={notFound.src}
+          className=" mb-12 h-96 object-cover"
+          alt="not found"
+        />
+        {language === "english" ? (
+          <div className="flex flex-col items-center justify-center">
+            <p className="text-center text-2xl font-bold">{copy.en.notFound}</p>
+            <Link
+              href={"/admin/find-products/1"}
+              className="mt-4 w-full rounded-md bg-emerald-400 py-4 px-8 text-center text-sm font-bold text-white"
+            >
+              {copy.en.findProducsts}
+            </Link>
+          </div>
+        ) : (
+          <div>
+            <p className="text-center text-2xl font-bold">{copy.it.notFound}</p>
+            <Link
+              href={"/admin/find-products/1"}
+              className="mt-4 w-full rounded-md bg-emerald-400 py-4 px-8 text-center text-sm font-bold text-white"
+            >
+              {copy.it.findProducsts}
+            </Link>
+          </div>
+        )}
+      </div>
+    );
   }
 
   return (

@@ -144,7 +144,7 @@ const WideScreensSidebar = ({
   const currentCopy = language === "english" ? copy.en : copy.ita;
 
   return (
-    <aside className=" sticky top-24 left-0 hidden h-[90.5vh] w-72 flex-col space-y-6 border-r bg-gray-50 py-6 px-4 shadow-lg md:flex">
+    <aside className=" sticky top-24 left-0 hidden h-[90.5vh] w-96 flex-col space-y-6 border-r bg-gray-50 py-6 px-4 shadow-lg md:flex">
       <Link
         href="/"
         className=" flex w-full  cursor-pointer items-center justify-center space-x-2 border border-dashed border-teal-800 px-5 py-2 text-teal-800 transition-all duration-200 hover:bg-gray-50"

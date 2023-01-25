@@ -137,18 +137,6 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
                 };
               });
 
-              console.log("Finalizing with: ");
-              console.table({
-                description: productDescription,
-                imageSet: product.imageSet.filter((src, idx) => {
-                  if (productImages[idx]) {
-                    return src;
-                  }
-                }),
-                name: productNameValue,
-                pid: product.pid,
-                variants: productVariants,
-              });
               finalizeListing({
                 description: productDescription,
                 imageSet: product.imageSet.filter((src, idx) => {

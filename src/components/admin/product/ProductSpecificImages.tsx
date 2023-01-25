@@ -16,7 +16,7 @@ const ProductSpecificImages = ({
         <img
           src={imageSet[currentImage]}
           alt={alt}
-          className="h-96 w-96 object-cover"
+          className="w-full rounded-lg object-cover md:h-96 md:w-96 md:rounded-none"
         />
       </div>
       <div className="flex items-center justify-center space-x-4">
@@ -35,23 +35,23 @@ const ProductSpecificImages = ({
             currentImage === 0 ? (
               <div className="flex w-full space-x-2">
                 <div className="relative rounded-xl">
-                  <div className="absolute h-full w-full bg-white opacity-50"></div>
+                  <div className="absolute h-full w-full rounded-lg bg-white opacity-50 md:rounded-none"></div>
                   <img
-                    className="h-16 w-16 object-contain"
+                    className="h-20 w-20 rounded-lg object-contain  md:rounded-none"
                     src={imageSet[imageSet.length - 1]}
                   />
                 </div>
-                <div className="relatve rounded-xl border-gray-500">
+                <div className="relatve rounded-xl border-gray-500 md:rounded-none">
                   <img
-                    className="h-16 w-16 object-contain"
+                    className=" h-20 w-20 rounded-lg object-contain md:rounded-none"
                     src={imageSet[currentImage]}
                   />
                 </div>
                 <div className="relative rounded-xl">
-                  <div className="absolute h-full w-full bg-white opacity-50"></div>
+                  <div className="absolute h-full w-full rounded-lg bg-white opacity-50 md:rounded-none"></div>
 
                   <img
-                    className="h-16 w-16 object-contain"
+                    className="h-20 w-20 rounded-lg object-contain md:rounded-none"
                     src={imageSet[currentImage + 1]}
                   />
                 </div>
@@ -59,21 +59,24 @@ const ProductSpecificImages = ({
             ) : currentImage === imageSet.length - 1 ? (
               <div className="flex w-full space-x-2">
                 <div className="relative rounded-xl">
-                  <div className="absolute h-full w-full bg-white opacity-50"></div>
+                  <div className="absolute h-full w-full rounded-lg bg-white opacity-50 md:rounded-none"></div>
                   <img
-                    className="h-16 w-16 object-contain"
+                    className="h-20 w-20 rounded-lg object-contain md:rounded-none"
                     src={imageSet[currentImage - 1]}
                   />
                 </div>
-                <div className="relative rounded-xl border-gray-500">
+                <div className="relative rounded-xl  border-gray-500">
                   <img
-                    className="h-16 w-16 object-contain"
+                    className="h-20 w-20 rounded-lg object-contain md:rounded-none"
                     src={imageSet[currentImage]}
                   />
                 </div>
                 <div className="relative rounded-xl">
-                  <div className="absolute h-full w-full bg-white opacity-50"></div>
-                  <img className="h-16 w-16 object-contain" src={imageSet[0]} />
+                  <div className="absolute h-full w-full rounded-lg bg-white opacity-50 md:rounded-none"></div>
+                  <img
+                    className="h-20 w-20 rounded-lg object-contain md:rounded-none"
+                    src={imageSet[0]}
+                  />
                 </div>
               </div>
             ) : (
@@ -81,13 +84,13 @@ const ProductSpecificImages = ({
                 <div className="relative rounded-xl">
                   <div className="absolute h-full w-full bg-white opacity-50"></div>
                   <img
-                    className="h-16 w-16 object-contain"
+                    className="h-20 w-20 rounded-lg object-contain md:rounded-none"
                     src={imageSet[currentImage - 1]}
                   />
                 </div>
-                <div className="relative rounded-xl border border-gray-500">
+                <div className="relative rounded-xl ">
                   <img
-                    className="h-16 w-16 object-contain"
+                    className="h-20 w-20 rounded-lg object-contain md:rounded-none"
                     src={imageSet[currentImage]}
                   />
                 </div>
@@ -95,7 +98,7 @@ const ProductSpecificImages = ({
                 <div className="relative rounded-xl">
                   <div className="absolute h-full w-full bg-white opacity-50"></div>
                   <img
-                    className="h-16 w-16 object-contain"
+                    className="h-20 w-20 rounded-lg object-contain md:rounded-none"
                     src={imageSet[currentImage + 1]}
                   />
                 </div>
@@ -108,7 +111,9 @@ const ProductSpecificImages = ({
                   return (
                     <div key={idx} className="rounded-xl">
                       <img
-                        className={"h-12 w-12 object-contain"}
+                        className={
+                          "h-12 w-12 rounded-lg object-contain md:rounded-none"
+                        }
                         src={img}
                         alt={alt}
                       />
@@ -127,7 +132,7 @@ const ProductSpecificImages = ({
               setCurrentImage((prev) => prev + 1);
             }
           }}
-          className="h-5 w-5 text-gray-600 transition-all duration-200 hover:text-gray-700"
+          className="h-6 w-6 text-gray-600 transition-all duration-200 hover:text-gray-700 md:h-5 md:w-5"
         />
       </div>
     </>

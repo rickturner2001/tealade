@@ -17,8 +17,15 @@ const ListingWrapper = ({
   setLanguage: Dispatch<SetStateAction<Language>>;
   pageNumber: number;
 }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
-    <Dashboard language={language} setLanguage={setLanguage} title={title}>
+    <Dashboard
+      isMenuOpen={isMenuOpen}
+      setIsMenuOpen={setIsMenuOpen}
+      language={language}
+      setLanguage={setLanguage}
+      title={title}
+    >
       <ListProductDisplay pageNumber={pageNumber} language={language} />
     </Dashboard>
   );

@@ -28,8 +28,12 @@ export const LoadingProductList = ({
   language: Language;
   setLanguage: Dispatch<SetStateAction<Language>>;
 }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <Dashboard
+      isMenuOpen={isMenuOpen}
+      setIsMenuOpen={setIsMenuOpen}
       language={language}
       setLanguage={setLanguage}
       title={

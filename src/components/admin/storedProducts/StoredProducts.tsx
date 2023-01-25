@@ -11,9 +11,12 @@ const StoredProducts = () => {
   const { data: importedProducts } =
     api.products.getAllImportedProducts.useQuery();
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <LanguageContext.Provider value={{ language }}>
       <Dashboard
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
         title={
           language === "english" ? "Store Products" : "Prodotti del negozio"
         }
@@ -24,7 +27,7 @@ const StoredProducts = () => {
           <ContextMenu />
           <div className="flex flex-col ">
             <LayoutGroup>
-              <motion.div layout className="px-24 py-12">
+              <motion.div layout className="px-0 py-12 md:px-24">
                 <StoreProductGrid />
               </motion.div>
             </LayoutGroup>

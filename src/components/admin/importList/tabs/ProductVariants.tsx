@@ -74,11 +74,11 @@ const ProductVariants = ({
 
   const currentCopy = language === "english" ? copy.en : copy.it;
   return (
-    <div className="w-full p-12">
+    <div className="w-full overflow-x-auto p-12">
       <table className="text-xs">
         <thead>
           <tr>
-            <th className="p-4 font-medium"></th>
+            <th className="p-4 font-medium">Tumbnail</th>
             <th className="p-4 text-start font-medium">{currentCopy.name}</th>
             <th className="p-4 font-medium">{currentCopy.height}</th>
             <th className="p-4 font-medium">{currentCopy.width}</th>

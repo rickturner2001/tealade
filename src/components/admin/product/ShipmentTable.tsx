@@ -91,7 +91,7 @@ const ShipmentTable = ({
     language === "english" ? shipmentCopy.en : shipmentCopy.it;
 
   return (
-    <div className="mt-8 flex w-full flex-col px-12">
+    <div className="mt-8 flex w-full flex-col px-3 md:px-12">
       <div className="mb-6 flex w-full justify-end space-x-4">
         <button
           onClick={() => setShpmentSelection("economy")}
@@ -120,18 +120,18 @@ const ShipmentTable = ({
         <thead className="border-b py-2 text-left">
           <tr className="p-4">
             <th className="p-4"></th>
-            <th className="p-4 text-sm font-bold text-gray-800">
+            <th className="p-4 text-xs font-bold text-gray-800">
               {currentCopy.europe}
             </th>
-            <th className="p-4  text-start text-sm font-bold text-gray-800">
+            <th className="p-4  text-start text-xs font-bold text-gray-800">
               {currentCopy.est}
             </th>
-            <th className="p-4 text-start text-sm font-bold text-gray-800">
+            <th className="p-4 text-start text-xs font-bold text-gray-800">
               {currentCopy.cost}
             </th>
           </tr>
         </thead>
-        <tbody className="text-sm">
+        <tbody className="text-xs">
           {shipmentData.data.map((ship, idx) => {
             return (
               <tr className="p-4" key={idx}>

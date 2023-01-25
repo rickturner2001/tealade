@@ -56,8 +56,12 @@ const ContextMenu = ({ language }: { language: Language }) => {
 
 const Admin = () => {
   const [language, setLanguage] = useState<Language>("english");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <Dashboard
+      isMenuOpen={isMenuOpen}
+      setIsMenuOpen={setIsMenuOpen}
       title={language === "english" ? "Find products" : "Cerca prodotti"}
       language={language}
       setLanguage={setLanguage}

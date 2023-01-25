@@ -8,12 +8,16 @@ import ProductTab from "./ProductTab";
 
 const ImportList = () => {
   const [language, setLanguage] = useState<Language>("english");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const { data: importedProducts } =
     api.products.getAllImportedProducts.useQuery();
 
   return (
     <LanguageContext.Provider value={{ language }}>
       <Dashboard
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
         title={language === "english" ? "Import list" : "Lista importi"}
         language={language}
         setLanguage={setLanguage}
@@ -25,7 +29,11 @@ const ImportList = () => {
               importedProducts.map((prod) => {
                 return (
                   <LayoutGroup key={prod.pid}>
-                    <motion.div layout key={prod.pid} className="px-24 py-12">
+                    <motion.div
+                      layout
+                      key={prod.pid}
+                      className="px-6 py-12 md:px-24"
+                    >
                       <div className="w-full rounded-xl bg-white shadow-lg">
                         <ProductTab product={prod} />
                       </div>

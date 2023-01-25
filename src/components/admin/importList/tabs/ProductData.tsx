@@ -70,16 +70,16 @@ const ProductData = ({
 
   const [currenteDeletionLabel, setCurrentDeletionLabel] = useState("");
   return (
-    <div className="flex w-full  items-start gap-x-24 px-12 py-12">
-      <div>
+    <div className="flex w-full  flex-col items-start gap-x-24 px-12 py-12 md:flex-row">
+      <div className="rounded-lg md:rounded-none">
         <img
           src={product.defaultThumbnail}
           alt={product.description}
-          className={"h-60 object-contain"}
+          className={"h-60 rounded-lg object-contain md:rounded-none"}
         />
       </div>
       {/* FLEX RIGHT*/}
-      <div className="flex w-full flex-col">
+      <div className="mt-6 flex w-full flex-col md:mt-0">
         <label htmlFor="productName" className="mb-2 text-sm font-medium">
           {currentCopy.productName}
         </label>
@@ -87,18 +87,18 @@ const ProductData = ({
           type="text"
           ref={productNameRef}
           id="productName"
-          className="w-full rounded-md bg-gray-100 p-2 text-sm text-gray-600 focus:outline-none"
+          className="w-full rounded-md bg-gray-100 p-2 text-xs text-gray-600 focus:outline-none md:text-sm"
           defaultValue={product.name}
         />
         <label htmlFor="addtag" className="mt-8 mb-2 text-sm font-medium">
           {currentCopy.productTags}
         </label>
-        <div className="flex w-full items-center space-x-2">
+        <div className="flex w-full flex-wrap items-center gap-y-2 space-x-2 ">
           {product.tags.map((tag) => {
             return (
               <div
                 key={tag.label}
-                className="flex items-center rounded-md bg-orange-400 p-3 text-xs font-bold text-white"
+                className="flex items-center rounded-md bg-orange-400 p-2 text-xs font-bold text-white md:p-3"
               >
                 <span>{tag.label}</span>
                 {loadingDeletion && currenteDeletionLabel === tag.label ? (
@@ -117,7 +117,7 @@ const ProductData = ({
           })}
           <input
             type="text"
-            className="w-32 border-2 border-dashed border-gray-300 p-2 text-xs text-gray-600 placeholder:text-center placeholder:text-gray-600 focus:outline-none"
+            className="w-max border-2 border-dashed border-gray-300 p-2 text-xs text-gray-600 placeholder:text-center placeholder:text-gray-600 focus:outline-none md:w-32"
             placeholder={currentCopy.addTag}
             ref={labelRef}
             onKeyDown={(e) => {
@@ -138,7 +138,7 @@ const ProductData = ({
             />
           )}
         </div>
-        <label className="mb02 mt-8 text-sm font-medium">
+        <label className="mb-2 mt-8 text-sm font-medium">
           {currentCopy.productCategory}
         </label>
         {categories && categories[0] && (

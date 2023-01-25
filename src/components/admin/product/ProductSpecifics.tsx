@@ -54,6 +54,8 @@ const ProductSpecifics = ({
     },
   });
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const { data: productData } = api.cjApi.requestProductByID.useQuery({
     pid: pid,
   });
@@ -65,6 +67,8 @@ const ProductSpecifics = ({
   if ((productData && !productData.data) || productData.data === undefined) {
     return (
       <Dashboard
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
         language={language}
         setLanguage={setLanguage}
         title={
@@ -81,16 +85,18 @@ const ProductSpecifics = ({
 
   return (
     <Dashboard
+      isMenuOpen={isMenuOpen}
+      setIsMenuOpen={setIsMenuOpen}
       language={language}
       setLanguage={setLanguage}
       title={
         language === "english" ? "Product details" : "Dettagli del prodotto"
       }
     >
-      <div className="py-12 px-24">
-        <div className="w-full rounded-xl bg-white py-8 px-24 shadow-lg">
+      <div className="py-12 md:px-24">
+        <div className="w-full rounded-xl bg-white py-8 px-6 shadow-lg md:px-24">
           {/* Outermost flex */}
-          <div className="flex items-start space-x-24">
+          <div className="flex flex-col items-start md:flex-row md:space-x-24">
             {/* left side */}
             <div className="flex flex-col justify-center space-y-8 ">
               <ProductSpecificImages
@@ -99,8 +105,8 @@ const ProductSpecifics = ({
               />
             </div>
             {/* right side */}
-            <div className="w-full">
-              <h2 className="text-2xl font-semibold capitalize text-gray-800">
+            <div className="mt-16 w-full md:mt-0">
+              <h2 className="text-2xl font-bold capitalize text-gray-800">
                 {product.entryNameEn}
               </h2>
               <p className="py-3 text-sm">
@@ -122,7 +128,7 @@ const ProductSpecifics = ({
               >
                 {language === "english" ? "View more" : "Scopri altro"}
               </a>
-              <div className="mt-24">
+              <div className="mt-12 md:mt-24">
                 <p className="text-sm text-gray-700">
                   {language === "english"
                     ? "Product cost"
@@ -131,8 +137,8 @@ const ProductSpecifics = ({
                 <p className="py-2 text-2xl font-semibold text-gray-800">
                   ${product.sellPrice}
                 </p>
-                <div className="mt-24 w-full">
-                  <div className="flex w-full space-x-12 bg-gray-100 px-6 py-4 text-lg font-bold">
+                <div className="mt-16 w-full md:mt-24">
+                  <div className="flex w-full justify-center space-x-12 bg-gray-100 px-3 py-4 text-lg font-bold md:justify-start md:px-6">
                     <p
                       className={`cursor-pointer ${
                         currentSubMenu === "shipping"
@@ -163,9 +169,9 @@ const ProductSpecifics = ({
                   ) : (
                     <VariantsTable variants={product.variants} />
                   )}
-                  <div className="w-1/2items-center mt-12 flex justify-start space-x-4 px-12">
+                  <div className="mt-12 flex w-full flex-col items-center justify-start space-y-4 px-3 md:flex-row md:space-y-0 md:space-x-4 md:px-12">
                     {isLoading ? (
-                      <button className="w-1/2 rounded-md bg-emerald-400 py-4 px-5 text-sm font-bold text-white ">
+                      <button className="w-full rounded-md bg-emerald-400 py-4 text-sm font-bold text-white md:w-1/2 md:px-5 ">
                         <svg
                           aria-hidden="true"
                           role="status"
@@ -188,7 +194,7 @@ const ProductSpecifics = ({
                           : "Caricamento..."}
                       </button>
                     ) : isSuccess ? (
-                      <button className="w-1/2 rounded-md bg-emerald-400 py-4 px-5 text-sm font-bold text-white ">
+                      <button className="w-full rounded-md  bg-emerald-400 py-4 text-sm font-bold text-white md:w-1/2 md:px-5 ">
                         <CheckIcon className=" mr-2 inline h-4 w-4 text-white" />
                         {language === "english" ? "Successful" : "Successo"}
                       </button>
@@ -219,14 +225,14 @@ const ProductSpecifics = ({
                             });
                           }
                         }}
-                        className="w-1/2 rounded-md bg-emerald-400 py-4 px-5 text-sm font-bold text-white"
+                        className="w-full rounded-md bg-emerald-400 py-4 text-sm font-bold text-white md:w-1/2 md:px-5"
                       >
                         {language === "english"
                           ? "Add to import list"
                           : "Aggiungi alla lista degli importi"}
                       </button>
                     )}
-                    <button className="w-1/2 rounded-md  bg-white py-3 px-5 text-sm font-bold text-gray-800 ring ring-gray-200">
+                    <button className="w-full rounded-md bg-white  py-3 text-sm font-bold text-gray-800 ring ring-gray-200 md:w-1/2 md:px-5">
                       {language === "english" ? "Coming soon" : "In arrivo"}
                     </button>
                   </div>

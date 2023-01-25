@@ -1,6 +1,9 @@
 import { Category, ProductVariant } from "@prisma/client";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { ProductWithTags } from "../../../types";
+import { api } from "../../../utils/api";
+import LanguageContext from "../../context/LanugageContext";
+import Spinner from "../../Spinner";
 import ProductData from "./tabs/ProductData";
 import ProductDescription from "./tabs/ProductDescription";
 import ProductImages from "./tabs/ProductImages";
@@ -26,6 +29,24 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
       return true;
     })
   );
+
+  const utils = api.useContext();
+
+  const { language } = useContext(LanguageContext);
+
+  const { mutate: deleteProduct, isLoading } =
+    api.products.deleteProduct.useMutation({
+      onSuccess: () => {
+        utils.products.invalidate().catch((e) => console.error(e));
+      },
+    });
+
+  const { mutate: finalizeListing, isLoading: loadingFinalization } =
+    api.products.finalizeProductListing.useMutation({
+      onSuccess: () => {
+        utils.products.invalidate().catch((e) => console.error(e));
+      },
+    });
 
   const [currentTab, setCurrentTab] = useState<Tabs>("product");
   return (
@@ -81,6 +102,60 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
       ) : (
         <></>
       )}
+
+      <div className="mt-4 flex w-full flex-col-reverse gap-y-2 px-4 pb-6 md:hidden">
+        {isLoading ? (
+          <button className="bold my-auto w-full   rounded-md bg-white py-3 px-8 text-sm  font-bold text-red-500 ring ring-gray-200 ">
+            Loading...
+            <Spinner className=" ml-2 inline h-4 w-4 animate-spin text-white" />
+          </button>
+        ) : (
+          <button
+            onClick={() => deleteProduct({ pid: product.pid })}
+            className="bold my-auto  w-full rounded-md border border-gray-200 bg-white  py-3 px-8 text-sm font-bold text-red-500"
+          >
+            {language === "english" ? "Remove product" : "Rimuovi prodotto"}
+          </button>
+        )}
+        {loadingFinalization ? (
+          <button className="bold my-auto  rounded-md bg-white py-3 px-8 text-sm  font-bold text-gray-800 ring ring-gray-200 ">
+            Loading...
+            <Spinner className=" ml-2 inline h-4 w-4 animate-spin text-white" />
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              if (productNameref.current?.value) {
+                const productVariants = product.variants.map((variant) => {
+                  return {
+                    height: variant.height,
+                    image: variant.thumbnail,
+                    name: variant.variantName,
+                    price: variant.price,
+                    vid: variant.vid,
+                    width: variant.width,
+                  };
+                });
+
+                finalizeListing({
+                  description: productDescription,
+                  imageSet: product.imageSet.filter((src, idx) => {
+                    if (productImages[idx]) {
+                      return src;
+                    }
+                  }),
+                  name: productNameref.current.value,
+                  pid: product.pid,
+                  variants: productVariants,
+                });
+              }
+            }}
+            className="my-auto rounded-md bg-emerald-500 py-3 px-8 text-sm font-bold text-white "
+          >
+            {language === "english" ? "Import to store" : "Importa sul negozio"}
+          </button>
+        )}
+      </div>
     </>
   );
 };

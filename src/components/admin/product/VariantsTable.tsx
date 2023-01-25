@@ -25,22 +25,24 @@ const VariantsTable = ({ variants }: { variants: CjProductVariant[] }) => {
     language === "english" ? variantsCopy.en : variantsCopy.it;
 
   return (
-    <div className="mt-8 flex w-full flex-col px-12">
+    <div className="mt-8 flex w-full flex-col overflow-x-auto px-3 md:px-12">
       <table className="`w-full">
         <thead className="border-b p-4 text-left">
-          <th className="p-4"></th>
-          <th className="p-4  text-sm font-bold text-gray-800">
-            {currentCopy.name}
-          </th>
-          <th className="p-4 text-sm font-bold text-gray-800">
-            {currentCopy.height}
-          </th>
-          <th className="p-4 text-sm font-bold text-gray-800">
-            {currentCopy.width}
-          </th>
-          <th className="p-4 text-sm font-bold text-gray-800">
-            {currentCopy.cost}
-          </th>
+          <tr className="p-4">
+            <th className="p-4">Thumbnail</th>
+            <th className="p-4  text-sm font-bold text-gray-800">
+              {currentCopy.name}
+            </th>
+            <th className="p-4 text-sm font-bold text-gray-800">
+              {currentCopy.height}
+            </th>
+            <th className="p-4 text-sm font-bold text-gray-800">
+              {currentCopy.width}
+            </th>
+            <th className="p-4 text-sm font-bold text-gray-800">
+              {currentCopy.cost}
+            </th>
+          </tr>
         </thead>
         <tbody className="text-sm">
           {variants.map((variant, idx) => {
@@ -48,7 +50,7 @@ const VariantsTable = ({ variants }: { variants: CjProductVariant[] }) => {
               <tr className="p-4" key={idx}>
                 <td className="p-4">
                   <img
-                    className="h-12  w-12 object-contain"
+                    className="h-12  w-12 rounded-lg object-contain md:rounded-none"
                     src={variant.variantImage}
                   />
                 </td>

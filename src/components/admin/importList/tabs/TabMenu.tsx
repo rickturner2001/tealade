@@ -76,25 +76,25 @@ const TabMenu = ({
 
   return (
     <div className="border-b border-gray-200 text-center text-sm font-medium text-gray-500 ">
-      <ul className="-mb-px flex flex-wrap py-4">
-        <li className="mr-2">
+      <ul className="-mb-px flex flex-wrap py-2 px-2 md:py-4">
+        <li>
           <button
             onClick={() => setCurrentTab("product")}
-            className={`active inline-block rounded-t-lg border-b-2 p-4 text-sm ${
+            className={`active inline-block rounded-t-lg  p-2 py-4 text-sm md:p-4 ${
               currentTab === "product"
-                ? "border-blue-600  font-bold text-blue-600 "
+                ? "  font-bold text-blue-600 "
                 : "border-transparent hover:border-gray-300 hover:text-gray-600"
             } `}
           >
             {currentCopy.product}
           </button>
         </li>
-        <li className="mr-2">
+        <li>
           <button
             onClick={() => setCurrentTab("description")}
-            className={`active inline-block rounded-t-lg border-b-2 p-4 text-sm ${
+            className={`active inline-block rounded-t-lg  p-2 py-4 text-sm md:p-4 ${
               currentTab === "description"
-                ? "border-blue-600  font-bold text-blue-600 "
+                ? "  font-bold text-blue-600 "
                 : "border-transparent hover:border-gray-300 hover:text-gray-600"
             } `}
             aria-current="page"
@@ -102,31 +102,31 @@ const TabMenu = ({
             {currentCopy.description}
           </button>
         </li>
-        <li className="mr-2">
+        <li>
           <button
             onClick={() => setCurrentTab("variants")}
-            className={`active inline-block rounded-t-lg border-b-2 p-4 text-sm ${
+            className={`active inline-block rounded-t-lg  p-2 py-4 text-sm md:p-4 ${
               currentTab === "variants"
-                ? "border-blue-600  font-bold text-blue-600 "
+                ? "  font-bold text-blue-600 "
                 : "border-transparent hover:border-gray-300 hover:text-gray-600"
             } `}
           >
             {currentCopy.variants}
           </button>
         </li>
-        <li className="mr-2">
+        <li>
           <button
             onClick={() => setCurrentTab("images")}
-            className={`active inline-block rounded-t-lg border-b-2 p-4 text-sm ${
+            className={`active inline-block rounded-t-lg  p-2 py-4 text-sm md:p-4 ${
               currentTab === "images"
-                ? "border-blue-600  font-bold text-blue-600 "
+                ? "  font-bold text-blue-600 "
                 : "border-transparent hover:border-gray-300 hover:text-gray-600"
             } `}
           >
             {currentCopy.images}
           </button>
         </li>
-        <li className="my-auto ml-auto mr-4 flex space-x-4">
+        <li className="my-auto ml-auto mr-4 hidden space-x-4 md:flex">
           {isLoading ? (
             <button className="bold my-auto  rounded-md bg-white py-3 px-8 text-sm  font-bold text-red-500 ring ring-gray-200 ">
               Loading...

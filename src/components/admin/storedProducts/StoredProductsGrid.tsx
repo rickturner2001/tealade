@@ -9,7 +9,7 @@ import Spinner from "../../../components/Spinner";
 import LanguageContext from "../../context/LanugageContext";
 
 const StoreProductGrid = () => {
-  const [perPage, setPerPage] = useState(20);
+  const [perPage, setPerPage] = useState(40);
 
   const { data: registeredProducts } =
     api.products.getAllStoreProducts.useQuery();

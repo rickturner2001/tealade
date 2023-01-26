@@ -47,7 +47,7 @@ export const authOptions: NextAuthOptions = {
           placeholder: "johnDoe@email.com",
         },
       },
-      async authorize(credentials, req) {
+      authorize(credentials, req) {
         console.log("Credentials");
         console.log(credentials);
 

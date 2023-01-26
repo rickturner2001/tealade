@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction } from "react";
-import { Language } from "../../types";
+import type { Dispatch, SetStateAction } from "react";
+import type { Language } from "../../types";
 import usFlag from "../../../public/media/images/us-flag.png";
 import itaFlag from "../../../public/media/images/ita-flag.png";
 import { ArrowsRightLeftIcon, UserIcon } from "@heroicons/react/24/solid";

@@ -1,4 +1,7 @@
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import { Category, ProductVariant } from "@prisma/client";
+import { TRPCClientError } from "@trpc/client";
+import { TRPCError } from "@trpc/server";
 import { Dispatch, RefObject, SetStateAction, useContext } from "react";
 import { api } from "../../../../utils/api";
 import LanguageContext from "../../../context/LanugageContext";
@@ -64,14 +67,22 @@ const TabMenu = ({
       },
     });
 
-  const { mutate: finalizeListing, isLoading: loadingFinalization } =
-    api.products.finalizeProductListing.useMutation({
-      onSuccess: () => {
-        utils.products.invalidate().catch((e) => console.error(e));
-      },
-    });
+  const {
+    mutate: finalizeListing,
+    isLoading: loadingFinalization,
+    isError,
+    error,
+  } = api.products.finalizeProductListing.useMutation({
+    onSuccess: () => {
+      utils.products.invalidate().catch((e) => console.error(e));
+    },
+  });
 
   const currentCopy = language === "english" ? copy.en : copy.it;
+
+  console.log(error?.data);
+
+  console.log();
 
   return (
     <div className="border-b border-gray-200 text-center text-sm font-medium text-gray-500 ">
@@ -171,6 +182,18 @@ const TabMenu = ({
           )}
         </li>
       </ul>
+      {isError && (
+        <div className="flex items-center justify-between bg-red-50 px-8 py-4 text-sm font-semibold text-red-800">
+          <p>
+            {error instanceof TRPCClientError &&
+              error.data.code === "UNAUTHORIZED" &&
+              "Only admins can register new products"}
+          </p>
+          <button className="">
+            <XMarkIcon className="h-6 w-6" />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

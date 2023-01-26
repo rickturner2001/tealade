@@ -1,6 +1,11 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import {
+  createTRPCRouter,
+  publicProcedure,
+  protectedProcedure,
+  adminProcedure,
+} from "../trpc";
 export const productRouter = createTRPCRouter({
   // Products
   registerProduct: publicProcedure
@@ -155,7 +160,7 @@ export const productRouter = createTRPCRouter({
       });
     }),
 
-  finalizeProductListing: publicProcedure
+  finalizeProductListing: adminProcedure
     .input(
       z.object({
         pid: z.string(),

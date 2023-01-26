@@ -186,7 +186,6 @@ const TabMenu = ({
         <div className="flex items-center justify-between bg-red-50 px-8 py-4 text-sm font-semibold text-red-800">
           <p>
             {error instanceof TRPCClientError &&
-              error.data.code === "UNAUTHORIZED" &&
               "Only admins can register new products"}
           </p>
           <button className="">

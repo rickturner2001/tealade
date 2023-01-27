@@ -25,11 +25,7 @@ export default function Dashboard({
   return (
     <DashboardContext.Provider value={{ isMenuOpen, setIsMenuOpen }}>
       <section>
-        <Navbar
-          language={language}
-          setIsMenuOpen={setIsMenuOpen}
-          setLanguage={setLanguage}
-        />
+        <Navbar setIsMenuOpen={setIsMenuOpen} setLanguage={setLanguage} />
         <div className="flex h-full w-full bg-gray-100">
           <SideMenu language={language} />
           <Main

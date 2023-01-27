@@ -1,21 +1,29 @@
-import type { Dispatch, SetStateAction } from "react";
+import { motion } from "framer-motion";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import type { Language } from "../../types";
 import usFlag from "../../../public/media/images/us-flag.png";
 import itaFlag from "../../../public/media/images/ita-flag.png";
-import { ArrowsRightLeftIcon, UserIcon } from "@heroicons/react/24/solid";
-import { signIn, useSession } from "next-auth/react";
+import {
+  ArrowsRightLeftIcon,
+  ChevronDownIcon,
+  CogIcon,
+  UserIcon,
+} from "@heroicons/react/24/outline";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
+import LanguageContext from "../context/LanugageContext";
 
 export default function Navbar({
-  language,
   setLanguage,
   setIsMenuOpen,
 }: {
-  language: Language;
   setLanguage: Dispatch<SetStateAction<Language>>;
   setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const { status, data: sessionData } = useSession();
+  const { language } = useContext(LanguageContext);
+
+  const [iseUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   return (
     <nav className="sticky top-0 z-40 flex items-center justify-start border-b bg-gray-50 p-3 shadow-md md:justify-between md:p-6">
@@ -34,19 +42,48 @@ export default function Navbar({
       </div>
       <div className=" ml-6 flex items-center space-x-4 md:ml-0">
         <LanguageSelection language={language} setLanguage={setLanguage} />
-        <div className="h-full border-l border-gray-300" />
+        <div className="relative h-full border-l border-gray-300" />
         {status === "authenticated" ? (
-          <div className="flex space-x-1">
-            <UserIcon className="h-5 w-5" />
-            <p>{sessionData.user?.name}</p>
-          </div>
+          <>
+            <motion.div
+              initial={{ visibility: "hidden", translateY: "200%", opacity: 0 }}
+              animate={
+                iseUserMenuOpen
+                  ? { visibility: "visible", translateY: "150%", opacity: 1 }
+                  : { visibility: "hidden", translateY: "200%", opacity: 0 }
+              }
+              className="absolute  right-2 w-52 translate-y-[4.5rem] rounded-md border bg-white p-2 shadow-sm"
+            >
+              <button
+                onClick={() =>
+                  void (() => {
+                    signOut().catch((e) => console.error(e));
+                  })
+                }
+                className="w-full rounded-md bg-gray-800 p-2 text-sm font-bold text-white "
+              >
+                Sign out
+              </button>
+            </motion.div>
+            <div className="flex space-x-1">
+              <UserIcon className="h-5 w-5" />
+              <p className="hidden md:block">{sessionData.user?.name}</p>
+              <button
+                onClick={() => setIsUserMenuOpen((prev) => !prev)}
+                className="jutify-center flex items-center"
+              >
+                <ChevronDownIcon className="h-3 w-3" />
+                {/* USER MENU */}
+              </button>
+            </div>
+          </>
         ) : (
           <button
             onClick={() => {
               signIn("google").catch((error) => console.error(error));
             }}
             type="button"
-            className="mr-2  rounded-lg border bg-gray-100 px-2 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 md:px-5 md:py-2 "
+            className="mr-2  rounded-lg border bg-gray-100 px-2 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-300 md:px-5 md:py-2 "
           >
             Sign in
           </button>

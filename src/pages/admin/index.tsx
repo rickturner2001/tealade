@@ -4,6 +4,7 @@ import { NextPage } from "next";
 import React, { useState } from "react";
 import Dashboard from "../../components/admin/Dashboard";
 import CategoryScrolldown from "../../components/admin/subComponents/dropdowns";
+import PrivateRoute from "../../components/layouts/PrivateRoute";
 import { Language, NonEmptyArray } from "../../types";
 import { api } from "../../utils/api";
 
@@ -73,7 +74,11 @@ const Admin = () => {
 };
 
 const admin: NextPage = () => {
-  return <Admin />;
+  return (
+    <PrivateRoute>
+      <Admin />
+    </PrivateRoute>
+  );
 };
 
 export default admin;

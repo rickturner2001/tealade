@@ -22,6 +22,8 @@ export const serverSchema = z.object({
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
   CJ_TOKEN: z.string(),
+  EMAIL_SERVER: z.string(),
+  EMAIL_FROM: z.string(),
 });
 
 /**
@@ -37,6 +39,8 @@ export const serverEnv = {
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   CJ_TOKEN: process.env.CJ_TOKEN,
+  EMAIL_SERVER: process.env.EMAIL_SERVER,
+  EMAIL_FROM: process.env.EMAIL_FROM,
 };
 
 /**

@@ -1,19 +1,8 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
-import { Language } from "../../types";
-import { api } from "../../utils/api";
-import CategoryScrolldown from "./subComponents/dropdowns";
-import ListProductDisplay from "./subComponents/ListProductDisplay";
-
 export default function Main({
-  language,
   children,
-  isListedProducts,
   title,
 }: {
-  language: Language;
   children?: JSX.Element;
-  isListedProducts?: boolean;
   title: string;
 }) {
   return (

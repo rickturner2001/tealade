@@ -1,12 +1,10 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { Category, ProductVariant } from "@prisma/client";
 import { TRPCClientError } from "@trpc/client";
-import { TRPCError } from "@trpc/server";
-import { Dispatch, RefObject, SetStateAction, useContext } from "react";
+import { type Dispatch, type SetStateAction, useContext } from "react";
 import { api } from "../../../../utils/api";
 import LanguageContext from "../../../context/LanugageContext";
 import Spinner from "../../../Spinner";
-import { Tabs } from "../ProductTab";
+import type { Tabs } from "../ProductTab";
 
 type VariantListing = {
   height: number;
@@ -18,7 +16,6 @@ type VariantListing = {
 };
 
 const TabMenu = ({
-  productCategory,
   productNameValue,
   productDescription,
   productImages,
@@ -27,7 +24,6 @@ const TabMenu = ({
   currentTab,
   pid,
 }: {
-  productCategory: Category | null;
   productNameValue: string;
   productDescription: string;
   productImages: string[];

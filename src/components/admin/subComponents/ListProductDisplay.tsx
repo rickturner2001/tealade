@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Product } from "@prisma/client";
+import type { Product } from "@prisma/client";
 import {
   CheckIcon,
   ChevronLeftIcon,
@@ -10,8 +10,7 @@ import {
 import Link from "next/link";
 import { api } from "../../../utils/api";
 import Spinner from "../../../components/Spinner";
-import { Language } from "../../../types";
-import { useRouter } from "next/router";
+import type { Language } from "../../../types";
 
 const ListProductDisplay = ({
   language,
@@ -20,11 +19,11 @@ const ListProductDisplay = ({
   language: Language;
   pageNumber: number;
 }) => {
-  const [perPage, setPerPage] = useState(20);
+  const pageData = useState(40);
 
-  const { data, isFetched } = api.cjApi.getListProducts.useQuery({
+  const { data } = api.cjApi.getListProducts.useQuery({
     pageNum: (pageNumber ? (+pageNumber as number | undefined) : 1) ?? 1,
-    perPage: perPage,
+    perPage: pageData[0],
     categoryKeyword: null,
   });
   const { data: registeredProducts } = api.products.getAllProducts.useQuery();

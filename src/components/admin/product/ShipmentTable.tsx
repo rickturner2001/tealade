@@ -1,6 +1,6 @@
 import {
-  Dispatch,
-  SetStateAction,
+  type Dispatch,
+  type SetStateAction,
   useState,
   useEffect,
   useContext,
@@ -81,7 +81,13 @@ const ShipmentTable = ({
         setRegularShipping(1);
       }
     }
-  }, [shipmentData]);
+  }, [
+    shipmentData,
+    economyShipping,
+    regularShipping,
+    setEconomyShippingData,
+    setRegularShippingData,
+  ]);
 
   if (!shipmentData || !shipmentData.data) {
     return <div>Loading...</div>;

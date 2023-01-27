@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Language, CjProductVariant } from "../../../types";
+import type { CjProductVariant } from "../../../types";
 import LanguageContext from "../../context/LanugageContext";
 
 const variantsCopy = {

@@ -1,15 +1,15 @@
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import { Product, ProductVariant } from "@prisma/client";
+import type { ProductVariant } from "@prisma/client";
 import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
+  type ChangeEvent,
+  type Dispatch,
+  type SetStateAction,
   useCallback,
   useContext,
   useEffect,
   useState,
 } from "react";
-import { NonNullableArrayIndex, ProductWithTags } from "../../../../types";
+import type { NonNullableArrayIndex, ProductWithTags } from "../../../../types";
 import LanguageContext from "../../../context/LanugageContext";
 import SalesPriceMenu from "./SalesPriceMenu";
 
@@ -70,7 +70,7 @@ const ProductVariants = ({
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  }, [setIsSalesPriceMenu, isSalesPriceMenu, isButtonClicked]);
+  }, [setIsSalesPriceMenu, isSalesPriceMenu, isButtonClicked, product.pid]);
 
   const currentCopy = language === "english" ? copy.en : copy.it;
   return (
@@ -157,7 +157,7 @@ const VariantRow = ({
         .toFixed(2)
         .toString()
     );
-  }, [variantPrices]);
+  }, [variantPrices, economyShipment, index]);
 
   const handlePriceChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {

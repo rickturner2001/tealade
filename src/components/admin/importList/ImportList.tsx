@@ -1,6 +1,6 @@
 import { LayoutGroup, motion } from "framer-motion";
-import { Fragment, useEffect, useState } from "react";
-import { Language } from "../../../types";
+import { Fragment, useState } from "react";
+import type { Language } from "../../../types";
 import { api } from "../../../utils/api";
 import LanguageContext from "../../context/LanugageContext";
 import Dashboard from "../Dashboard";
@@ -32,7 +32,6 @@ const ImportList = () => {
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
         title={language === "english" ? "Import list" : "Lista importi"}
-        language={language}
         setLanguage={setLanguage}
       >
         <Fragment>

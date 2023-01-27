@@ -1,6 +1,6 @@
-import { Category, ProductVariant } from "@prisma/client";
-import { useContext, useRef, useState } from "react";
-import { ProductWithTags } from "../../../types";
+import type { Category } from "@prisma/client";
+import { useContext, useState } from "react";
+import type { ProductWithTags } from "../../../types";
 import { api } from "../../../utils/api";
 import LanguageContext from "../../context/LanugageContext";
 import Spinner from "../../Spinner";
@@ -25,7 +25,7 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
   const [productNameValue, setProductNameValue] = useState(product.name);
   const [productDescription, setProductDescription] = useState("");
   const [productImages, setProductImages] = useState(
-    product.imageSet.map((_) => {
+    product.imageSet.map(() => {
       return true;
     })
   );
@@ -66,7 +66,6 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
         currentTab={currentTab}
         productNameValue={productNameValue}
         productDescription={productDescription}
-        productCategory={selectedCategory}
         productImages={product.imageSet.filter((image, idx) => {
           if (productImages[idx]) {
             return image;

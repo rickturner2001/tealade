@@ -1,16 +1,12 @@
 import { LayoutGroup, motion } from "framer-motion";
-import { Fragment, useEffect, useState } from "react";
-import { Language } from "../../../types";
-import { api } from "../../../utils/api";
+import { Fragment, useState } from "react";
+import type { Language } from "../../../types";
 import LanguageContext from "../../context/LanugageContext";
 import Dashboard from "../Dashboard";
 import StoreProductGrid from "./StoredProductsGrid";
 
 const StoredProducts = () => {
   const [language, setLanguage] = useState<Language>("english");
-  const { data: importedProducts } =
-    api.products.getAllImportedProducts.useQuery();
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <LanguageContext.Provider value={{ language }}>
@@ -20,7 +16,6 @@ const StoredProducts = () => {
         title={
           language === "english" ? "Store Products" : "Prodotti del negozio"
         }
-        language={language}
         setLanguage={setLanguage}
       >
         <Fragment>

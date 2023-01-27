@@ -1,17 +1,23 @@
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import {
+  type Dispatch,
+  type SetStateAction,
+  useContext,
+  useState,
+} from "react";
 import type { Language } from "../../types";
 import usFlag from "../../../public/media/images/us-flag.png";
 import itaFlag from "../../../public/media/images/ita-flag.png";
 import {
   ArrowsRightLeftIcon,
   ChevronDownIcon,
-  CogIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import LanguageContext from "../context/LanugageContext";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Navbar({
   setLanguage,
@@ -78,15 +84,12 @@ export default function Navbar({
             </div>
           </>
         ) : (
-          <button
-            onClick={() => {
-              signIn("google").catch((error) => console.error(error));
-            }}
-            type="button"
+          <Link
             className="mr-2  rounded-lg border bg-gray-100 px-2 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-300 md:px-5 md:py-2 "
+            href={"/login"}
           >
             Sign in
-          </button>
+          </Link>
         )}
       </div>
     </nav>
@@ -105,7 +108,11 @@ const LanguageSelection = ({
   return (
     <div className="flex items-center space-x-2">
       <div>
-        <img className="h-4 " src={flagsData.active[0]} />
+        <img
+          alt="flag representing selected language"
+          className="h-4 "
+          src={flagsData.active[0]}
+        />
       </div>
       <span className="text-sm font-medium">{flagsData.active[1]}</span>
       <button

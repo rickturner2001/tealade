@@ -1,8 +1,6 @@
 import { CheckIcon } from "@heroicons/react/24/solid";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { ProductWithTags } from "../../../../types";
-
-type ExistingItem = NonNullable<boolean[][number]>;
+import type { Dispatch, SetStateAction } from "react";
+import type { ProductWithTags } from "../../../../types";
 
 const ProductImages = ({
   product,

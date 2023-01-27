@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Language } from "../../types";
+import type { Language } from "../../types";
 
 interface LanguageContextValue {
   language: Language;

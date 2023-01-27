@@ -1,14 +1,13 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { Category } from "@prisma/client";
+import type { Category } from "@prisma/client";
 import {
-  Dispatch,
-  RefObject,
-  SetStateAction,
+  type Dispatch,
+  type SetStateAction,
   useContext,
   useRef,
   useState,
 } from "react";
-import { ProductWithTags, NonEmptyArray } from "../../../../types";
+import type { ProductWithTags, NonEmptyArray } from "../../../../types";
 import { api } from "../../../../utils/api";
 import LanguageContext from "../../../context/LanugageContext";
 import Spinner from "../../../Spinner";
@@ -46,24 +45,18 @@ const ProductData = ({
 
   const utils = api.useContext();
 
-  const {
-    mutate: addTagMutation,
-    isLoading,
-    isError,
-  } = api.products.addNewTag.useMutation({
-    onSuccess: () => {
-      utils.products.invalidate().catch((error) => console.error(error));
-    },
-  });
-  const {
-    mutate: deleteTagMutation,
-    isLoading: loadingDeletion,
-    isError: errorDeletion,
-  } = api.products.deleteTag.useMutation({
-    onSuccess: () => {
-      utils.products.invalidate().catch((error) => console.error(error));
-    },
-  });
+  const { mutate: addTagMutation, isLoading } =
+    api.products.addNewTag.useMutation({
+      onSuccess: () => {
+        utils.products.invalidate().catch((error) => console.error(error));
+      },
+    });
+  const { mutate: deleteTagMutation, isLoading: loadingDeletion } =
+    api.products.deleteTag.useMutation({
+      onSuccess: () => {
+        utils.products.invalidate().catch((error) => console.error(error));
+      },
+    });
 
   const { data: categories } = api.products.getAllCategories.useQuery();
   const currentCopy = language === "english" ? copy.en : copy.it;

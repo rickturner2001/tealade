@@ -1,12 +1,11 @@
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import Dashboard from "../../../components/admin/Dashboard";
 import ListProductDisplay from "../../../components/admin/subComponents/ListProductDisplay";
 import type { Language } from "../../../types";
 
 const ListingWrapper = ({
   language,
-  children,
   title,
   setLanguage,
   pageNumber,
@@ -22,7 +21,6 @@ const ListingWrapper = ({
     <Dashboard
       isMenuOpen={isMenuOpen}
       setIsMenuOpen={setIsMenuOpen}
-      language={language}
       setLanguage={setLanguage}
       title={title}
     >

@@ -1,8 +1,7 @@
-import { ProductVariant } from "@prisma/client";
+import type { ProductVariant } from "@prisma/client";
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useRef } from "react";
-import { Language } from "../../../../types";
-import ProductVariants from "./ProductVariants";
+import { type Dispatch, type SetStateAction, useRef } from "react";
+import type { Language } from "../../../../types";
 
 const SalesPriceMenu = ({
   isVisible,

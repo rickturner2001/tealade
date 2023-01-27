@@ -7,10 +7,14 @@ import {
   ArchiveBoxArrowDownIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import { Product, ProductTag, ProductVariant, Shipment } from "@prisma/client";
+import type {
+  Product,
+  ProductTag,
+  ProductVariant,
+  Shipment,
+} from "@prisma/client";
 import Link from "next/link";
 import { useContext } from "react";
-import { Language } from "../../types";
 import { api } from "../../utils/api";
 import DashboardContext from "../context/DashboardContext";
 import LanguageContext from "../context/LanugageContext";
@@ -44,7 +48,7 @@ type StoreProducts =
     })[]
   | undefined;
 
-export default function SideMenu({ language }: { language: Language }) {
+export default function SideMenu() {
   const { data: importedProduct } =
     api.products.getAllImportedProducts.useQuery();
 

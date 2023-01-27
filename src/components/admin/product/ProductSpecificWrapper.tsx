@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useState } from "react";
-import { Language } from "../../../types";
+import { type Dispatch, type SetStateAction, useState } from "react";
+import type { Language } from "../../../types";
 import LanguageContext from "../../context/LanugageContext";
 import Dashboard from "../Dashboard";
 import ProductSpecifics from "./ProductSpecifics";
@@ -34,7 +34,6 @@ export const LoadingProductList = ({
     <Dashboard
       isMenuOpen={isMenuOpen}
       setIsMenuOpen={setIsMenuOpen}
-      language={language}
       setLanguage={setLanguage}
       title={
         language === "english" ? "Product details" : "Dettagli del prodotto"

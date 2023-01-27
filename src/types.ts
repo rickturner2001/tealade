@@ -1,4 +1,9 @@
-import { Product, ProductTag, ProductVariant, Shipment } from "@prisma/client";
+import type {
+  Product,
+  ProductTag,
+  ProductVariant,
+  Shipment,
+} from "@prisma/client";
 
 export type NonEmptyArray<T> = [T, ...T[]];
 export type NonNullableArrayIndex<T> = T extends any[]

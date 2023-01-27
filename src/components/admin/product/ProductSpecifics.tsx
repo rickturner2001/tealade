@@ -1,6 +1,11 @@
 import { CheckIcon } from "@heroicons/react/24/solid";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
-import { Language } from "../../../types";
+import {
+  type Dispatch,
+  type SetStateAction,
+  useContext,
+  useState,
+} from "react";
+import type { Language } from "../../../types";
 import { api } from "../../../utils/api";
 import LanguageContext from "../../context/LanugageContext";
 import Dashboard from "../Dashboard";
@@ -69,7 +74,6 @@ const ProductSpecifics = ({
       <Dashboard
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
-        language={language}
         setLanguage={setLanguage}
         title={
           language === "english" ? "Product details" : "Dettagli del prodotto"
@@ -87,7 +91,6 @@ const ProductSpecifics = ({
     <Dashboard
       isMenuOpen={isMenuOpen}
       setIsMenuOpen={setIsMenuOpen}
-      language={language}
       setLanguage={setLanguage}
       title={
         language === "english" ? "Product details" : "Dettagli del prodotto"

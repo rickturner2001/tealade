@@ -1,11 +1,11 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { Category } from "@prisma/client";
-import { NextPage } from "next";
+import type { Category } from "@prisma/client";
+import type { NextPage } from "next";
 import React, { useState } from "react";
 import Dashboard from "../../components/admin/Dashboard";
 import CategoryScrolldown from "../../components/admin/subComponents/dropdowns";
 import PrivateRoute from "../../components/layouts/PrivateRoute";
-import { Language, NonEmptyArray } from "../../types";
+import type { Language, NonEmptyArray } from "../../types";
 import { api } from "../../utils/api";
 
 const copy = {
@@ -64,9 +64,7 @@ const Admin = () => {
       isMenuOpen={isMenuOpen}
       setIsMenuOpen={setIsMenuOpen}
       title={language === "english" ? "Find products" : "Cerca prodotti"}
-      language={language}
       setLanguage={setLanguage}
-      isListedProducts={true}
     >
       <ContextMenu language={language} />
     </Dashboard>

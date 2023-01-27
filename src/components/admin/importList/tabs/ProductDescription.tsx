@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { ProductWithTags } from "../../../../types";
+import { type Dispatch, type SetStateAction, useEffect } from "react";
+import type { ProductWithTags } from "../../../../types";
 import QuillEditor from "../../QullEditor";
 
 const ProductDescription = ({
@@ -14,7 +14,7 @@ const ProductDescription = ({
   useEffect(() => {
     if (!productDescription)
       setProductDescription(product.description.replace(/<img[^>]*>/g, ""));
-  }, []);
+  }, [productDescription, product.description, setProductDescription]);
 
   return (
     <div className="w-full p-12">

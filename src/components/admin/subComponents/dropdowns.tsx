@@ -1,7 +1,7 @@
-import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
+import { type Dispatch, Fragment, type SetStateAction, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import { Category } from "@prisma/client";
+import type { Category } from "@prisma/client";
 
 export default function CategoryScrolldown({
   categories,
@@ -16,7 +16,7 @@ export default function CategoryScrolldown({
 }) {
   useEffect(() => {
     setSelectedCategory(defaultSelection);
-  }, []);
+  }, [defaultSelection, setSelectedCategory]);
 
   return (
     <div className=" w-full md:w-1/2">

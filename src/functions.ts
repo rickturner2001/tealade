@@ -1,6 +1,5 @@
-import { Input } from "postcss";
 import { env } from "./env/server.mjs";
-import {
+import type {
   CJResponseListProducts,
   CjResponseProductSpecifics,
   CJShippingResponse,

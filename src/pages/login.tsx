@@ -90,7 +90,7 @@ const SignIn = () => {
                   setIsMissingEmail(true);
                   emailRef?.current?.focus();
                 }
-              })
+              })()
             }
             className="mt-12 w-full rounded-md bg-teal-500 py-3 text-center font-bold text-white"
           >

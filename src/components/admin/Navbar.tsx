@@ -56,9 +56,9 @@ export default function Navbar({
             >
               <button
                 onClick={() =>
-                  void (() => {
-                    signOut().catch((e) => console.error(e));
-                  })
+                  void (async () => {
+                    await signOut().catch((e) => console.error(e));
+                  })()
                 }
                 className="w-full rounded-md bg-gray-800 p-2 text-sm font-bold text-white "
               >

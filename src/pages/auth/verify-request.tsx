@@ -84,7 +84,7 @@ const VerifyRequest = () => {
                   signIn("email", { email: currentEmail }).catch((e) =>
                     console.error(e)
                   );
-                })
+                })()
               }
               className="inline-flex items-center justify-center rounded-md bg-teal-600 p-2 font-bold text-white"
             >

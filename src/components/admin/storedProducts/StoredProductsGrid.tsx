@@ -1,7 +1,6 @@
 import notFound from "../../../../public/media/images/not-found.png";
-import { motion } from "framer-motion";
-import { useContext, useState } from "react";
-import { Product, ProductVariant } from "@prisma/client";
+import { useContext } from "react";
+import type { Product, ProductVariant } from "@prisma/client";
 import Link from "next/link";
 import { api } from "../../../utils/api";
 import Spinner from "../../../components/Spinner";
@@ -9,8 +8,6 @@ import Spinner from "../../../components/Spinner";
 import LanguageContext from "../../context/LanugageContext";
 
 const StoreProductGrid = () => {
-  const [perPage, setPerPage] = useState(40);
-
   const { data: registeredProducts } =
     api.products.getAllStoreProducts.useQuery();
 
@@ -97,7 +94,7 @@ const StoreProductGrid = () => {
             </Link>
           </div>
         ) : (
-          <div>
+          <div className="flex flex-col items-center justify-center">
             <p className="text-center text-2xl font-bold">{copy.it.notFound}</p>
             <Link
               href={"/admin/find-products/1"}

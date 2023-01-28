@@ -17,7 +17,6 @@ import { signOut, useSession } from "next-auth/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import LanguageContext from "../context/LanugageContext";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Navbar({
   setLanguage,
@@ -71,17 +70,17 @@ export default function Navbar({
                 Sign out
               </button>
             </motion.div>
-            <div className="flex space-x-1">
+            <button
+              onClick={() => setIsUserMenuOpen((prev) => !prev)}
+              className="flex space-x-1"
+            >
               <UserIcon className="h-5 w-5" />
               <p className="hidden md:block">{sessionData.user?.name}</p>
-              <button
-                onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                className="jutify-center flex items-center"
-              >
+              <div className="jutify-center flex items-center">
                 <ChevronDownIcon className="h-3 w-3" />
                 {/* USER MENU */}
-              </button>
-            </div>
+              </div>
+            </button>
           </>
         ) : (
           <Link

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { EnvelopeIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { signIn } from "next-auth/react";
@@ -9,6 +9,8 @@ const VerifyRequest = () => {
 
   const [currentEmail, setCurrentEmail] = useState<string | null>();
   const [isChangingEmail, setIsChangingEmail] = useState(false);
+
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
 
   const newEmailRef = useRef<HTMLInputElement>(null);
 
@@ -70,11 +72,12 @@ const VerifyRequest = () => {
             <button
               onClick={() => {
                 setIsChangingEmail((prev) => !prev);
+                setIsButtonClicked(false);
                 setTimeout(() => {
                   newEmailRef?.current?.focus();
                 }, 100);
               }}
-              className="self-end text-sm text-teal-800 underline underline-offset-4"
+              className="end self-center text-sm text-teal-800 underline underline-offset-4"
             >
               change email
             </button>
@@ -84,13 +87,25 @@ const VerifyRequest = () => {
                   signIn("email", { email: currentEmail }).catch((e) =>
                     console.error(e)
                   );
+                  localStorage.setItem(
+                    "emailVerification",
+                    currentEmail as string
+                  );
+                  setIsButtonClicked(true);
                 })()
               }
               className="inline-flex items-center justify-center rounded-md bg-teal-600 p-2 font-bold text-white"
             >
-              <EnvelopeIcon className="h-5 w-5 font-bold" />
+              {isButtonClicked ? (
+                <CheckIcon className="h-5 w-5" />
+              ) : (
+                <EnvelopeIcon className="h-5 w-5 font-bold" />
+              )}
 
-              <span className="pl-2"> send again</span>
+              <span className="pl-2">
+                {" "}
+                {isButtonClicked ? "sent" : "send again"}
+              </span>
             </button>
           </div>
         </div>

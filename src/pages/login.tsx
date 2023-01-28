@@ -3,6 +3,7 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import Navbar from "../components/admin/Navbar";
+import Spinner from "../components/Spinner";
 import type { Language } from "../types";
 // import loginBg from "../../public/media/images/bg.jpg";
 
@@ -12,6 +13,7 @@ const SignIn = () => {
 
   const menuState = useState(false);
   const languageState = useState<Language>("english");
+  const [isButtonClick, setIsButtonClick] = useState(false);
   const [isMissingEmail, setIsMissingEmail] = useState(false);
 
   const emailRef = useRef<HTMLInputElement>(null);
@@ -86,14 +88,18 @@ const SignIn = () => {
                     "emailVerification",
                     emailRef.current.value
                   );
+                  setIsButtonClick(true);
                 } else {
                   setIsMissingEmail(true);
                   emailRef?.current?.focus();
                 }
               })()
             }
-            className="mt-12 w-full rounded-md bg-teal-500 py-3 text-center font-bold text-white"
+            className="mt-12 inline-flex w-full items-center justify-center  rounded-md bg-teal-500 py-3 text-center font-bold text-white"
           >
+            {isButtonClick && (
+              <Spinner className=" mr-2 inline h-4 w-4 animate-spin text-white" />
+            )}
             Sign up
           </button>
         </div>

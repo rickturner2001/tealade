@@ -22,7 +22,7 @@ const StoredProducts = () => {
           <ContextMenu />
           <div className="flex flex-col ">
             <LayoutGroup>
-              <motion.div layout className="px-0 py-12 md:px-24">
+              <motion.div layout className="px-0 py-12 md:px-12">
                 <StoreProductGrid />
               </motion.div>
             </LayoutGroup>

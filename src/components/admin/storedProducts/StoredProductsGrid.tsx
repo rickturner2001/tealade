@@ -26,7 +26,7 @@ const StoreProductGrid = () => {
 
   if (!registeredProducts) {
     return (
-      <div className=" grid grid-cols-1 gap-x-12 gap-y-12 py-6  px-12 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className=" grid grid-cols-1 gap-x-12 gap-y-12 py-6  px-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {[1, 2, 3, 4].map((idx) => {
           return (
             <div
@@ -77,7 +77,7 @@ const StoreProductGrid = () => {
   }
   if (registeredProducts.length === 0) {
     return (
-      <div className="flex w-full flex-col items-center justify-center px-6 py-12 md:px-24">
+      <div className="flex w-full flex-col items-center justify-center px-6 py-12 md:px-12">
         <img
           src={notFound.src}
           className=" mb-12 h-96 object-cover"
@@ -110,7 +110,7 @@ const StoreProductGrid = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-x-12 gap-y-12 py-6  px-12 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-x-6 gap-y-12 py-6  px-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {registeredProducts.map((prod) => {
           return <ProductCard key={prod.pid} product={prod} />;
         })}
@@ -152,7 +152,7 @@ const ProductCard = ({
     });
   return (
     <div
-      className={`relative z-10 flex  max-w-lg  flex-col items-center justify-center space-y-8 rounded-2xl  bg-white py-12 px-12 shadow-md`}
+      className={`relative z-10 flex  max-w-md  flex-col items-center justify-center space-y-8 rounded-2xl  bg-white py-12 shadow-md`}
     >
       <div className="h-full w-full">
         <div className="flex items-center justify-center">

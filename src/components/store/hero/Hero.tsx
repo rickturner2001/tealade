@@ -31,8 +31,10 @@ const Hero = () => {
           <button className="text-bold mb-12 w-max rounded-md bg-gray-800 p-2 text-xs font-medium">
             featured
           </button>
-          <h3 className="mb-6 font-medium uppercase">sponsored products</h3>
-          <h2 className="text-2xl font-bold">Unlock a World of Shopping!</h2>
+          <h3 className="mb-6 font-medium uppercase">Seasonal collection</h3>
+          <h2 className="text-2xl font-bold">
+            Bring Home the Joy of the Season
+          </h2>
           <button className="mt-12 w-max rounded-full border border-sky-500/10 bg-sky-500/20 py-4 px-12 font-medium shadow-md">
             More info
           </button>

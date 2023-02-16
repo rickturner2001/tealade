@@ -1,7 +1,7 @@
 import { createTRPCRouter } from "./trpc";
-import { exampleRouter } from "./routers/example";
 import { productRouter } from "./routers/products";
 import { cjApiRouter } from "./routers/cjAPI";
+import { sectionRouter } from "./routers/sections";
 
 /**
  * This is the primary router for your server.
@@ -9,9 +9,9 @@ import { cjApiRouter } from "./routers/cjAPI";
  * All routers added in /api/routers should be manually added here
  */
 export const appRouter = createTRPCRouter({
-  example: exampleRouter,
   products: productRouter,
   cjApi: cjApiRouter,
+  sections: sectionRouter,
 });
 
 // export type definition of API

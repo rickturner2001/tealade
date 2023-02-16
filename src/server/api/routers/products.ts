@@ -128,6 +128,17 @@ export const productRouter = createTRPCRouter({
     }),
 
   // Categories
+    getAllCategoriesWithProductCount: publicProcedure.query(async({ctx}) => {
+      return await ctx.prisma.category.findMany({
+        include: {
+          products: {
+            include: {
+              _count: true
+            }
+          }
+        }
+      })
+    }),
 
   // Categories Queries
   getAllCategories: publicProcedure.query(async ({ ctx }) => {
@@ -135,23 +146,12 @@ export const productRouter = createTRPCRouter({
   }),
   // Categories Mutations
   blukCreateNewCategory: publicProcedure
-    .input(z.object({ label: z.string().array() }))
+    .input(z.object({ label: z.string().array(), ids: z.string().array()}))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.category.createMany({
-        data: input.label.map((label) => {
-          return { label: label };
+        data: input.label.map((label, idx) => {
+          return { label: label, cid: input.ids[idx] as string };
         }),
-      });
-    }),
-
-  createNewSubCategory: publicProcedure
-    .input(z.object({ label: z.string(), category: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.subCategory.createMany({
-        data: {
-          categoryLabel: input.category,
-          label: input.label,
-        },
       });
     }),
 

@@ -1,4 +1,6 @@
 import type {
+  Category,
+  Prisma,
   Product,
   ProductTag,
   ProductVariant,
@@ -11,7 +13,20 @@ export type NonNullableArrayIndex<T> = T extends any[]
   : never;
 
 export type Language = "english" | "italian";
+export type CurrencyType = "USD" | "EUR"
 
+export type CategoryWithProductCount = (Category & {
+  products: (Product & {
+      _count: Prisma.ProductCountOutputType;
+  })[];
+})
+
+
+export type ImportedProduct = (Product & {
+  tags: ProductTag[];
+  variants: ProductVariant[];
+  shipments: Shipment[];
+})
 export type CJResponseListProducts = {
   code: number;
   result: boolean;
@@ -152,3 +167,6 @@ export type ProductWithTags = Product & {
   variants: ProductVariant[];
   shipments: Shipment[];
 };
+
+
+export type StoreSections = 'featured' | "hot" | "seasonal"

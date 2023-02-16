@@ -68,16 +68,8 @@ model VerificationToken {
 
 
 model Category{
-    label String @id
-    subCategories SubCategory[]
-    products Product[]
-}
-
-
-model SubCategory{
-    label String @id
-    categoryLabel String 
-    category Category @relation(fields: [categoryLabel], references: [label], onDelete: Cascade)
+    cid  String @id //Category ID
+    label String @unique 
     products Product[]
 }
 
@@ -89,7 +81,6 @@ model SubCategory{
     categoryLabel String?
     category Category? @relation(fields: [categoryLabel], references: [label])
     subCategoryLabel String?
-    subCategory SubCategory? @relation(fields: [subCategoryLabel], references: [label])
     description String
     variants ProductVariant[]
     defaultThumbnail String
@@ -97,6 +88,7 @@ model SubCategory{
     isStore Boolean @default(false)
     shipments Shipment[]
     isImport Boolean @default(false)
+    sections ShopSection[]
  }
 
 
@@ -107,9 +99,6 @@ model Shipment{
     cost Float
     productId String 
     product Product @relation(fields: [productId], references: [pid], onDelete: Cascade)
-
-    
-
 }
 
 model ProductVariant{
@@ -124,10 +113,15 @@ model ProductVariant{
 }
 
 
-
  model ProductTag{
     label String 
     productId String
     products Product  @relation(fields: [productId], references: [pid], onDelete: Cascade)
   @@id([label, productId])
  }
+
+model ShopSection{
+    id String @id @default(cuid())
+    label String @unique
+    products Product[]
+}

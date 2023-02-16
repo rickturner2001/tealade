@@ -1,56 +1,36 @@
-import {
-  Bars3Icon,
-  HeartIcon,
-  MagnifyingGlassIcon,
-  ShoppingCartIcon,
-  UserIcon,
-  UsersIcon,
-} from "@heroicons/react/24/outline";
+import { useState } from "react";
+import type { StoreSections } from "../../types";
+import Link from "next/link";
+import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 
 const Navbar = () => {
+  
+  
+  
+  const [selectedSection ,setSelectedSection] =  useState<StoreSections>("featured")
+
   return (
-    <nav className="relative z-40 flex w-screen items-center justify-between   border-b border-b-white/20 bg-blue-600 text-white shadow-md">
-      {/* Hamburger (mobile) */}
-      <div className="border-r border-r-white/20 p-5 md:hidden">
-        <Bars3Icon className="h-5 w-5" />
-      </div>
-      <div className="hidden items-center border-r border-r-white/20 md:flex">
-        <button aria-label="query products by keyword" className=" py-6 px-8">
-          <MagnifyingGlassIcon className="h-5 w-5" />
-        </button>
-      </div>
-      <div>
-        <span className="inline-block pr-6 text-2xl font-semibold uppercase md:pr-0">
-          Tealade
-        </span>
-      </div>
-      <ul role={"list"} className="hidden items-center md:flex">
-        <li
-          role={"listitem"}
-          className="flex items-center border-r border-r-white/20 p-6"
-        >
-          <button>
-            <UserIcon className="h-5 w-5" />
-          </button>
-        </li>
-        <li
-          role={"listitem"}
-          className="flex items-center border-r border-r-white/20 p-6"
-        >
-          <button>
-            <HeartIcon className="h-5 w-5" />
-          </button>
-        </li>
-        <li
-          role={"listitem"}
-          className="flex items-center border-r border-r-white/20 p-6"
-        >
-          <button>
-            <ShoppingCartIcon className="h-5 w-5" />
-          </button>
-        </li>
-      </ul>
-    </nav>
+    <div className="relative w-screen">
+    <nav className="flex justify-between font-medium py-4 px-10 items-center">
+      <span className="inline-block text-2xl font-medium uppercase">Tealade</span>
+    <ul className="flex  space-x-4">
+      <li><button className="p-4 ">Featured</button></li>
+      <li><button className="p-4">Seasonal</button></li>
+      <li><button className="p-4">Hot</button></li>
+    </ul>
+
+<div className="flex space-x-6 items-center">
+
+    {/* <input className="w-full rounded-md border focus:outline-none py-2 px-4"/> */}
+<button>Search</button>
+<Link href={"/"}>Help</Link>
+<ShoppingBagIcon className="w-5 text-gray-600 h-5"/>
+</div>
+
+    </nav >
+  <div className="w-[96%] mx-auto bottom-0  border-t border-t-gray-200"></div>
+  
+    </div>
   );
 };
 

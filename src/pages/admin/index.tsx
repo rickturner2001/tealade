@@ -28,7 +28,7 @@ export const ContextMenu = () => {
   );
 
   return (
-    <div className="w-full bg-gradient-to-r from-blue-700 to-blue-500 py-6 opacity-80">
+    <div className="relative z-40 w-full bg-gradient-to-r from-blue-700 to-blue-500 py-6 opacity-80">
       <div className="space-between flex px-24">
         <label htmlFor="product search" className="sr-only">
           Search

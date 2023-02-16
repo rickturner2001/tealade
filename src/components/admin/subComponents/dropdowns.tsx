@@ -2,6 +2,7 @@ import { type Dispatch, Fragment, type SetStateAction, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import type { Category } from "@prisma/client";
+import Link from "next/link";
 
 export default function CategoryScrolldown({
   categories,
@@ -19,7 +20,7 @@ export default function CategoryScrolldown({
   }, [defaultSelection, setSelectedCategory]);
 
   return (
-    <div className=" w-full md:w-1/2">
+    <div className=" relative z-50 w-full md:w-1/2">
       <Listbox value={selectedCategory} onChange={setSelectedCategory}>
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full cursor-default rounded-md bg-white p-2.5 text-left text-sm shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-300 sm:text-sm">
@@ -35,16 +36,18 @@ export default function CategoryScrolldown({
           </Listbox.Button>
           <Transition
             as={Fragment}
-            leave="transition ease-in duration-100"
+            leave="transition ease-in duration-100 z-20"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {categories.map((category, personIdx) => (
                 <Listbox.Option
+                  as={Link}
+                  href={`/admin/find-products/${category.cid}/1`}
                   key={personIdx}
                   className={({ active }) =>
-                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                    `relative z-30 cursor-default select-none py-2 pl-10 pr-4 ${
                       active ? "bg-blue-100 text-blue-900" : "text-gray-900"
                     }`
                   }

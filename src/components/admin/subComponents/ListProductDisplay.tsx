@@ -15,16 +15,18 @@ import type { Language } from "../../../types";
 const ListProductDisplay = ({
   language,
   pageNumber,
+  category,
 }: {
   language: Language;
   pageNumber: number;
+  category?: string;
 }) => {
   const pageData = useState(40);
 
   const { data } = api.cjApi.getListProducts.useQuery({
     pageNum: (pageNumber ? (+pageNumber as number | undefined) : 1) ?? 1,
     perPage: pageData[0],
-    categoryKeyword: null,
+    categoryKeyword: category ?? null,
   });
   const { data: registeredProducts } = api.products.getAllProducts.useQuery();
 

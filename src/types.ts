@@ -13,20 +13,19 @@ export type NonNullableArrayIndex<T> = T extends any[]
   : never;
 
 export type Language = "english" | "italian";
-export type CurrencyType = "USD" | "EUR"
+export type CurrencyType = "USD" | "EUR";
 
-export type CategoryWithProductCount = (Category & {
+export type CategoryWithProductCount = Category & {
   products: (Product & {
-      _count: Prisma.ProductCountOutputType;
+    _count: Prisma.ProductCountOutputType;
   })[];
-})
+};
 
-
-export type ImportedProduct = (Product & {
+export type ImportedProduct = Product & {
   tags: ProductTag[];
   variants: ProductVariant[];
   shipments: Shipment[];
-})
+};
 export type CJResponseListProducts = {
   code: number;
   result: boolean;
@@ -155,6 +154,10 @@ export type CJShippingResponse = {
   requestId: string;
 };
 
+export type StoreProduct = Product & {
+  variants: ProductVariant[];
+};
+
 export type ShippingItem = {
   logisticAging: string;
   logisticPrice: number;
@@ -168,5 +171,4 @@ export type ProductWithTags = Product & {
   shipments: Shipment[];
 };
 
-
-export type StoreSections = 'featured' | "hot" | "seasonal"
+export type StoreSections = "featured" | "hot" | "seasonal";

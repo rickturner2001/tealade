@@ -2,22 +2,19 @@ import { motion } from "framer-motion";
 import {
   BuildingStorefrontIcon,
   ShoppingBagIcon,
+  WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
 import {
   ArchiveBoxArrowDownIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import type {
-  Product,
-  ProductTag,
-  ProductVariant,
-  Shipment,
-} from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import Link from "next/link";
 import { useContext } from "react";
 import { api } from "../../utils/api";
 import DashboardContext from "../context/DashboardContext";
 import LanguageContext from "../context/LanugageContext";
+import Builder from "../../pages/admin/builder";
 
 const copy = {
   en: {
@@ -25,44 +22,36 @@ const copy = {
     findProducts: "Find products",
     importList: "Import list",
     importedProducts: "Imported products",
+    sectionBuilder: "Section builder",
   },
   ita: {
     storeRedirect: "Negozio",
     findProducts: "Trova prodotti",
     importList: "Lista importi",
     importedProducts: "Prodotti importati",
+    sectionBuilder: "Costuisci sezione",
   },
 };
 
-type ImportedProducts =
-  | (Product & {
-      tags: ProductTag[];
-      variants: ProductVariant[];
-      shipments: Shipment[];
-    })[]
-  | undefined;
-
-type StoreProducts =
-  | (Product & {
-      variants: ProductVariant[];
-    })[]
-  | undefined;
-
 export default function SideMenu() {
-  const { data: importedProduct } =
-    api.products.getAllImportedProducts.useQuery();
+  const { data: importedProducts } =
+    api.products.getImportedProductsCount.useQuery();
 
-  const { data: storeProducts } = api.products.getAllStoreProducts.useQuery();
+  const { data: storeProducts } = api.products.getStoreProductsCount.useQuery();
+
+  const { data: sectionCount } = api.sections.getSectionCount.useQuery();
 
   return (
     <>
       <WideScreensSidebar
-        importedProducts={importedProduct}
+        importedProducts={importedProducts}
+        sectionCount={sectionCount}
         storeProducts={storeProducts}
       />
       <SmallScreensSidebar
-        importedProducts={importedProduct}
+        importedProducts={importedProducts}
         storeProducts={storeProducts}
+        sectionCount={sectionCount}
       />
     </>
   );
@@ -71,9 +60,12 @@ export default function SideMenu() {
 const SmallScreensSidebar = ({
   importedProducts,
   storeProducts,
+  sectionCount,
 }: {
-  importedProducts: ImportedProducts;
-  storeProducts: StoreProducts;
+  importedProducts: number | undefined;
+  storeProducts: number | undefined;
+
+  sectionCount: number | undefined;
 }) => {
   const { language } = useContext(LanguageContext);
   const { isMenuOpen, setIsMenuOpen } = useContext(DashboardContext);
@@ -117,7 +109,7 @@ const SmallScreensSidebar = ({
           {currentCopy.importList}
         </span>
         <span className="rounded-full bg-gray-200 px-2 py-1 text-xs text-gray-800">
-          {importedProducts ? importedProducts.length : "?"}
+          {importedProducts ? importedProducts : "0"}
         </span>
       </Link>
       <Link
@@ -130,7 +122,20 @@ const SmallScreensSidebar = ({
           {currentCopy.importedProducts}
         </span>
         <span className="rounded-full bg-gray-200 px-2 py-1 text-xs text-gray-800">
-          {storeProducts ? storeProducts.length : "?"}
+          {storeProducts ?? "0"}
+        </span>
+      </Link>
+      <Link
+        onClick={() => setIsMenuOpen(false)}
+        href={"/admin/builder"}
+        className="flex cursor-pointer items-center space-x-2 rounded-md px-4 py-2 transition-all duration-200 hover:bg-gray-100"
+      >
+        <WrenchScrewdriverIcon className="h-5 w-5 text-gray-700" />
+        <span className="text-sm font-medium text-gray-700">
+          {currentCopy.sectionBuilder}
+        </span>
+        <span className="rounded-full bg-gray-200 px-2 py-1 text-xs text-gray-800">
+          {sectionCount ?? "0"}
         </span>
       </Link>
     </motion.aside>
@@ -140,9 +145,11 @@ const SmallScreensSidebar = ({
 const WideScreensSidebar = ({
   importedProducts,
   storeProducts,
+  sectionCount,
 }: {
-  importedProducts: ImportedProducts;
-  storeProducts: StoreProducts;
+  importedProducts: number | undefined;
+  storeProducts: number | undefined;
+  sectionCount: number | undefined;
 }) => {
   const { language } = useContext(LanguageContext);
   const currentCopy = language === "english" ? copy.en : copy.ita;
@@ -174,7 +181,7 @@ const WideScreensSidebar = ({
         <ArchiveBoxArrowDownIcon className="h-5 w-5 text-gray-700" />
         <span className="text-sm text-gray-700">{currentCopy.importList}</span>
         <span className="rounded-full bg-gray-200 px-2 py-1 text-xs text-gray-800">
-          {importedProducts ? importedProducts.length : "?"}
+          {importedProducts ?? "0"}
         </span>
       </Link>
       <Link
@@ -186,7 +193,19 @@ const WideScreensSidebar = ({
           {currentCopy.importedProducts}
         </span>
         <span className="rounded-full bg-gray-200 px-2 py-1 text-xs text-gray-800">
-          {storeProducts ? storeProducts.length : "?"}
+          {storeProducts ?? "0"}
+        </span>
+      </Link>
+      <Link
+        href="/admin/builder"
+        className="flex cursor-pointer items-center space-x-2 rounded-md px-4 py-2 transition-all duration-200 hover:bg-gray-100"
+      >
+        <WrenchScrewdriverIcon className="h-5 w-5 text-gray-700" />
+        <span className="text-sm text-gray-700">
+          {currentCopy.sectionBuilder}
+        </span>
+        <span className="rounded-full bg-gray-200 px-2 py-1 text-xs text-gray-800">
+          {sectionCount ?? "0"}
         </span>
       </Link>
     </aside>

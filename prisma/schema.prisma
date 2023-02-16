@@ -93,35 +93,37 @@ model Category{
 
 
 model Shipment{
-    id String @id @default(cuid())
-    courier String
-    est String
-    cost Float
+    id        String @id @default(cuid())
+    courier   String
+    est       String
+    cost      Float
     productId String 
-    product Product @relation(fields: [productId], references: [pid], onDelete: Cascade)
+    product   Product @relation(fields: [productId], references: [pid], onDelete: Cascade)
 }
 
 model ProductVariant{
-    vid String @id
+    vid         String @id
     variantName String
-    thumbnail String
-    productId String
-    Product Product  @relation(fields: [productId], references: [pid], onDelete: Cascade)
-    price Float
-    height Float
-    width Float
+    thumbnail   String
+    productId   String
+    Product     Product  @relation(fields: [productId], references: [pid], onDelete: Cascade)
+    price       Float
+    height      Float
+    width       Float
 }
 
 
  model ProductTag{
-    label String 
+    label     String 
     productId String
-    products Product  @relation(fields: [productId], references: [pid], onDelete: Cascade)
-  @@id([label, productId])
+    products  Product  @relation(fields: [productId], references: [pid], onDelete: Cascade)
+    @@id([label, productId])
  }
 
+
 model ShopSection{
-    id String @id @default(cuid())
-    label String @unique
-    products Product[]
+    id        String @id @default(cuid())
+    label     String @unique
+    products  Product[]
+    thumbnail String
 }

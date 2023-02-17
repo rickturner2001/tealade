@@ -106,7 +106,11 @@ const ListProductDisplay = ({
       <div className="my-12  flex w-full items-center justify-center space-x-4">
         {pageNumber && +pageNumber > 1 && (
           <Link
-            href={`/admin/find-products/${+pageNumber - 1}`}
+            href={
+              category
+                ? `/admin/find-products/${category}/${+pageNumber - 1}`
+                : `/admin/find-products/${+pageNumber - 1}Chevron`
+            }
             className="rounded-md border bg-gray-100  p-2 text-sm font-bold text-gray-800"
           >
             <ChevronLeftIcon className="h-4 w-4" />
@@ -117,7 +121,11 @@ const ListProductDisplay = ({
         </button>
         {pageNumber && (
           <Link
-            href={`/admin/find-products/${+pageNumber + 1}`}
+            href={
+              category
+                ? `/admin/find-products/${category}/${+pageNumber + 1}`
+                : `/admin/find-products/${+pageNumber + 1}`
+            }
             className="rounded-md border bg-gray-100 p-2 text-sm font-bold text-gray-800"
           >
             <ChevronRightIcon className="h-4 w-4" />

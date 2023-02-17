@@ -207,6 +207,8 @@ const ProductSpecifics = ({
                           if (economyShipping) {
                             registerNewProduct({
                               defaultThumbnail: product.productImageSet[0],
+                              categoryId: product.categoryId,
+                              categoryName: product.categoryName,
                               description: product.productNameEn,
                               name: product.entryNameEn,
                               imageSet: product.productImageSet,

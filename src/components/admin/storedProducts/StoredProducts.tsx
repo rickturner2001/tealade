@@ -35,7 +35,7 @@ const StoredProducts = () => {
 
 const ContextMenu = () => {
   return (
-    <div className="w-full bg-gradient-to-r from-blue-700 to-blue-500 py-6 opacity-80"></div>
+    <div className="w-full bg-gradient-to-r from-blue-700 to-blue-500/80 py-6 "></div>
   );
 };
 

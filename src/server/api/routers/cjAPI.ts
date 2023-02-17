@@ -4,7 +4,7 @@ import {
   requestProductList,
   requestShipmentByVid,
 } from "../../../functions";
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { adminProcedure, createTRPCRouter, publicProcedure } from "../trpc";
 
 export const cjApiRouter = createTRPCRouter({
   getListProducts: publicProcedure
@@ -36,7 +36,7 @@ export const cjApiRouter = createTRPCRouter({
       return await requestShipmentByVid(input.vid);
     }),
 
-  blindProductRegistration: publicProcedure
+  blindProductRegistration: adminProcedure
     .input(z.object({ pid: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const productData = await requestProductById(input.pid);
@@ -47,10 +47,23 @@ export const cjApiRouter = createTRPCRouter({
         );
         if (shipmentData.data) {
           const product = productData.data;
+
           const shipments = shipmentData.data;
+
           return await ctx.prisma.product.create({
             data: {
               pid: product.pid,
+              category: {
+                connectOrCreate: {
+                  where: {
+                    cid: product.categoryId,
+                  },
+                  create: {
+                    cid: product.categoryId,
+                    label: product.categoryName,
+                  },
+                },
+              },
               defaultThumbnail: product.productImageSet[0],
               isImport: true,
               description: product.description,

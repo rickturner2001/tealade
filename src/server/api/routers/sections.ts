@@ -1,9 +1,14 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import {
+  createTRPCRouter,
+  publicProcedure,
+  protectedProcedure,
+  adminProcedure,
+} from "../trpc";
 
 export const sectionRouter = createTRPCRouter({
-  createSectionWithProducts: protectedProcedure
+  createSectionWithProducts: adminProcedure
     .input(
       z.object({
         label: z.string(),
@@ -25,7 +30,7 @@ export const sectionRouter = createTRPCRouter({
       });
     }),
 
-  addProductsToSection: protectedProcedure
+  addProductsToSection: adminProcedure
     .input(z.object({ sid: z.string(), pids: z.string().array() }))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.shopSection.update({
@@ -42,7 +47,7 @@ export const sectionRouter = createTRPCRouter({
       });
     }),
 
-  changeSectionThumbnail: protectedProcedure
+  changeSectionThumbnail: adminProcedure
     .input(z.object({ sid: z.string(), thumbnail: z.string() }))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.shopSection.update({
@@ -55,7 +60,7 @@ export const sectionRouter = createTRPCRouter({
       });
     }),
 
-  removeProductsFromSection: protectedProcedure
+  removeProductsFromSection: adminProcedure
     .input(z.object({ sid: z.string(), pids: z.string().array() }))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.shopSection.update({
@@ -72,7 +77,7 @@ export const sectionRouter = createTRPCRouter({
       });
     }),
 
-  deleteSection: protectedProcedure
+  deleteSection: adminProcedure
     .input(z.object({ sid: z.string() }))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.shopSection.delete({
@@ -86,6 +91,19 @@ export const sectionRouter = createTRPCRouter({
   getAllSesctions: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.shopSection.findMany();
   }),
+
+  getSectionById: publicProcedure
+    .input(z.object({ sid: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.shopSection.findUnique({
+        where: {
+          id: input.sid,
+        },
+        include: {
+          products: true,
+        },
+      });
+    }),
 
   getSectionCount: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.shopSection.count();

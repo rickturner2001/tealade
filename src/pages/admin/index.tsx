@@ -28,23 +28,12 @@ export const ContextMenu = () => {
   );
 
   return (
-    <div className="relative z-40 w-full bg-gradient-to-r from-blue-700 to-blue-500 py-6 opacity-80">
+    <div className="relative z-40 w-full bg-gradient-to-r from-blue-700/80 to-blue-500/80 py-6">
       <div className="space-between flex px-24">
         <label htmlFor="product search" className="sr-only">
           Search
         </label>
-        <div className="relative w-full">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <MagnifyingGlassIcon className="h-5 w-5 text-white" />
-          </div>
-          <input
-            type="text"
-            id="search"
-            className="block w-1/2 rounded-md bg-blue-500 p-2.5 pl-10 text-sm text-white placeholder:text-white focus:outline-none"
-            placeholder={currentCopy.searchPlaceholder}
-            required
-          />
-        </div>
+
         {categories && categories[0] && (
           <CategoryScrolldown
             selectedCategory={selectedCategory}

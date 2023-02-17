@@ -22,10 +22,6 @@ const ListingWrapper = ({
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const [selectedCagtory, setSelectedCategory] = useState<Category | null>(
-    null
-  );
-
   return (
     <Dashboard
       isMenuOpen={isMenuOpen}
@@ -50,8 +46,6 @@ const ListByPageNumber = () => {
 
   const router = useRouter();
 
-  console.log("Router: ", router);
-
   const { slugs } = router.query;
 
   return (
@@ -59,7 +53,7 @@ const ListByPageNumber = () => {
       setLanguage={setLanguage}
       language={languge}
       title={languge === "english" ? "Find products" : "Trova prodotti"}
-      pageNumber={slugs && slugs[1] ? +slugs[1] : 1 ?? 1}
+      pageNumber={slugs ? (slugs[1] ? +slugs[1] : slugs[0] ? +slugs[0] : 1) : 1}
       category={slugs && slugs.length > 1 ? slugs[0] : undefined}
     />
   );

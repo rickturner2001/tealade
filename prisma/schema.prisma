@@ -78,9 +78,6 @@ model Category{
     pid String @id
     name String 
     tags ProductTag[]
-    categoryLabel String?
-    category Category? @relation(fields: [categoryLabel], references: [label])
-    subCategoryLabel String?
     description String
     variants ProductVariant[]
     defaultThumbnail String
@@ -89,6 +86,8 @@ model Category{
     shipments Shipment[]
     isImport Boolean @default(false)
     sections ShopSection[]
+    categoryId String
+    category Category @relation(fields: [categoryId], references: [cid])
  }
 
 

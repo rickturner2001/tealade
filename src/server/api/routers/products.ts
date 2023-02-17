@@ -1,14 +1,20 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure, adminProcedure } from "../trpc";
+import {
+  createTRPCRouter,
+  publicProcedure,
+  adminProcedure,
+  protectedProcedure,
+} from "../trpc";
 export const productRouter = createTRPCRouter({
   // Products
-  registerProduct: publicProcedure
+  registerProduct: adminProcedure
     .input(
       z.object({
         pid: z.string(),
         name: z.string(),
         description: z.string(),
+        categoryId: z.string(),
         variants: z
           .object({
             vid: z.string(),
@@ -24,6 +30,8 @@ export const productRouter = createTRPCRouter({
         shipments: z
           .object({ courier: z.string(), est: z.string(), price: z.number() })
           .array(),
+
+        categoryName: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -35,6 +43,17 @@ export const productRouter = createTRPCRouter({
           description: input.description,
           name: input.name,
           imageSet: input.imageSet,
+          category: {
+            connectOrCreate: {
+              where: {
+                cid: input.categoryId,
+              },
+              create: {
+                cid: input.categoryId,
+                label: input.categoryName,
+              },
+            },
+          },
           variants: {
             createMany: {
               data: input.variants.map((variant) => {
@@ -64,7 +83,7 @@ export const productRouter = createTRPCRouter({
       });
     }),
 
-  deleteProduct: publicProcedure
+  deleteProduct: adminProcedure
     .input(z.object({ pid: z.string() }))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.product.delete({
@@ -84,7 +103,11 @@ export const productRouter = createTRPCRouter({
         isStore: true,
       },
       include: {
-        variants: true,
+        variants: {
+          orderBy: {
+            price: "asc",
+          },
+        },
       },
     });
   }),
@@ -103,7 +126,7 @@ export const productRouter = createTRPCRouter({
   }),
 
   // Tags
-  addNewTag: publicProcedure
+  addNewTag: adminProcedure
     .input(z.object({ label: z.string(), pid: z.string() }))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.productTag.create({
@@ -114,7 +137,7 @@ export const productRouter = createTRPCRouter({
       });
     }),
 
-  deleteTag: publicProcedure
+  deleteTag: adminProcedure
     .input(z.object({ label: z.string(), pid: z.string() }))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.productTag.delete({
@@ -145,7 +168,7 @@ export const productRouter = createTRPCRouter({
     return await ctx.prisma.category.findMany({});
   }),
   // Categories Mutations
-  blukCreateNewCategory: publicProcedure
+  blukCreateNewCategory: adminProcedure
     .input(z.object({ label: z.string().array(), ids: z.string().array() }))
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.category.createMany({

@@ -2,7 +2,8 @@ import { EyeIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { api } from "../../../utils/api";
 import Spinner from "../../../components/Spinner";
 import { type Dispatch, type SetStateAction, useRef, useState } from "react";
-import { type StoreProduct } from "../../../types";
+import ProductSelection from "./ProductSelection";
+import Link from "next/link";
 
 const BuilderLayout = () => {
   const utils = api.useContext();
@@ -10,10 +11,9 @@ const BuilderLayout = () => {
   const [currentDeletion, setCurrentDeletion] = useState("");
 
   const { data: sections } = api.sections.getAllSesctions.useQuery();
-  const [selectedProduct, setSelectedProduct] = useState<StoreProduct | null>(
-    null
-  );
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const sectionNameRef = useRef<HTMLInputElement>(null);
+  const [sectionThumbnail, setSectionThumbnail] = useState("");
 
   const {
     mutate: createSectionMutation,
@@ -37,21 +37,29 @@ const BuilderLayout = () => {
   });
 
   return (
-    <div className="m-8 grid min-h-[20rem] grid-cols-4 gap-x-4 rounded-md p-8 shadow-md">
+    <div className="m-8 grid  grid-cols-1 grid-rows-2 gap-x-4 space-y-6 rounded-md shadow-md  lg:grid-cols-2 xl:grid-cols-3 xl:p-8 2xl:grid-cols-4">
       {sections && sections.length < 4 ? (
         <>
-          <div className="relative flex flex-col justify-between rounded-md border bg-white p-6 shadow-sm">
-            <div className="w-full">
-              <span className=" inline-block p-2 text-sm ">Section Label</span>
+          <div className="relative col-span-2 row-span-2 flex h-max flex-col justify-between rounded-md border bg-white p-6 shadow-sm">
+            <div className=" w-full">
+              <span className=" inline-block p-2 text-sm font-medium">
+                Section Label
+              </span>
               <input
                 ref={sectionNameRef}
-                className="w-full rounded-md border border-blue-500 py-2  px-4 text-sm focus:outline-none"
+                className="w-full rounded-md border  py-2  px-4 text-sm focus:outline-none"
               />
 
-              <div className="my-6">
-                <span className=" inline-block p-2 text-sm ">Lead product</span>
+              <div className="my-8">
+                <span className=" inline-block p-2 text-sm font-medium ">
+                  Products
+                </span>
 
-                <ProductSelection setSelectedProduct={setSelectedProduct} />
+                <ProductSelection
+                  sectionThumbnail={sectionThumbnail}
+                  setSectionThumbnail={setSectionThumbnail}
+                  setSelectedProducts={setSelectedProducts}
+                />
               </div>
             </div>
             {!isLoading ? (
@@ -59,23 +67,20 @@ const BuilderLayout = () => {
                 onClick={() => {
                   const sectionLabel = sectionNameRef?.current?.value;
 
-                  console.debug("label: ", sectionLabel);
-                  console.debug("prod: ", selectedProduct);
-
-                  if (sectionLabel && selectedProduct) {
+                  if (sectionLabel && selectedProducts.length) {
                     createSectionMutation({
                       label: sectionLabel,
-                      pids: [selectedProduct.pid],
-                      thumbnail: selectedProduct.defaultThumbnail,
+                      pids: selectedProducts,
+                      thumbnail: sectionThumbnail,
                     });
                   }
                 }}
-                className={`flex w-full items-center  justify-center self-center rounded-md bg-blue-500 py-3 px-8 text-center text-sm font-bold text-white`}
+                className={`focus:blue-300 focus:ring-300 flex w-full  items-center justify-center self-center rounded-lg bg-blue-700  py-2.5 px-5 text-center text-sm font-bold text-white hover:bg-blue-800 focus:ring-4`}
               >
                 <span className="w-full text-center">Add section</span>
               </button>
             ) : (
-              <button className=" flex w-full items-center justify-center space-x-2  rounded-md bg-blue-500 px-8 py-3 text-sm  font-bold text-white">
+              <button className=" relative flex w-full items-center justify-center space-x-2  rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-bold text-white hover:bg-blue-800  focus:ring-4 focus:ring-blue-300">
                 <Spinner className="h-5 w-5 animate-spin" />
                 <span>Loading</span>
               </button>
@@ -88,18 +93,25 @@ const BuilderLayout = () => {
                 className="flex flex-col space-y-4 bg-white p-4"
                 key={section.id}
               >
+                <p className="text-sm font-medium text-gray-700">
+                  {section.label}
+                </p>
                 <img
                   src={section.thumbnail}
-                  className="h-full w-full object-contain"
+                  className="h-full w-full rounded-lg object-contain"
                 />
+
                 <div className="flex space-x-2">
-                  <button className="w-full rounded-md border border-gray-400 bg-white py-3 px-8 text-sm font-semibold text-gray-600">
-                    {section.label}
-                  </button>
+                  <Link
+                    href={`/admin/section/${section.id}`}
+                    className="block w-1/2 rounded-lg border border-gray-200 bg-white py-2.5 px-5 text-center text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-200"
+                  >
+                    Edit
+                  </Link>
                   {isLoadingDeletion && currentDeletion === section.id ? (
-                    <button className="items-cente flex w-full space-x-2 rounded-md border border-red-800 bg-red-500/50 py-3 px-8 text-sm font-semibold text-red-700">
+                    <button className="flex w-1/2 items-center rounded-lg bg-red-700 px-5  py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300">
                       <Spinner className="h-5 w-5 animate-spin" />
-                      <span>Loading</span>
+                      <span className="ml-4">Loading</span>
                     </button>
                   ) : (
                     <button
@@ -107,7 +119,7 @@ const BuilderLayout = () => {
                         removeSectionMutation({ sid: section.id });
                         setCurrentDeletion(section.id);
                       }}
-                      className="flex-grow rounded-md border border-red-800 bg-red-500/50 py-3 px-8 text-sm font-semibold text-red-700"
+                      className="w-1/2 items-center rounded-lg bg-red-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300"
                     >
                       Delete
                     </button>
@@ -178,71 +190,6 @@ const BuilderLayout = () => {
             </div>
           )}
         </>
-      )}
-    </div>
-  );
-};
-
-const ProductSelection = ({
-  setSelectedProduct,
-}: {
-  setSelectedProduct: Dispatch<SetStateAction<StoreProduct | null>>;
-}) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeProduct, setActiveProduct] = useState<StoreProduct | null>(null);
-
-  const { data: storeProducts } = api.products.getAllStoreProducts.useQuery();
-
-  return (
-    <div className="  flex select-none flex-col rounded-md border bg-white p-2 px-4 text-sm font-semibold text-gray-800">
-      {/* Active Item */}
-
-      <button
-        onClick={() => setIsMenuOpen((prev) => !prev)}
-        className="flex w-full items-center justify-between py-2 px-4"
-      >
-        <div>{!activeProduct ? "Select a product" : activeProduct.name}</div>
-        {!activeProduct ? (
-          <EyeIcon className="h-5 w-5" />
-        ) : (
-          <img
-            src={activeProduct.defaultThumbnail}
-            className="h-12 w-12 rounded-md object-cover"
-          />
-        )}
-      </button>
-      {/* List */}
-      {isMenuOpen && (
-        <ul className="absolute top-0 right-0 flex h-full w-full flex-col overflow-scroll rounded-md border bg-white p-4 pt-9 shadow-sm">
-          <button
-            onClick={() => {
-              setIsMenuOpen(false);
-            }}
-            className="absolute top-2 right-2 rounded-md border border-red-800 bg-red-500/20 p-0.5 text-red-800"
-          >
-            <XMarkIcon className="h-5 w-5" />
-          </button>
-          {storeProducts &&
-            storeProducts.map((prod) => {
-              return (
-                <li
-                  onClick={() => {
-                    setSelectedProduct(prod);
-                    setActiveProduct(prod);
-                    setIsMenuOpen(false);
-                  }}
-                  key={prod.pid}
-                  className="flex items-center space-x-4 py-2 px-4 text-sm transition-all duration-300 hover:bg-gray-100"
-                >
-                  <img
-                    className="h-12 w-12 rounded-md object-cover"
-                    src={prod.defaultThumbnail}
-                  />
-                  <span>{prod.name}</span>
-                </li>
-              );
-            })}
-        </ul>
       )}
     </div>
   );

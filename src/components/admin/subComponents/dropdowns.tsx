@@ -1,8 +1,15 @@
-import { type Dispatch, Fragment, type SetStateAction, useEffect } from "react";
+import {
+  type Dispatch,
+  Fragment,
+  type SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import type { Category } from "@prisma/client";
 import Link from "next/link";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
 export default function CategoryScrolldown({
   categories,
@@ -15,66 +22,52 @@ export default function CategoryScrolldown({
   defaultSelection: Category;
   selectedCategory: Category | null;
 }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
     setSelectedCategory(defaultSelection);
   }, [defaultSelection, setSelectedCategory]);
 
   return (
-    <div className=" relative z-50 w-full md:w-1/2">
-      <Listbox value={selectedCategory} onChange={setSelectedCategory}>
-        <div className="relative mt-1">
-          <Listbox.Button className="relative w-full cursor-default rounded-md bg-white p-2.5 text-left text-sm shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-300 sm:text-sm">
-            <span className="block truncate">
-              {selectedCategory && selectedCategory.label}
-            </span>
-            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-              <ChevronUpDownIcon
-                className="h-5 w-5 text-gray-400"
-                aria-hidden="true"
-              />
-            </span>
-          </Listbox.Button>
-          <Transition
-            as={Fragment}
-            leave="transition ease-in duration-100 z-20"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white  py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {categories.map((category, personIdx) => (
-                <Listbox.Option
-                  as={Link}
+    <div className="relative w-1/2">
+      <button
+        onClick={() => {
+          setIsMenuOpen((prev) => !prev);
+        }}
+        id="dropdownDelayButton"
+        data-dropdown-toggle="dropdownDelay"
+        data-dropdown-delay="500"
+        data-dropdown-trigger="hover"
+        className="inline-flex w-full items-center justify-between  truncate overflow-ellipsis rounded-lg bg-white px-4 py-2.5 text-center text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-blue-300 "
+        type="button"
+      >
+        Filter by category
+        <ChevronDownIcon className="ml-2 h-4 w-4" />
+      </button>
+      <div
+        id="dropdownDelay"
+        className={`z-10 ${
+          !isMenuOpen ? "hidden" : ""
+        } absolute top-12 right-0 z-[100]  h-96 w-full divide-y divide-gray-100 overflow-y-auto rounded-lg bg-white shadow dark:bg-gray-700`}
+      >
+        <ul
+          className="py-2 text-sm text-gray-700 "
+          aria-labelledby="dropdownDelayButton"
+        >
+          {categories.map((category) => {
+            return (
+              <li key={category.cid} className="">
+                <Link
+                  className="block px-4 py-2 hover:bg-gray-100 "
                   href={`/admin/find-products/${category.cid}/1`}
-                  key={personIdx}
-                  className={({ active }) =>
-                    `relative z-30 cursor-default select-none py-2 pl-10 pr-4 ${
-                      active ? "bg-blue-100 text-blue-900" : "text-gray-900"
-                    }`
-                  }
-                  value={category}
                 >
-                  {({ selected }) => (
-                    <>
-                      <span
-                        className={`block truncate ${
-                          selected ? "font-medium" : "font-normal"
-                        }`}
-                      >
-                        {category.label}
-                      </span>
-                      {selected ? (
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
-                          <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                        </span>
-                      ) : null}
-                    </>
-                  )}
-                </Listbox.Option>
-              ))}
-            </Listbox.Options>
-          </Transition>
-        </div>
-      </Listbox>
+                  {category.label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }

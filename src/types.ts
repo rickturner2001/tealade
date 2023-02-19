@@ -1,11 +1,14 @@
 import type {
   Category,
+  Discount,
   Prisma,
   Product,
   ProductTag,
   ProductVariant,
   Shipment,
+  ShopSection,
 } from "@prisma/client";
+import { Variant } from "framer-motion";
 
 export type NonEmptyArray<T> = [T, ...T[]];
 export type NonNullableArrayIndex<T> = T extends any[]
@@ -158,6 +161,11 @@ export type StoreProduct = Product & {
   variants: ProductVariant[];
 };
 
+export type ProductWithDiscount = Product & {
+  discount: Discount | null;
+  variants: ProductVariant[];
+};
+
 export type ShippingItem = {
   logisticAging: string;
   logisticPrice: number;
@@ -169,6 +177,13 @@ export type ProductWithTags = Product & {
   tags: ProductTag[];
   variants: ProductVariant[];
   shipments: Shipment[];
+};
+
+export type SectionDataWithProducts = ShopSection & {
+  products: (Product & {
+    discount: Discount | null;
+    variants: ProductVariant[];
+  })[];
 };
 
 export type StoreSections = "featured" | "hot" | "seasonal";

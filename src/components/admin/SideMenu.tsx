@@ -114,7 +114,7 @@ const SmallScreensSidebar = ({
       </Link>
       <Link
         onClick={() => setIsMenuOpen(false)}
-        href="/admin/store-items"
+        href="/admin"
         className="flex cursor-pointer items-center space-x-2 rounded-md px-4 py-2 transition-all duration-200 hover:bg-gray-100"
       >
         <BuildingStorefrontIcon className="h-5 w-5 text-gray-700" />
@@ -185,7 +185,7 @@ const WideScreensSidebar = ({
         </span>
       </Link>
       <Link
-        href="/admin/store-items"
+        href="/admin"
         className="flex cursor-pointer items-center space-x-2 rounded-md px-4 py-2 transition-all duration-200 hover:bg-gray-100"
       >
         <BuildingStorefrontIcon className="h-5 w-5 text-gray-700" />

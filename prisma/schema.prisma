@@ -88,6 +88,8 @@ model Category{
     sections ShopSection[]
     categoryId String
     category Category @relation(fields: [categoryId], references: [cid])
+    discountId String?
+    discount Discount? @relation(fields: [discountId], references: [id])
  }
 
 
@@ -125,4 +127,12 @@ model ShopSection{
     label     String @unique
     products  Product[]
     thumbnail String
+}
+
+
+model Discount {
+    id String @id @default(cuid())
+    value Int
+    label String 
+    products Product[] 
 }

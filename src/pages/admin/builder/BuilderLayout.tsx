@@ -37,10 +37,10 @@ const BuilderLayout = () => {
   });
 
   return (
-    <div className="m-8 grid  grid-cols-1 grid-rows-2 gap-x-4 space-y-6 rounded-md shadow-md  lg:grid-cols-2 xl:grid-cols-3 xl:p-8 2xl:grid-cols-4">
+    <div className="m-8 flex flex-wrap gap-x-4 gap-y-4 rounded-md shadow-md  ">
       {sections && sections.length < 4 ? (
         <>
-          <div className="relative col-span-2 row-span-2 flex h-max flex-col justify-between rounded-md border bg-white p-6 shadow-sm">
+          <div className="relative   flex h-max w-full flex-col justify-between rounded-md border bg-white p-6 shadow-sm">
             <div className=" w-full">
               <span className=" inline-block p-2 text-sm font-medium">
                 Section Label
@@ -75,7 +75,7 @@ const BuilderLayout = () => {
                     });
                   }
                 }}
-                className={`focus:blue-300 focus:ring-300 flex w-full  items-center justify-center self-center rounded-lg bg-blue-700  py-2.5 px-5 text-center text-sm font-bold text-white hover:bg-blue-800 focus:ring-4`}
+                className={`focus:blue-300 focus:ring-300 flex w-full  items-center justify-center self-center rounded-lg bg-cyan-100  py-2.5 px-5 text-center text-sm font-medium text-cyan-900 hover:bg-cyan-200 focus:ring-2 focus:ring-cyan-300`}
               >
                 <span className="w-full text-center">Add section</span>
               </button>
@@ -90,7 +90,7 @@ const BuilderLayout = () => {
           {sections.map((section) => {
             return (
               <div
-                className="flex flex-col space-y-4 bg-white p-4"
+                className="flex h-max flex-col space-y-4 rounded-lg bg-white p-4"
                 key={section.id}
               >
                 <p className="text-sm font-medium text-gray-700">
@@ -98,18 +98,18 @@ const BuilderLayout = () => {
                 </p>
                 <img
                   src={section.thumbnail}
-                  className="h-full w-full rounded-lg object-contain"
+                  className="w-full rounded-lg object-contain md:h-64 md:w-64"
                 />
 
                 <div className="flex space-x-2">
                   <Link
                     href={`/admin/section/${section.id}`}
-                    className="block w-1/2 rounded-lg border border-gray-200 bg-white py-2.5 px-5 text-center text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-200"
+                    className="block w-1/2 rounded-lg border bg-blue-100 py-2.5 px-5 text-center text-sm font-medium text-blue-900  hover:bg-blue-200  focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-300"
                   >
                     Edit
                   </Link>
                   {isLoadingDeletion && currentDeletion === section.id ? (
-                    <button className="flex w-1/2 items-center rounded-lg bg-red-700 px-5  py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300">
+                    <button className="flex w-1/2 items-center rounded-lg bg-red-100 px-5 py-2.5 text-center  text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-300">
                       <Spinner className="h-5 w-5 animate-spin" />
                       <span className="ml-4">Loading</span>
                     </button>
@@ -119,7 +119,7 @@ const BuilderLayout = () => {
                         removeSectionMutation({ sid: section.id });
                         setCurrentDeletion(section.id);
                       }}
-                      className="w-1/2 items-center rounded-lg bg-red-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300"
+                      className="w-1/2 items-center rounded-lg bg-red-100 px-5 py-2.5 text-center text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-300"
                     >
                       Delete
                     </button>

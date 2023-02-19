@@ -103,6 +103,7 @@ export const productRouter = createTRPCRouter({
         isStore: true,
       },
       include: {
+        discount: true,
         variants: {
           orderBy: {
             price: "asc",
@@ -195,6 +196,7 @@ export const productRouter = createTRPCRouter({
           })
           .array(),
         imageSet: z.string().array(),
+        sectionId: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -207,6 +209,14 @@ export const productRouter = createTRPCRouter({
           imageSet: input.imageSet,
           defaultThumbnail: input.imageSet[0],
           isImport: false,
+          sections:
+            input.sectionId === ""
+              ? undefined
+              : {
+                  connect: {
+                    id: input.sectionId,
+                  },
+                },
           isStore: true,
           name: input.name,
           variants: {

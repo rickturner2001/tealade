@@ -12,19 +12,22 @@ import { api } from "../../../../utils/api";
 import LanguageContext from "../../../context/LanugageContext";
 import Spinner from "../../../Spinner";
 import CategoryScrolldown from "../../subComponents/dropdowns";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 const ProductData = ({
   product,
   productNameValue,
   setProductNameValue,
-  selectedCategory,
-  setSelectedCategory,
+  selectedSectionLabel,
+  setSelectedSectionLabel,
 }: {
   product: ProductWithTags;
   productNameValue: string;
   setProductNameValue: Dispatch<SetStateAction<string>>;
-  selectedCategory: Category | null;
-  setSelectedCategory: Dispatch<SetStateAction<Category | null>>;
+  selectedSectionLabel: { label: string; id: string };
+  setSelectedSectionLabel: Dispatch<
+    SetStateAction<{ label: string; id: string }>
+  >;
 }) => {
   const { language } = useContext(LanguageContext);
 
@@ -58,9 +61,11 @@ const ProductData = ({
       },
     });
 
-  const { data: categories } = api.products.getAllCategories.useQuery();
+  const { data: sections } = api.sections.getAllSesctions.useQuery();
   const currentCopy = language === "english" ? copy.en : copy.it;
   const labelRef = useRef<HTMLInputElement>(null);
+
+  const [isSectionMenuOpen, setIsSectionMenuOpen] = useState(false);
 
   const [currenteDeletionLabel, setCurrentDeletionLabel] = useState("");
   return (
@@ -135,34 +140,53 @@ const ProductData = ({
         <label className="mb-2 mt-8 text-sm font-medium">
           {currentCopy.productCategory}
         </label>
-        {categories && categories[0] && (
-          <CategoriesScrolldownWrapper
-            categories={categories as NonEmptyArray<Category>}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-          />
-        )}
+        {/* Section Scrolldown */}
+        <div className="relative w-1/2">
+          <button
+            onClick={() => setIsSectionMenuOpen((prev) => !prev)}
+            id="dropdownDefaultButton"
+            data-dropdown-toggle="dropdown"
+            className="inline-flex  items-center rounded-lg bg-blue-700 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            type="button"
+          >
+            {selectedSectionLabel.label === ""
+              ? "Assign to a section"
+              : selectedSectionLabel.label}
+            <ChevronDownIcon className="ml-2 h-4 w-4" />
+          </button>
+          {isSectionMenuOpen && (
+            <div
+              id="dropdown"
+              className="absolute top-14 right-0  z-10 w-full divide-y divide-gray-100 rounded-lg border bg-white shadow dark:bg-gray-700"
+            >
+              <ul
+                className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                aria-labelledby="dropdownDefaultButton"
+              >
+                {sections &&
+                  sections.map((section) => {
+                    return (
+                      <li
+                        onClick={() => {
+                          setSelectedSectionLabel({
+                            label: section.label,
+                            id: section.id,
+                          });
+                          setIsSectionMenuOpen(false);
+                        }}
+                        className="block px-4 py-2 hover:bg-gray-100 "
+                        key={section.id}
+                      >
+                        {section.label}
+                      </li>
+                    );
+                  })}
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
     </div>
-  );
-};
-
-const CategoriesScrolldownWrapper = ({
-  selectedCategory,
-  setSelectedCategory,
-  categories,
-}: {
-  categories: NonEmptyArray<Category>;
-  selectedCategory: Category | null;
-  setSelectedCategory: Dispatch<SetStateAction<Category | null>>;
-}) => {
-  return (
-    <CategoryScrolldown
-      setSelectedCategory={setSelectedCategory}
-      selectedCategory={selectedCategory}
-      categories={categories}
-      defaultSelection={categories[0]}
-    />
   );
 };
 

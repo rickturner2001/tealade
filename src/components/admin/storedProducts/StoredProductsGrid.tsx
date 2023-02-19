@@ -169,9 +169,9 @@ const ProductCard = ({
         <div className="mt-12 flex flex-col items-center justify-center">
           <Link
             href={`/admin/product/${product.pid}`}
-            className="text-whitet rounded-md bg-emerald-400 py-3 px-8 text-sm font-medium text-white"
+            className="text-whitet rounded-md bg-green-400 py-3 px-8 text-sm font-medium text-white"
           >
-            {language === "english" ? "View in Tealade" : "Vedi su Tealade"}
+            Move back to Imports
           </Link>
           {loadingRemoval ? (
             <button className="py-3 px-8 text-sm font-medium text-red-500">

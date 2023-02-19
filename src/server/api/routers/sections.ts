@@ -60,6 +60,22 @@ export const sectionRouter = createTRPCRouter({
       });
     }),
 
+  changeSectionNameAndThumbnail: adminProcedure
+    .input(
+      z.object({ thumbnail: z.string(), label: z.string(), sid: z.string() })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.shopSection.update({
+        where: {
+          id: input.sid,
+        },
+        data: {
+          label: input.label,
+          thumbnail: input.thumbnail,
+        },
+      });
+    }),
+
   removeProductsFromSection: adminProcedure
     .input(z.object({ sid: z.string(), pids: z.string().array() }))
     .mutation(async ({ ctx, input }) => {
@@ -87,6 +103,21 @@ export const sectionRouter = createTRPCRouter({
       });
     }),
 
+  removeItemsFromSection: adminProcedure
+    .input(z.object({ pid: z.string(), sid: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.shopSection.update({
+        where: {
+          id: input.sid,
+        },
+        data: {
+          products: {
+            disconnect: { pid: input.pid },
+          },
+        },
+      });
+    }),
+
   // Read only
   getAllSesctions: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.shopSection.findMany();
@@ -100,7 +131,12 @@ export const sectionRouter = createTRPCRouter({
           id: input.sid,
         },
         include: {
-          products: true,
+          products: {
+            include: {
+              discount: true,
+              variants: true,
+            },
+          },
         },
       });
     }),

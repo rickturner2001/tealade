@@ -13,9 +13,6 @@ import TabMenu from "./tabs/TabMenu";
 export type Tabs = "product" | "description" | "variants" | "images";
 
 const ProductTab = ({ product }: { product: ProductWithTags }) => {
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
-    null
-  );
   const [variantPrices, setVariantPrices] = useState<number[]>(
     product.variants.map((variant) => {
       return variant.price;
@@ -49,6 +46,11 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
     });
 
   const [currentTab, setCurrentTab] = useState<Tabs>("product");
+  const [selectedSectionLabel, setSelectedSectionLabel] = useState({
+    label: "",
+    id: "",
+  });
+
   return (
     <>
       <TabMenu
@@ -72,14 +74,15 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
           }
         })}
         pid={product.pid}
+        sectionLabel={selectedSectionLabel}
       />
       {currentTab === "product" ? (
         <ProductData
           productNameValue={productNameValue}
           setProductNameValue={setProductNameValue}
           product={product}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
+          selectedSectionLabel={selectedSectionLabel}
+          setSelectedSectionLabel={setSelectedSectionLabel}
         />
       ) : currentTab === "description" ? (
         <ProductDescription
@@ -146,6 +149,7 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
                 name: productNameValue,
                 pid: product.pid,
                 variants: productVariants,
+                sectionId: selectedSectionLabel.id,
               });
             }}
             className="my-auto rounded-md bg-emerald-500 py-3 px-8 text-sm font-bold text-white "

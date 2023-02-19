@@ -19,6 +19,7 @@ const TabMenu = ({
   productNameValue,
   productDescription,
   productImages,
+  sectionLabel,
   productVariants,
   setCurrentTab,
   currentTab,
@@ -27,6 +28,7 @@ const TabMenu = ({
   productNameValue: string;
   productDescription: string;
   productImages: string[];
+  sectionLabel: { id: string; label: string };
   productVariants: VariantListing[];
   pid: string;
   currentTab: Tabs;
@@ -160,6 +162,7 @@ const TabMenu = ({
                   imageSet: productImages,
                   name: productNameValue,
                   pid: pid,
+                  sectionId: sectionLabel.id,
                   variants: productVariants.map((variant) => {
                     return {
                       height: variant.height,

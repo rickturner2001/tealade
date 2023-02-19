@@ -29,7 +29,7 @@ const ProductSelection = ({
   const { data: storeProducts } = api.products.getAllStoreProducts.useQuery();
 
   return (
-    <div className="flex h-96 flex-col space-y-4 overflow-y-auto  px-4">
+    <div className="flex h-96 w-full flex-col gap-y-4 gap-x-2 overflow-y-auto px-4 lg:flex-row  lg:flex-wrap">
       {storeProducts &&
         storeProducts.map((prod) => {
           return (
@@ -75,7 +75,7 @@ const SelectableProduct = ({
           setIsActive((prev) => !prev);
         }
       }}
-      className={` relative z-10 flex cursor-pointer select-none items-center justify-between rounded-md border p-3 shadow-md ${
+      className={` relative z-10 flex w-full cursor-pointer select-none items-center justify-between rounded-md border p-3 shadow-md lg:w-96 ${
         isActive ? "bg-sky-600 text-white " : "bg-white text-gray-900"
       }`}
     >

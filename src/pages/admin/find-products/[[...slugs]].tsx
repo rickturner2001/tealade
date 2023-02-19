@@ -3,8 +3,9 @@ import { type Dispatch, type SetStateAction, useState } from "react";
 import Dashboard from "../../../components/admin/Dashboard";
 import ListProductDisplay from "../../../components/admin/subComponents/ListProductDisplay";
 import type { Language } from "../../../types";
-import { ContextMenu } from "..";
 import { Category } from "@prisma/client";
+import CategoryScrolldown from "../../../components/admin/subComponents/dropdowns";
+import { api } from "../../../utils/api";
 
 const ListingWrapper = ({
   language,
@@ -62,4 +63,21 @@ const ListByPageNumber = () => {
 const listByPageNumber = () => {
   return <ListByPageNumber />;
 };
+const ContextMenu = () => {
+  const { data } = api.products.getAllCategories.useQuery();
+  const [category, setCategory] = useState<null | Category>(null);
+  return (
+    <div className=" flex w-full justify-end bg-gradient-to-r from-blue-700 to-blue-500/80 py-6">
+      {data && (
+        <CategoryScrolldown
+          categories={data}
+          defaultSelection={data[0] as Category}
+          selectedCategory={category}
+          setSelectedCategory={setCategory}
+        />
+      )}
+    </div>
+  );
+};
+
 export default listByPageNumber;

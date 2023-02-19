@@ -28,6 +28,7 @@ const ListProductDisplay = ({
     perPage: pageData[0],
     categoryKeyword: category ?? null,
   });
+
   const { data: registeredProducts } = api.products.getAllProducts.useQuery();
 
   if (!data || !registeredProducts) {

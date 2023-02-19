@@ -10,39 +10,10 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { api } from "../../../utils/api";
 import { useIsMutating } from "@tanstack/react-query";
 import Spinner from "../../Spinner";
-
-const evaluatePriceRange = (variants: number[]) => {
-  if (variants.length === 1) {
-    return variants[0] as number;
-  }
-  const first = variants[0] as number;
-  const last = variants[variants.length - 1] as number;
-
-  if (first === last) {
-    return first;
-  }
-  return `${first}-${last}`;
-};
-
-function getProductDiscount(
-  price: string | number,
-  discount: number
-): string | number {
-  if (typeof price === "number") {
-    return ((price * (100 - discount)) / 100).toFixed(2);
-  } else {
-    const [startPrice, endPrice] = price.split("-");
-    const discountedStartPrice = (
-      (parseInt(startPrice as string) * (100 - discount)) /
-      100
-    ).toFixed(2);
-    const discountedEndPrice = (
-      (parseInt(endPrice as string) * (100 - discount)) /
-      100
-    ).toFixed(2);
-    return `${discountedStartPrice}-${discountedEndPrice}`;
-  }
-}
+import {
+  evaluatePriceRange,
+  getProductDiscount,
+} from "../../../pages/admin/section/[sid]";
 
 const SectionProductsDisplay = ({
   sectionData,

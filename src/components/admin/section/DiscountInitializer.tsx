@@ -32,6 +32,10 @@ const DiscountInitializer = ({
     (prod) => prod.discount
   );
 
+  const productsWithoutDiscount = sectionData.products.filter(
+    (prod) => !prod.discount
+  );
+
   const handleSubmission = () => {
     const discountLabel = discountLabelRef?.current?.value;
     const discountValue = discountValueRef?.current?.value;
@@ -106,6 +110,9 @@ const DiscountInitializer = ({
             discountedProducts={productsWithDiscount}
             isOpen={isModalOpen}
             setIsOpen={setIsModalOpen}
+            undiscountedProducts={productsWithoutDiscount.map(
+              (prod) => prod.pid
+            )}
           >
             <button
               onClick={() => {

@@ -10,12 +10,14 @@ const OverrideDiscountModal = ({
   isOpen,
   discountLabel,
   discountValue,
+  undiscountedProducts,
   setIsOpen,
 }: {
   children: JSX.Element;
   discountLabel: string | undefined;
   discountValue: string | undefined;
   discountedProducts: ProductWithDiscount[];
+  undiscountedProducts: string[];
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
@@ -167,7 +169,10 @@ const OverrideDiscountModal = ({
                             issueDiscountMutation({
                               label: discountLabel,
                               value: +discountValue,
-                              pids: discountsToOverride,
+                              pids: [
+                                ...undiscountedProducts,
+                                ...discountsToOverride,
+                              ],
                             });
                           }
                         }}

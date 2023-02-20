@@ -29,7 +29,7 @@ export default function CategoryScrolldown({
   }, [defaultSelection, setSelectedCategory]);
 
   return (
-    <div className="relative w-1/3 p-4">
+    <div className="relative p-4 lg:w-1/3">
       <button
         onClick={() => {
           setIsMenuOpen((prev) => !prev);

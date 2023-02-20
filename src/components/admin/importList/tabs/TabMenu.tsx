@@ -136,26 +136,26 @@ const TabMenu = ({
         </li>
         <li className="my-auto ml-auto mr-4 hidden space-x-4 md:flex">
           {isLoading ? (
-            <button className="mr-2 mb-2 rounded-lg border border-gray-200 bg-white py-2.5 px-5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-200 ">
+            <button className="mr-2 mb-2 rounded-lg  bg-red-100 py-2.5 px-5 text-sm font-medium text-red-900 hover:bg-red-200  focus:z-10 focus:outline-none focus:ring-4 focus:ring-red-300 ">
               Loading...
               <Spinner className=" ml-2 inline h-4 w-4 animate-spin text-white" />
             </button>
           ) : (
             <button
               onClick={() => deleteProduct({ pid: pid })}
-              className="mr-2 mb-2 rounded-lg bg-red-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 "
+              className="mr-2 mb-2 rounded-lg bg-red-100 px-5 py-2.5 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus:ring-4 focus:ring-red-300 "
             >
               {currentCopy.removeProduct}
             </button>
           )}
           {loadingFinalization ? (
-            <button className="mr-2 mb-2 rounded-lg border border-gray-200 bg-white py-2.5 px-5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-200 ">
+            <button className="mr-2 mb-2 rounded-lg  bg-blue-100 py-2.5 px-5 text-sm font-medium text-blue-900  hover:bg-blue-200 focus:z-10 focus:outline-none focus:ring-4 focus:ring-blue-300 ">
               Loading...
               <Spinner className=" ml-2 inline h-4 w-4 animate-spin text-white" />
             </button>
           ) : (
             <button
-              className="mr-2 mb-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 "
+              className="mr-2 mb-2 rounded-lg bg-green-100 px-5 py-2.5 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus:ring-4 focus:ring-green-300 "
               onClick={() => {
                 finalizeListing({
                   description: productDescription,

@@ -6,6 +6,12 @@ import { api } from "../../../utils/api";
 import Spinner from "../../../components/Spinner";
 
 import LanguageContext from "../../context/LanugageContext";
+import { StoreProductIncludeAll } from "../../../types";
+import ProductImages from "../importList/tabs/ProductImages";
+import {
+  evaluatePriceRange,
+  getProductDiscount,
+} from "../../../pages/admin/section/[sid]";
 
 const StoreProductGrid = () => {
   const { data: registeredProducts } =
@@ -26,7 +32,7 @@ const StoreProductGrid = () => {
 
   if (!registeredProducts) {
     return (
-      <div className=" grid grid-cols-1 gap-x-12 gap-y-12 py-6  px-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className=" grid grid-cols-1 gap-x-12 gap-y-12 py-6  px-6 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {[1, 2, 3, 4].map((idx) => {
           return (
             <div
@@ -110,7 +116,7 @@ const StoreProductGrid = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-x-6 gap-y-12 py-6  px-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-4">
         {registeredProducts.map((prod) => {
           return <ProductCard key={prod.pid} product={prod} />;
         })}
@@ -119,14 +125,15 @@ const StoreProductGrid = () => {
   );
 };
 
-const ProductCard = ({
-  product,
-}: {
-  product: Product & {
-    variants: ProductVariant[];
-  };
-}) => {
+const ProductCard = ({ product }: { product: StoreProductIncludeAll }) => {
   const utils = api.useContext();
+
+  const { mutate: setProductToEditMutation, isLoading: loadProductToEdit } =
+    api.products.setProductToEdit.useMutation({
+      onSuccess: async () => {
+        await utils.products.invalidate();
+      },
+    });
 
   const { language } = useContext(LanguageContext);
 
@@ -150,29 +157,83 @@ const ProductCard = ({
         utils.products.invalidate().catch((error) => console.error(error));
       },
     });
+
+  const productPrice = evaluatePriceRange(
+    product.variants.map((variant) => variant.price)
+  );
+
   return (
     <div
-      className={`relative z-10 flex  max-w-md  flex-col items-center justify-center space-y-8 rounded-2xl  bg-white py-12 shadow-md`}
+      className={`relative z-10 flex  w-full  max-w-sm flex-col items-center justify-center space-y-8 rounded-2xl bg-white  p-4 py-12 shadow-md`}
     >
       <div className="h-full w-full">
+        <div className="mb-4 flex w-full flex-wrap items-center justify-center gap-x-1 gap-y-1">
+          {product.sections.map((section) => {
+            return (
+              <span
+                key={section.id}
+                className="w-max rounded-md bg-cyan-100 px-2 py-1 text-xs text-cyan-900"
+              >
+                {section.label}
+              </span>
+            );
+          })}
+        </div>
         <div className="flex items-center justify-center">
           <img src={product.defaultThumbnail} className="h-48 object-contain" />
         </div>
-        <div className="mt-4 flex  w-full flex-col items-center justify-center space-y-1 text-center">
-          <p className="mt-4 w-full overflow-hidden truncate text-ellipsis text-sm font-semibold text-gray-800">
+        <ul className="mt-4 flex w-full flex-wrap items-center justify-center gap-x-1 gap-y-1">
+          {product.tags.map((tag) => {
+            return (
+              <li
+                className="rounded-md bg-orange-100 py-1 px-2 text-xs text-orange-900"
+                key={tag.label}
+              >
+                {tag.label}
+              </li>
+            );
+          })}
+        </ul>
+        <div className="flex  w-full flex-col items-center justify-center space-y-1 text-center">
+          <p className="mt-4 mb-4 w-full overflow-hidden truncate text-ellipsis text-sm font-semibold text-gray-800">
             {product.name}
           </p>
-          <p className="text-md mt-4 font-medium text-gray-700">
-            ${evaluatePrice(product.variants).join("-")}
+          <div className=" flex w-full items-center justify-center">
+            {product.discount && (
+              <span className="block w-max rounded-md bg-purple-100 py-1 px-2 text-xs text-purple-900">
+                {product.discount.label} ({product.discount.value}%)
+              </span>
+            )}
+          </div>
+          <p className="text-md mt-2 font-medium text-gray-700">
+            {product.discount ? (
+              <span className="inline-flex ">
+                $<span className="mr-1 line-through">{productPrice}</span>
+                <span>
+                  {getProductDiscount(productPrice, product.discount.value)}
+                </span>
+              </span>
+            ) : (
+              `$${productPrice}`
+            )}
           </p>
         </div>
         <div className="mt-12 flex flex-col items-center justify-center">
-          <Link
-            href={`/admin/product/${product.pid}`}
-            className="text-whitet rounded-md bg-green-400 py-3 px-8 text-sm font-medium text-white"
-          >
-            Move back to Imports
-          </Link>
+          {loadProductToEdit ? (
+            <button className="text-whitet inline-flex items-center justify-center rounded-md bg-green-400 py-3 px-8 text-sm font-medium text-white">
+              <Spinner className="mr-2 h-6 w-5 animate-spin" />
+              loading
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setProductToEditMutation({ pid: product.pid });
+              }}
+              className="text-whitet rounded-md bg-green-400 py-3 px-8 text-sm font-medium text-white"
+            >
+              Move back to Imports
+            </button>
+          )}
           {loadingRemoval ? (
             <button className="py-3 px-8 text-sm font-medium text-red-500">
               <Spinner className=" mr-2 inline h-4 w-4 animate-spin text-white" />

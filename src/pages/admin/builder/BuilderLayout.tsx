@@ -73,14 +73,17 @@ const BuilderLayout = () => {
                       pids: selectedProducts,
                       thumbnail: sectionThumbnail,
                     });
+                    setSelectedProducts([]);
+                    setSectionThumbnail("");
+                    sectionNameRef.current.value = "";
                   }
                 }}
-                className={`focus:blue-300 focus:ring-300 flex w-full  items-center justify-center self-center rounded-lg bg-cyan-100  py-2.5 px-5 text-center text-sm font-medium text-cyan-900 hover:bg-cyan-200 focus:ring-2 focus:ring-cyan-300`}
+                className={`focus:ring-300 flex w-full items-center  justify-center self-center rounded-lg bg-blue-100 py-2.5  px-5 text-center text-sm font-medium text-blue-900 hover:bg-blue-200 focus:ring-2 focus:ring-blue-300 `}
               >
                 <span className="w-full text-center">Add section</span>
               </button>
             ) : (
-              <button className=" relative flex w-full items-center justify-center space-x-2  rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-bold text-white hover:bg-blue-800  focus:ring-4 focus:ring-blue-300">
+              <button className=" relative flex w-full items-center justify-center space-x-2  rounded-lg bg-blue-100 px-5 py-2.5 text-sm font-bold text-blue-900 hover:bg-blue-200  focus:ring-4 focus:ring-blue-300">
                 <Spinner className="h-5 w-5 animate-spin" />
                 <span>Loading</span>
               </button>
@@ -135,21 +138,28 @@ const BuilderLayout = () => {
             sections.map((section) => {
               return (
                 <div
-                  className="flex flex-col space-y-4 bg-white p-4"
+                  className="flex h-max flex-col space-y-4 rounded-lg bg-white p-4"
                   key={section.id}
                 >
+                  <p className="text-sm font-medium text-gray-700">
+                    {section.label}
+                  </p>
                   <img
                     src={section.thumbnail}
-                    className="h-full w-full object-contain"
+                    className="w-full rounded-lg object-contain md:h-64 md:w-64"
                   />
+
                   <div className="flex space-x-2">
-                    <button className="w-full rounded-md border border-gray-400 bg-white py-3 px-8 text-sm font-semibold text-gray-600">
-                      {section.label}
-                    </button>
+                    <Link
+                      href={`/admin/section/${section.id}`}
+                      className="block w-1/2 rounded-lg border bg-blue-100 py-2.5 px-5 text-center text-sm font-medium text-blue-900  hover:bg-blue-200  focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    >
+                      Edit
+                    </Link>
                     {isLoadingDeletion && currentDeletion === section.id ? (
-                      <button className="items-cente rflex w-full flex-grow space-x-2 rounded-md border border-red-800 bg-red-500/50 py-3 px-8 text-sm font-semibold text-red-700">
-                        <Spinner className="animate-spid h-5 w-5" />
-                        <span>Loading</span>
+                      <button className="flex w-1/2 items-center rounded-lg bg-red-100 px-5 py-2.5 text-center  text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-300">
+                        <Spinner className="h-5 w-5 animate-spin" />
+                        <span className="ml-4">Loading</span>
                       </button>
                     ) : (
                       <button
@@ -157,7 +167,7 @@ const BuilderLayout = () => {
                           removeSectionMutation({ sid: section.id });
                           setCurrentDeletion(section.id);
                         }}
-                        className="flex-grow rounded-md border border-red-800 bg-red-500/50 py-3 px-8 text-sm font-semibold text-red-700"
+                        className="w-1/2 items-center rounded-lg bg-red-100 px-5 py-2.5 text-center text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-300"
                       >
                         Delete
                       </button>

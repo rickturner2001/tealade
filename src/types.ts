@@ -186,4 +186,12 @@ export type SectionDataWithProducts = ShopSection & {
   })[];
 };
 
+export type StoreProductIncludeAll = Product & {
+  discount: Discount | null;
+  tags: ProductTag[];
+
+  sections: ShopSection[];
+  variants: ProductVariant[];
+};
+
 export type StoreSections = "featured" | "hot" | "seasonal";

@@ -30,7 +30,9 @@ export const getProductDiscount = (
   if (typeof price === "number") {
     return ((price * (100 - discount)) / 100).toFixed(2);
   } else {
+    console.log("Price is split");
     const [startPrice, endPrice] = price.split("-");
+    console.log(startPrice, endPrice);
     const discountedStartPrice = (
       (parseInt(startPrice as string) * (100 - discount)) /
       100

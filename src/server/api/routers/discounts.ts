@@ -1,4 +1,4 @@
-import { adminProcedure, createTRPCRouter } from "../trpc";
+import { adminProcedure, createTRPCRouter, publicProcedure } from "../trpc";
 import { z } from "zod";
 
 export const discountRouter = createTRPCRouter({
@@ -73,4 +73,40 @@ export const discountRouter = createTRPCRouter({
         },
       });
     }),
+
+  getAllDiscounts: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.discount.findMany({
+      include: {
+        products: {
+          include: {
+            _count: true,
+          },
+        },
+      },
+    });
+  }),
+
+  getDiscountById: publicProcedure
+    .input(z.object({ did: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.discount.findUnique({
+        where: {
+          id: input.did,
+        },
+        include: {
+          products: {
+            include: {
+              discount: true,
+              sections: true,
+              tags: true,
+              variants: true,
+            },
+          },
+        },
+      });
+    }),
+
+  getDiscountsCount: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.discount.count();
+  }),
 });

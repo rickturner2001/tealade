@@ -36,13 +36,13 @@ const ProductData = ({
       productName: "Product name",
       productTags: "Product tags",
       addTag: "Add new tag",
-      productCategory: "Category",
+      productCategory: "Section",
     },
     it: {
       productName: "Nome del prodotto",
       addTag: "Aggiungi etichetta",
       productTags: "Etichette del prodotto",
-      productCategory: "Categoria",
+      productCategory: "Sezione",
     },
   };
 
@@ -141,12 +141,12 @@ const ProductData = ({
           {currentCopy.productCategory}
         </label>
         {/* Section Scrolldown */}
-        <div className="relative w-1/2">
+        <div className="relative w-full lg:w-1/2">
           <button
             onClick={() => setIsSectionMenuOpen((prev) => !prev)}
             id="dropdownDefaultButton"
             data-dropdown-toggle="dropdown"
-            className="inline-flex  items-center rounded-lg bg-blue-700 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="inline-flex  items-center   rounded-lg bg-blue-700 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             type="button"
           >
             {selectedSectionLabel.label === ""

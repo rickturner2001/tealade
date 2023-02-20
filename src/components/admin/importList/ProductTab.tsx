@@ -115,7 +115,7 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
         ) : (
           <button
             onClick={() => deleteProduct({ pid: product.pid })}
-            className="bold my-auto  w-full rounded-md border border-gray-200 bg-white  py-3 px-8 text-sm font-bold text-red-500"
+            className="bold my-auto  w-full rounded-md  bg-red-100 py-3 px-8 text-sm font-medium text-red-900 hover:bg-red-200 "
           >
             {language === "english" ? "Remove product" : "Rimuovi prodotto"}
           </button>
@@ -152,7 +152,7 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
                 sectionId: selectedSectionLabel.id,
               });
             }}
-            className="my-auto rounded-md bg-emerald-500 py-3 px-8 text-sm font-bold text-white "
+            className="my-auto rounded-md bg-emerald-100 py-3 px-8 text-sm font-medium text-emerald-900 hover:bg-emerald-200 focus:ring-4 focus:ring-emerald-300  "
           >
             {language === "english" ? "Import to store" : "Importa sul negozio"}
           </button>

@@ -93,6 +93,20 @@ export const productRouter = createTRPCRouter({
       });
     }),
 
+  setProductToEdit: adminProcedure
+    .input(z.object({ pid: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.product.update({
+        where: {
+          pid: input.pid,
+        },
+        data: {
+          isStore: false,
+          isImport: true,
+        },
+      });
+    }),
+
   getAllProducts: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.product.findMany();
   }),
@@ -103,6 +117,8 @@ export const productRouter = createTRPCRouter({
         isStore: true,
       },
       include: {
+        sections: true,
+        tags: true,
         discount: true,
         variants: {
           orderBy: {
@@ -125,6 +141,21 @@ export const productRouter = createTRPCRouter({
       },
     });
   }),
+
+  removeDiscountByProductId: adminProcedure
+    .input(z.object({ pid: z.string(), did: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.product.update({
+        where: {
+          pid: input.pid,
+        },
+        data: {
+          discount: {
+            disconnect: true,
+          },
+        },
+      });
+    }),
 
   // Tags
   addNewTag: adminProcedure

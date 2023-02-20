@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import {
   BuildingStorefrontIcon,
+  ReceiptPercentIcon,
   ShoppingBagIcon,
   WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
@@ -41,17 +42,21 @@ export default function SideMenu() {
 
   const { data: sectionCount } = api.sections.getSectionCount.useQuery();
 
+  const { data: discountsCount } = api.discounts.getDiscountsCount.useQuery();
+
   return (
     <>
       <WideScreensSidebar
         importedProducts={importedProducts}
         sectionCount={sectionCount}
         storeProducts={storeProducts}
+        discountsCount={discountsCount}
       />
       <SmallScreensSidebar
         importedProducts={importedProducts}
         storeProducts={storeProducts}
         sectionCount={sectionCount}
+        discountsCount={discountsCount}
       />
     </>
   );
@@ -61,9 +66,11 @@ const SmallScreensSidebar = ({
   importedProducts,
   storeProducts,
   sectionCount,
+  discountsCount,
 }: {
   importedProducts: number | undefined;
   storeProducts: number | undefined;
+  discountsCount: number | undefined;
 
   sectionCount: number | undefined;
 }) => {
@@ -138,6 +145,17 @@ const SmallScreensSidebar = ({
           {sectionCount ?? "0"}
         </span>
       </Link>
+      <Link
+        onClick={() => setIsMenuOpen(false)}
+        href={"/admin/discounts"}
+        className="flex cursor-pointer items-center space-x-2 rounded-md px-4 py-2 transition-all duration-200 hover:bg-gray-100"
+      >
+        <ReceiptPercentIcon className="h-5 w-5 text-gray-700" />
+        <span className="text-sm font-medium text-gray-700">Discounts</span>
+        <span className="rounded-full bg-gray-200 px-2 py-1 text-xs text-gray-800">
+          {discountsCount ?? "0"}
+        </span>
+      </Link>
     </motion.aside>
   );
 };
@@ -146,10 +164,12 @@ const WideScreensSidebar = ({
   importedProducts,
   storeProducts,
   sectionCount,
+  discountsCount,
 }: {
   importedProducts: number | undefined;
   storeProducts: number | undefined;
   sectionCount: number | undefined;
+  discountsCount: number | undefined;
 }) => {
   const { language } = useContext(LanguageContext);
   const currentCopy = language === "english" ? copy.en : copy.ita;
@@ -206,6 +226,16 @@ const WideScreensSidebar = ({
         </span>
         <span className="rounded-full bg-gray-200 px-2 py-1 text-xs text-gray-800">
           {sectionCount ?? "0"}
+        </span>
+      </Link>
+      <Link
+        href="/admin/discounts"
+        className="flex cursor-pointer items-center space-x-2 rounded-md px-4 py-2 transition-all duration-200 hover:bg-gray-100"
+      >
+        <ReceiptPercentIcon className="h-5 w-5 text-gray-700" />
+        <span className="text-sm text-gray-700">Discounts</span>
+        <span className="rounded-full bg-gray-200 px-2 py-1 text-xs text-gray-800">
+          {discountsCount ?? "0"}
         </span>
       </Link>
     </aside>

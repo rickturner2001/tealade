@@ -6,24 +6,20 @@ import Spinner from "../../components/Spinner";
 import { Discount, Product, Prisma } from "@prisma/client";
 import Link from "next/link";
 import DiscountDeletionModal from "../../components/admin/discount/modals/DiscountDeletionModal";
+import DashboardPageWrapper from "../../components/admin/layouts/DashboardPageWrapper";
 
 const Discounts = () => {
   const [iseMenuOpen, setIsMenuOpen] = useState(false);
   const [language, setLanguage] = useState<Language>("english");
   const { data: discounts } = api.discounts.getAllDiscounts.useQuery();
   return (
-    <Dashboard
-      isMenuOpen={iseMenuOpen}
-      setIsMenuOpen={setIsMenuOpen}
-      setLanguage={setLanguage}
-      title="Discounts"
-    >
+    <DashboardPageWrapper>
       {discounts ? (
         <DiscountsDisplay discountsData={discounts} />
       ) : (
         <LoadingState />
       )}
-    </Dashboard>
+    </DashboardPageWrapper>
   );
 };
 

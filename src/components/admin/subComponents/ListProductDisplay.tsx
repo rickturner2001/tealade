@@ -10,14 +10,11 @@ import {
 import Link from "next/link";
 import { api } from "../../../utils/api";
 import Spinner from "../../../components/Spinner";
-import type { Language } from "../../../types";
 
 const ListProductDisplay = ({
-  language,
   pageNumber,
   category,
 }: {
-  language: Language;
   pageNumber: number;
   category?: string;
 }) => {
@@ -96,7 +93,6 @@ const ListProductDisplay = ({
               category={prod.categoryName}
               pid={prod.pid}
               image={prod.productImage}
-              language={language}
               name={prod.productNameEn}
               registeredProducts={registeredProducts}
               price={prod.sellPrice}
@@ -144,7 +140,6 @@ const ProductCard = ({
   price,
   pid,
   registeredProducts,
-  language,
 }: {
   image: string;
   pid: string;
@@ -152,7 +147,6 @@ const ProductCard = ({
   category: string;
   price: number;
   registeredProducts: Product[];
-  language: Language;
 }) => {
   const [isButtonVisible, setIsButtonVisible] = useState(false);
   const isListed = registeredProducts.map((prod) => prod.pid).includes(pid);
@@ -201,9 +195,7 @@ const ProductCard = ({
         </div>
         <div className="mt-12 flex flex-col items-center justify-center">
           <p className="font-semibold ">${price}</p>
-          <p className="font-semibole text-sm">
-            {language === "english" ? "Product Cost" : "Costo del prodotto"}
-          </p>
+          <p className="font-semibole text-sm">Product Cost</p>
         </div>
       </Link>
       {isListed ? (
@@ -223,9 +215,7 @@ const ProductCard = ({
             animate={isButtonVisible ? { opacity: 1 } : { opacity: 0 }}
             className={`absolute -bottom-5 left-0 z-20 w-full rounded-b-xl border-4 py-4 px-5 text-sm font-semibold text-white ${"border-red-500 bg-red-500"}`}
           >
-            {language === "english"
-              ? "Remove from import list"
-              : "Rimuovi dalla lista importi"}
+            Remove from import list
           </motion.button>
         )
       ) : loadingRegistration ? (
@@ -242,9 +232,7 @@ const ProductCard = ({
           animate={isButtonVisible ? { opacity: 1 } : { opacity: 0 }}
           className={`absolute -bottom-5 left-0 z-20 w-full rounded-b-xl border-4 py-4 px-5 text-center text-sm font-semibold text-white ${"border-emerald-400 bg-emerald-400"}`}
         >
-          {language === "english"
-            ? "Add to import list"
-            : "Aggiungi alla lista importi"}
+          Add to import list
         </motion.button>
       )}
     </motion.div>

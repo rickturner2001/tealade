@@ -195,3 +195,10 @@ export type StoreProductIncludeAll = Product & {
 };
 
 export type StoreSections = "featured" | "hot" | "seasonal";
+
+export type SideMenuSection =
+  | "find products"
+  | "import list"
+  | "imported products"
+  | "section builder"
+  | "discounts";

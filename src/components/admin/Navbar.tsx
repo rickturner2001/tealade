@@ -6,8 +6,6 @@ import {
   useState,
 } from "react";
 import type { Language } from "../../types";
-import usFlag from "../../../public/media/images/us-flag.png";
-import itaFlag from "../../../public/media/images/ita-flag.png";
 import {
   ArrowsRightLeftIcon,
   ChevronDownIcon,
@@ -19,10 +17,8 @@ import LanguageContext from "../context/LanugageContext";
 import Link from "next/link";
 
 export default function Navbar({
-  setLanguage,
   setIsMenuOpen,
 }: {
-  setLanguage: Dispatch<SetStateAction<Language>>;
   setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const { status, data: sessionData } = useSession();
@@ -46,7 +42,6 @@ export default function Navbar({
         <p className="text-xl md:text-2xl">Tealade</p>
       </div>
       <div className=" ml-6 flex items-center space-x-4 md:ml-0">
-        <LanguageSelection language={language} setLanguage={setLanguage} />
         <div className="relative h-full border-l border-gray-300" />
         {status === "authenticated" ? (
           <>
@@ -94,44 +89,3 @@ export default function Navbar({
     </nav>
   );
 }
-
-const LanguageSelection = ({
-  language,
-  setLanguage,
-}: {
-  language: Language;
-  setLanguage: Dispatch<SetStateAction<Language>>;
-}) => {
-  const flagsData = getFlag(language);
-
-  return (
-    <div className="flex items-center space-x-2">
-      <div>
-        <img
-          alt="flag representing selected language"
-          className="h-4 "
-          src={flagsData.active[0]}
-        />
-      </div>
-      <span className="text-sm font-medium">{flagsData.active[1]}</span>
-      <button
-        onClick={() =>
-          setLanguage(language === "english" ? "italian" : "english")
-        }
-      >
-        <ArrowsRightLeftIcon className="h-4 w-4" />
-      </button>
-    </div>
-  );
-};
-
-const getFlag = (language: Language) => {
-  if (language == "english") {
-    return {
-      active: [usFlag.src, "English"],
-    } as const;
-  }
-  return {
-    active: [itaFlag.src, "Italiano"],
-  } as const;
-};

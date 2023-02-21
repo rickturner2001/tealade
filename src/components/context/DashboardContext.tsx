@@ -1,16 +1,23 @@
-import { createContext } from "react";
+import { type Dispatch, type SetStateAction, createContext } from "react";
+import type { SideMenuSection } from "../../types";
 
 interface DashboardContextValue {
   isMenuOpen: boolean;
-  setIsMenuOpen: (state: boolean) => void;
+  setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
+  currentSection: SideMenuSection;
+  setCurrentSection: Dispatch<SetStateAction<SideMenuSection>>;
 }
 
 const DashboardContext = createContext<DashboardContextValue>({
   isMenuOpen: false,
-  setIsMenuOpen: () => {
-    // avoid non-empty method ts-error
-    console.log(false);
-  },
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  setIsMenuOpen: () => {},
+
+  currentSection: "imported products",
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  setCurrentSection: () => {},
 });
 
 export default DashboardContext;

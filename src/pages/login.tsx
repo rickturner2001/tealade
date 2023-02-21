@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import Navbar from "../components/admin/Navbar";
 import Spinner from "../components/Spinner";
-import type { Language } from "../types";
 // import loginBg from "../../public/media/images/bg.jpg";
 
 const SignIn = () => {
@@ -12,7 +11,6 @@ const SignIn = () => {
   const router = useRouter();
 
   const menuState = useState(false);
-  const languageState = useState<Language>("english");
   const [isButtonClick, setIsButtonClick] = useState(false);
   const [isMissingEmail, setIsMissingEmail] = useState(false);
 
@@ -31,7 +29,7 @@ const SignIn = () => {
 
   return (
     <div className="flex h-screen w-screen flex-col ">
-      <Navbar setIsMenuOpen={menuState[1]} setLanguage={languageState[1]} />
+      <Navbar setIsMenuOpen={menuState[1]} />
       <div className="relative flex h-full items-center justify-center bg-gradient-to-r from-teal-400 to-blue-400">
         <div className="relative z-20 max-w-7xl rounded-md border bg-white p-8">
           <h1 className="mb-2 text-2xl font-bold text-teal-900 md:mb-4 md:text-4xl">

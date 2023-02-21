@@ -9,6 +9,7 @@ import AddProductsDisplay from "../../../components/admin/section/AddProductsDis
 import SectionProductDisplay from "../../../components/admin/section/SectionProductsDisplay";
 import ThumbnailEditAlert from "../../../components/admin/section/alerts/ThumbnailEditAlert";
 import SectionEdit from "../../../components/admin/section/SectionEdit";
+import DashboardPageWrapper from "../../../components/admin/layouts/DashboardPageWrapper";
 
 export const evaluatePriceRange = (variants: number[]) => {
   if (variants.length === 1) {
@@ -87,14 +88,9 @@ const SectionView = ({ sid }: { sid: string }) => {
         setNewThumbnail: setNewThumbnail,
       }}
     >
-      <Dashboard
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        setLanguage={setLanguage}
-        title={sectionData ? sectionData.label : "Section Edit"}
-      >
+      <DashboardPageWrapper>
         <MainContainer sectionData={sectionData} />
-      </Dashboard>
+      </DashboardPageWrapper>
     </sectionEditContext.Provider>
   );
 };

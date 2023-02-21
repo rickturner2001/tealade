@@ -8,6 +8,7 @@ import LanguageContext from "../../../components/context/LanugageContext";
 import { ProductVariant } from "@prisma/client";
 import Spinner from "../../../components/Spinner";
 import { evaluatePriceRange, getProductDiscount } from "../section/[sid]";
+import DashboardPageWrapper from "../../../components/admin/layouts/DashboardPageWrapper";
 
 const DiscountDisplaySectionWrapper = () => {
   const [iseMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,14 +19,9 @@ const DiscountDisplaySectionWrapper = () => {
   const { id: did } = router.query;
 
   return (
-    <Dashboard
-      isMenuOpen={iseMenuOpen}
-      setIsMenuOpen={setIsMenuOpen}
-      setLanguage={setLanguage}
-      title="Discounts"
-    >
+    <DashboardPageWrapper>
       {did ? <DiscountDisplaySection did={did as string} /> : <></>}
-    </Dashboard>
+    </DashboardPageWrapper>
   );
 };
 

@@ -4,41 +4,21 @@ import type { Language } from "../../../types";
 import LanguageContext from "../../context/LanugageContext";
 import Dashboard from "../Dashboard";
 import ProductSpecifics from "./ProductSpecifics";
+import DashboardPageWrapper from "../layouts/DashboardPageWrapper";
 
 const ProductSpecificsWrapper = () => {
   const router = useRouter();
   const { pid } = router.query;
 
-  const [language, setLanguage] = useState<Language>("english");
-
   if (!pid) {
-    return <LoadingProductList language={language} setLanguage={setLanguage} />;
+    return <LoadingProductList />;
   }
-  return (
-    <LanguageContext.Provider value={{ language }}>
-      <ProductSpecifics pid={pid as string} setLanguage={setLanguage} />
-    </LanguageContext.Provider>
-  );
+  return <ProductSpecifics pid={pid as string} />;
 };
 
-export const LoadingProductList = ({
-  language,
-  setLanguage,
-}: {
-  language: Language;
-  setLanguage: Dispatch<SetStateAction<Language>>;
-}) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+export const LoadingProductList = () => {
   return (
-    <Dashboard
-      isMenuOpen={isMenuOpen}
-      setIsMenuOpen={setIsMenuOpen}
-      setLanguage={setLanguage}
-      title={
-        language === "english" ? "Product details" : "Dettagli del prodotto"
-      }
-    >
+    <DashboardPageWrapper>
       <div
         role="status"
         className="h-[91vh] w-full animate-pulse space-y-8 p-24 md:flex md:items-center md:space-y-0 md:space-x-8"
@@ -69,7 +49,7 @@ export const LoadingProductList = ({
         </div>
         <span className="sr-only">Loading...</span>
       </div>
-    </Dashboard>
+    </DashboardPageWrapper>
   );
 };
 

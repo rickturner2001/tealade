@@ -283,4 +283,38 @@ export const productRouter = createTRPCRouter({
       },
     });
   }),
+
+  getAllDiscountedProducts: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.product.findMany({
+      take: 8,
+      where: {
+        discountId: {
+          not: null,
+        },
+      },
+      include: {
+        discount: true,
+        category: true,
+        variants: true,
+        sections: true,
+        shipments: true,
+      },
+    });
+  }),
+
+  getLatestUpdatedProducts: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.product.findMany({
+      take: 8,
+      orderBy: {
+        updatedAt: "desc",
+      },
+      include: {
+        discount: true,
+        category: true,
+        variants: true,
+        sections: true,
+        shipments: true,
+      },
+    });
+  }),
 });

@@ -20,6 +20,7 @@ const SectionMainEditor = ({
   } = useContext(sectionEditContext);
 
   const sectionLabelRef = useRef<HTMLInputElement>(null);
+  const sectionDescriptionRef = useRef<HTMLTextAreaElement>(null);
 
   const utils = api.useContext();
   const {
@@ -74,6 +75,19 @@ const SectionMainEditor = ({
             defaultValue={sectionData.label}
             ref={sectionLabelRef}
           />
+          <label
+            htmlFor="section-label"
+            className="mb-2 block p-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Section descirption
+          </label>
+          <textarea
+            id="message"
+            defaultValue={sectionData.description}
+            ref={sectionDescriptionRef}
+            rows={4}
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 "
+          ></textarea>
           <div className="flex w-full  flex-col items-center space-y-6  ">
             <div className="flex  w-full flex-col items-center space-y-4 py-2 lg:items-start ">
               <div className="flex w-full flex-row gap-x-2 py-2">
@@ -95,8 +109,13 @@ const SectionMainEditor = ({
                 ) : (
                   <button
                     onClick={() => {
+                      console.log(newThumbnail);
                       changeSectionThumbnailMutation({
                         thumbnail: newThumbnail,
+                        description:
+                          sectionDescriptionRef?.current?.value ??
+                          sectionData.description,
+
                         sid: sectionId,
                         label:
                           sectionLabelRef?.current?.value ?? sectionData.label,

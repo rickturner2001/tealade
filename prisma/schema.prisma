@@ -90,6 +90,7 @@ model Category{
     category Category @relation(fields: [categoryId], references: [cid])
     discountId String?
     discount Discount? @relation(fields: [discountId], references: [id])
+    updatedAt DateTime @updatedAt @default(now())
  }
 
 
@@ -127,6 +128,7 @@ model ShopSection{
     label     String @unique
     products  Product[]
     thumbnail String
+    description String @default("")
 }
 
 

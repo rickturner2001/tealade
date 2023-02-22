@@ -1,11 +1,6 @@
 import { z } from "zod";
 
-import {
-  createTRPCRouter,
-  publicProcedure,
-  protectedProcedure,
-  adminProcedure,
-} from "../trpc";
+import { createTRPCRouter, publicProcedure, adminProcedure } from "../trpc";
 
 export const sectionRouter = createTRPCRouter({
   createSectionWithProducts: adminProcedure
@@ -62,7 +57,13 @@ export const sectionRouter = createTRPCRouter({
 
   changeSectionNameAndThumbnail: adminProcedure
     .input(
-      z.object({ thumbnail: z.string(), label: z.string(), sid: z.string() })
+      z.object({
+        thumbnail: z.string(),
+        label: z.string(),
+        description: z.string(),
+
+        sid: z.string(),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.shopSection.update({
@@ -71,6 +72,7 @@ export const sectionRouter = createTRPCRouter({
         },
         data: {
           label: input.label,
+          description: input.description,
           thumbnail: input.thumbnail,
         },
       });

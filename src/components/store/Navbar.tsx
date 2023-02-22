@@ -1,35 +1,82 @@
-import { useState } from "react";
-import type { StoreSections } from "../../types";
+import {
+  Bars3Icon,
+  HeartIcon,
+  MagnifyingGlassIcon,
+  ShoppingBagIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { useContext, useState } from "react";
+import StoreContext from "../context/StoreContext";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { motion } from "framer-motion";
+import ActionDropdown from "./navbar/ActionDropdown";
 
 const Navbar = () => {
-  
-  
-  
-  const [selectedSection ,setSelectedSection] =  useState<StoreSections>("featured")
-
+  const { isMenuOpen, setIsMenuOpen } = useContext(StoreContext);
   return (
-    <div className="relative w-screen">
-    <nav className="flex justify-between font-medium py-4 px-10 items-center">
-      <span className="inline-block text-2xl font-medium uppercase">Tealade</span>
-    <ul className="flex  space-x-4">
-      <li><button className="p-4 ">Featured</button></li>
-      <li><button className="p-4">Seasonal</button></li>
-      <li><button className="p-4">Hot</button></li>
-    </ul>
+    <nav className="flex w-full items-center justify-between bg-cyan-500 py-3 px-6 text-white">
+      <Link
+        href={"/"}
+        className="block px-5 py-2.5 text-2xl uppercase tracking-wider hover:bg-white/20"
+      >
+        Tealade
+      </Link>
+      <InputSearch />
+      <ActionMenu />
+      {/* Small Screens menu */}
 
-<div className="flex space-x-6 items-center">
+      <button
+        className="lg:hidden"
+        onClick={() => setIsMenuOpen((prev) => !prev)}
+      >
+        {isMenuOpen ? (
+          <XMarkIcon className="h-8 w-8" />
+        ) : (
+          <Bars3Icon className="h-8 w-8" />
+        )}
+      </button>
+    </nav>
+  );
+};
 
-    {/* <input className="w-full rounded-md border focus:outline-none py-2 px-4"/> */}
-<button>Search</button>
-<Link href={"/"}>Help</Link>
-<ShoppingBagIcon className="w-5 text-gray-600 h-5"/>
-</div>
+const ActionMenu = () => {
+  const { data: sessionData } = useSession();
 
-    </nav >
-  <div className="w-[96%] mx-auto bottom-0  border-t border-t-gray-200"></div>
-  
+  if (!sessionData) {
+    return (
+      <Link
+        href={"/login"}
+        className=" hidden  py-2 px-4 text-base font-medium hover:bg-white/20 lg:block"
+      >
+        Sign in
+      </Link>
+    );
+  }
+
+  return <ActionDropdown username={sessionData.user?.name ?? undefined} />;
+};
+
+const InputSearch = () => {
+  return (
+    <div className="hidden w-full max-w-xl lg:block">
+      <label
+        htmlFor="default-search"
+        className="sr-only mb-2 text-sm font-medium text-gray-900"
+      >
+        Search
+      </label>
+      <div className="relative">
+        <input
+          id="default-search"
+          className="block w-full  bg-white/20 p-2.5  text-sm text-white placeholder:text-white focus:border-cyan-500 focus:outline-none focus:ring-cyan-500"
+          placeholder="Search Mockups, Logos..."
+          required
+        />
+        <button className="absolute bottom-[2px] right-[2px] my-auto h-max  px-4 py-2 text-sm font-medium text-white hover:bg-white/10 focus:outline-none ">
+          <MagnifyingGlassIcon className="h-5 w-5 text-white" />
+        </button>
+      </div>
     </div>
   );
 };

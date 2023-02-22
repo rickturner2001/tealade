@@ -2,12 +2,22 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="mt-24 bg-gray-900 p-4 md:px-6 md:py-8">
-      <div className="sm:flex sm:items-center sm:justify-between">
-        <Link href={"/"} className="block text-2xl uppercase text-white">
+    <footer className="mt-32 bg-cyan-500 p-4 px-4">
+      <div className="flex flex-col items-center justify-between gap-y-2 md:flex-row">
+        <Link
+          href={"/"}
+          className="block px-5 py-2.5 text-2xl uppercase text-white hover:bg-white/20"
+        >
           tealade
         </Link>
-        <ul className="mb-6 flex flex-wrap items-center text-sm text-gray-400 sm:mb-0">
+        <span className="block text-sm text-gray-100 sm:text-center">
+          ©{" "}
+          <a href="https://tealade.com/" className="hover:underline">
+            Tealade™
+          </a>
+          . All Rights Reserved.
+        </span>
+        <ul className="flex flex-wrap items-center text-sm text-gray-100 sm:mb-0">
           <li>
             <Link
               href="/privacy-policy"
@@ -16,6 +26,7 @@ const Footer = () => {
               Privacy Policy
             </Link>
           </li>
+
           <li>
             <a href="#" className="mr-4 hover:underline md:mr-6 ">
               Licensing
@@ -28,14 +39,6 @@ const Footer = () => {
           </li>
         </ul>
       </div>
-      <hr className="my-6 border border-gray-700 sm:mx-auto lg:my-8" />
-      <span className="block text-sm text-gray-400 sm:text-center">
-        ©{" "}
-        <a href="https://tealade.com/" className="hover:underline">
-          Tealade™
-        </a>
-        . All Rights Reserved.
-      </span>
     </footer>
   );
 };

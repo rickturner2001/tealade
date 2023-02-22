@@ -1,15 +1,10 @@
 import { motion } from "framer-motion";
-import { ShopSection } from "@prisma/client";
+import { type ShopSection } from "@prisma/client";
 import { api } from "../../utils/api";
-import {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { useContext, useEffect, useState } from "react";
 import SectionsContext from "../context/SectionsContext";
 import Spinner from "../Spinner";
+import Image from "next/image";
 
 const SectionsDisplay = () => {
   const { data: sections } = api.sections.getAllSesctions.useQuery();
@@ -114,7 +109,7 @@ const SectionDisplay = ({ sections }: { sections: ShopSection[] }) => {
             key={section.id}
             className="absolute top-0 right-0 mx-auto h-full w-full max-w-7xl flex-1   "
           >
-            <div className="absolute top-0 right-0 flex h-full w-full items-center  bg-gradient-to-r from-black/80 p-12">
+            <div className="absolute top-0 right-0 z-30 flex h-full w-full items-center  bg-gradient-to-r from-black/80 p-12">
               <div className="w-full max-w-md">
                 <span className="block text-4xl font-bold uppercase text-cyan-500">
                   {section.label}
@@ -127,9 +122,12 @@ const SectionDisplay = ({ sections }: { sections: ShopSection[] }) => {
                 </button>
               </div>
             </div>
-            <img
+            <Image
+              loading="eager"
+              alt={section.label}
               src={section.thumbnail}
-              className="h-full w-full  object-cover"
+              fill={true}
+              className="relative z-10  h-full w-full object-cover"
             />
           </motion.div>
         );

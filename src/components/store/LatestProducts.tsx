@@ -4,6 +4,7 @@ import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { HeartIcon } from "@heroicons/react/24/solid";
 import { evaluatePriceRange, getProductDiscount } from "./functions";
 import Spinner from "../Spinner";
+import Image from "next/image";
 
 const LatestProducts = () => {
   const { data: products } = api.products.getLatestUpdatedProducts.useQuery();
@@ -34,19 +35,22 @@ const LatestProducts = () => {
         {products.map((product) => (
           <div key={product.pid} className="flex flex-col">
             <Link href={`product/${product.pid}`} className="group">
-              <div className=" aspect-w-1 aspect-h-1 xl:aspect-w-7 xl:aspect-h-8 relative w-full overflow-hidden  bg-gray-200">
-                <img
-                  src={product.defaultThumbnail}
-                  alt={product.name}
-                  className="h-full w-full object-cover object-center group-hover:opacity-75"
-                />
+              <div className="relative">
+                <div className=" aspect-w-1 aspect-h-1 w-full overflow-hidden  bg-gray-200 xl:aspect-w-7  xl:aspect-h-8">
+                  <Image
+                    fill={true}
+                    src={product.defaultThumbnail}
+                    alt={product.name}
+                    className="h-full w-full object-cover object-center group-hover:opacity-75"
+                  />
+                </div>
+
                 {product.discount?.value && (
                   <span className="absolute top-2 right-2  bg-red-500 py-1 px-2 text-sm font-bold text-white">
                     {product.discount.value}%
                   </span>
                 )}
               </div>
-
               <h3 className={`mt-2 text-sm text-gray-700`}>{product.name}</h3>
               <h4 className="mt-1 truncate overflow-ellipsis text-xs text-gray-700">
                 {product.category.label}
@@ -72,7 +76,7 @@ const LatestProducts = () => {
                 </div>
               ) : (
                 product.shipments[0] && (
-                  <p className="text-lg text-gray-900 line-through">
+                  <p className="text-lg text-gray-900 ">
                     {evaluatePriceRange(
                       product.variants.map((variant) => variant.price),
                       product.shipments[0].cost

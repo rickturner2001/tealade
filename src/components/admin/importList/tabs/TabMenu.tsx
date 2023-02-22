@@ -1,4 +1,3 @@
-import { XMarkIcon } from "@heroicons/react/24/solid";
 import { TRPCClientError } from "@trpc/client";
 import { type Dispatch, type SetStateAction, useContext } from "react";
 import { api } from "../../../../utils/api";

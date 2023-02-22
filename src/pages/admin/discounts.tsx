@@ -1,19 +1,15 @@
 import { useState } from "react";
-import Dashboard from "../../components/admin/Dashboard";
-import { Language } from "../../types";
 import { api } from "../../utils/api";
 import Spinner from "../../components/Spinner";
-import { Discount, Product, Prisma } from "@prisma/client";
+import { type Discount, type Product, type Prisma } from "@prisma/client";
 import Link from "next/link";
 import DiscountDeletionModal from "../../components/admin/discount/modals/DiscountDeletionModal";
 import DashboardPageWrapper from "../../components/admin/layouts/DashboardPageWrapper";
 
 const Discounts = () => {
-  const [iseMenuOpen, setIsMenuOpen] = useState(false);
-  const [language, setLanguage] = useState<Language>("english");
   const { data: discounts } = api.discounts.getAllDiscounts.useQuery();
   return (
-    <DashboardPageWrapper>
+    <DashboardPageWrapper noContext={true}>
       {discounts ? (
         <DiscountsDisplay discountsData={discounts} />
       ) : (

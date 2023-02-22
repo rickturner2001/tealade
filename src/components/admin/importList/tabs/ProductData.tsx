@@ -1,5 +1,4 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import type { Category } from "@prisma/client";
 import {
   type Dispatch,
   type SetStateAction,
@@ -7,12 +6,12 @@ import {
   useRef,
   useState,
 } from "react";
-import type { ProductWithTags, NonEmptyArray } from "../../../../types";
+import type { ProductWithTags } from "../../../../types";
 import { api } from "../../../../utils/api";
 import LanguageContext from "../../../context/LanugageContext";
 import Spinner from "../../../Spinner";
-import CategoryScrolldown from "../../subComponents/dropdowns";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 
 const ProductData = ({
   product,
@@ -70,10 +69,11 @@ const ProductData = ({
   const [currenteDeletionLabel, setCurrentDeletionLabel] = useState("");
   return (
     <div className="flex w-full  flex-col items-start gap-x-24 px-12 py-12 md:flex-row">
-      <div className="rounded-lg md:rounded-none">
-        <img
+      <div className="relative h-72 w-72 rounded-lg md:rounded-none">
+        <Image
           src={product.defaultThumbnail}
           alt={product.description}
+          fill
           className={"h-60 rounded-lg object-contain md:rounded-none"}
         />
       </div>

@@ -1,19 +1,17 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import sectionEditContext from "../../context/sectionEditContext";
 import type {
   ProductWithDiscount,
   SectionDataWithProducts,
 } from "../../../types";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import ProductImages from "../importList/tabs/ProductImages";
-import { XMarkIcon } from "@heroicons/react/24/solid";
 import { api } from "../../../utils/api";
-import { useIsMutating } from "@tanstack/react-query";
 import Spinner from "../../Spinner";
 import {
   evaluatePriceRange,
   getProductDiscount,
 } from "../../../pages/admin/section/[sid]";
+import Image from "next/image";
 
 const SectionProductsDisplay = ({
   sectionData,
@@ -21,12 +19,12 @@ const SectionProductsDisplay = ({
   sectionData: SectionDataWithProducts;
 }) => {
   return (
-    <div className="relative mx-auto max-w-2xl rounded-lg bg-white py-16 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8">
+    <div className="relative mx-auto w-full rounded-lg bg-white py-16 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8">
       <h2 className="text-2xl font-bold tracking-tight text-gray-900">
         Section products
       </h2>
 
-      <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+      <div className="mt-6 grid grid-cols-1 gap-y-24 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
         {sectionData.products.map((product) => (
           <SectionProduct
             key={product.pid}
@@ -70,13 +68,14 @@ const SectionProduct = ({
           }
         }}
         key={product.pid}
-        className="group relative"
+        className="group "
       >
-        <div className="min-h-80 aspect-w-1 aspect-h-1 lg:aspect-none w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-80">
-          <img
+        <div className=" relative h-full min-h-[16rem] w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-64 lg:w-64 ">
+          <Image
+            fill={true}
             src={product.defaultThumbnail}
             alt={product.name}
-            className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+            className="h-full w-full rounded-lg object-cover"
           />
         </div>
         <div className="mt-4 flex justify-between ">

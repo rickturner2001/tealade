@@ -9,13 +9,11 @@ import {
   ArchiveBoxArrowDownIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import type { Prisma } from "@prisma/client";
 import Link from "next/link";
 import { useContext } from "react";
 import { api } from "../../utils/api";
 import DashboardContext from "../context/DashboardContext";
 import LanguageContext from "../context/LanugageContext";
-import Builder from "../../pages/admin/builder";
 
 const copy = {
   en: {

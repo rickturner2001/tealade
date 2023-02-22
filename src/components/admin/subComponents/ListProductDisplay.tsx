@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import { api } from "../../../utils/api";
 import Spinner from "../../../components/Spinner";
+import Image from "next/image";
 
 const ListProductDisplay = ({
   pageNumber,
@@ -184,8 +185,8 @@ const ProductCard = ({
         </span>
       )}
       <Link href={`/admin/product/${pid}`} className="h-full w-full">
-        <div className="flex items-center justify-center">
-          <img src={image} className="h-48 object-contain" />
+        <div className="relative flex h-48 items-center justify-center">
+          <Image fill alt="" src={image} className="h-48 object-contain" />
         </div>
         <div className="mt-4 flex  w-full flex-col items-center justify-center space-y-1 text-center">
           <p className="mt-4 w-full overflow-hidden truncate text-ellipsis text-sm font-semibold text-gray-800">

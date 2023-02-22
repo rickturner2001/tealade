@@ -1,24 +1,13 @@
 import { CheckIcon } from "@heroicons/react/24/solid";
-import { type Dispatch, useState } from "react";
-import type { Language } from "../../../types";
+import { useState } from "react";
 import { api } from "../../../utils/api";
-import Dashboard from "../Dashboard";
 import ProductSpecificImages from "./ProductSpecificImages";
 import { LoadingProductList } from "./ProductSpecificWrapper";
 import ShipmentTable from "./ShipmentTable";
 import VariantsTable from "./VariantsTable";
 import DashboardPageWrapper from "../layouts/DashboardPageWrapper";
 import Spinner from "../../Spinner";
-const copy = {
-  en: {
-    shipping: "Shipping",
-    variants: "Variants",
-  },
-  it: {
-    shipping: "Spedizione",
-    variants: "Varianti",
-  },
-};
+
 type SubMenu = "shipping" | "variants";
 type ShipmentData = {
   courier: string;

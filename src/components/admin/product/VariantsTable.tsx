@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import type { CjProductVariant } from "../../../types";
 import LanguageContext from "../../context/LanugageContext";
+import Image from "next/image";
 
 const variantsCopy = {
   en: {
@@ -49,7 +50,9 @@ const VariantsTable = ({ variants }: { variants: CjProductVariant[] }) => {
             return (
               <tr className="p-4" key={idx}>
                 <td className="p-4">
-                  <img
+                  <Image
+                    alt={variant.variantNameEn}
+                    fill={true}
                     className="h-12  w-12 rounded-lg object-contain md:rounded-none"
                     src={variant.variantImage}
                   />

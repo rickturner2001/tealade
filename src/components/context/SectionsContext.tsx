@@ -1,4 +1,4 @@
-import { ShopSection } from "@prisma/client";
+import { type ShopSection } from "@prisma/client";
 import { type Dispatch, type SetStateAction, createContext } from "react";
 
 interface SectionContextValue {

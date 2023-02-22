@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Tab } from "@headlessui/react";
 import SectionMainEditor from "./SectionMainEditor";
-import { SectionDataWithProducts } from "../../../types";
+import type { SectionDataWithProducts } from "../../../types";
 import DiscountInitializer from "./DiscountInitializer";
 
 function classNames(...classes: string[]) {

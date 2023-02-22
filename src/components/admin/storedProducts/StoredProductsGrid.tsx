@@ -1,17 +1,16 @@
 import notFound from "../../../../public/media/images/not-found.png";
 import { useContext } from "react";
-import type { Product, ProductVariant } from "@prisma/client";
 import Link from "next/link";
 import { api } from "../../../utils/api";
 import Spinner from "../../../components/Spinner";
 
 import LanguageContext from "../../context/LanugageContext";
-import { StoreProductIncludeAll } from "../../../types";
-import ProductImages from "../importList/tabs/ProductImages";
+import type { StoreProductIncludeAll } from "../../../types";
 import {
   evaluatePriceRange,
   getProductDiscount,
 } from "../../../pages/admin/section/[sid]";
+import Image from "next/image";
 
 const StoreProductGrid = () => {
   const { data: registeredProducts } =
@@ -84,11 +83,14 @@ const StoreProductGrid = () => {
   if (registeredProducts.length === 0) {
     return (
       <div className="flex w-full flex-col items-center justify-center px-6 py-12 md:px-12">
-        <img
-          src={notFound.src}
-          className=" mb-12 h-96 object-cover"
-          alt="not found"
-        />
+        <div className="h-96">
+          <Image
+            fill={true}
+            src={notFound.src}
+            className=" mb-12 h-full object-cover"
+            alt="not found"
+          />
+        </div>
         {language === "english" ? (
           <div className="flex flex-col items-center justify-center">
             <p className="text-center text-2xl font-bold">{copy.en.notFound}</p>
@@ -137,20 +139,6 @@ const ProductCard = ({ product }: { product: StoreProductIncludeAll }) => {
 
   const { language } = useContext(LanguageContext);
 
-  const evaluatePrice = (variants: ProductVariant[]) => {
-    if (variants.length === 1) {
-      return [variants[0]?.price as number];
-    }
-    const min = Math.min(...variants.map((variant) => variant.price));
-    const max = Math.max(...variants.map((variant) => variant.price));
-
-    if (min === max) {
-      return [min];
-    }
-
-    return [min, max];
-  };
-
   const { mutate: removeProduct, isLoading: loadingRemoval } =
     api.products.deleteProduct.useMutation({
       onSuccess: () => {
@@ -180,7 +168,14 @@ const ProductCard = ({ product }: { product: StoreProductIncludeAll }) => {
           })}
         </div>
         <div className="flex items-center justify-center">
-          <img src={product.defaultThumbnail} className="h-48 object-contain" />
+          <div className="relative h-48 w-48">
+            <Image
+              fill={true}
+              alt={product.name}
+              src={product.defaultThumbnail}
+              className=" h-48 w-48 object-contain"
+            />
+          </div>
         </div>
         <ul className="mt-4 flex w-full flex-wrap items-center justify-center gap-x-1 gap-y-1">
           {product.tags.map((tag) => {

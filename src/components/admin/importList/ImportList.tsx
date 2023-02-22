@@ -1,19 +1,17 @@
 import { LayoutGroup, motion } from "framer-motion";
-import { Fragment, useState } from "react";
-import type { SideMenuSection } from "../../../types";
 import { api } from "../../../utils/api";
-import Dashboard from "../Dashboard";
 import ProductTab from "./ProductTab";
 import notFound from "../../../../public/media/images/not-found.png";
 import Link from "next/link";
 import DashboardPageWrapper from "../layouts/DashboardPageWrapper";
+import Image from "next/image";
 
 const ImportList = () => {
   const { data: importedProducts } =
     api.products.getAllImportedProducts.useQuery();
 
   return (
-    <DashboardPageWrapper>
+    <DashboardPageWrapper noContext={true}>
       <div className="flex flex-col ">
         {importedProducts && importedProducts.length > 0 ? (
           importedProducts.map((prod) => {
@@ -33,11 +31,14 @@ const ImportList = () => {
           })
         ) : (
           <div className="flex w-full flex-col items-center justify-center px-6 py-12 md:px-24">
-            <img
-              src={notFound.src}
-              className=" mb-12 h-96 object-cover"
-              alt="not found"
-            />
+            <div className="relative h-96 w-96">
+              <Image
+                src={notFound.src}
+                fill
+                className=" mb-12 h-96 object-cover"
+                alt="not found"
+              />
+            </div>
             <div className="flex flex-col items-center justify-center">
               <p className="text-center text-2xl font-bold">
                 Could not find any products

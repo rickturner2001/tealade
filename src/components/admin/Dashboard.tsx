@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { Language, SideMenuSection } from "../../types";
+import type { SideMenuSection } from "../../types";
 import DashboardContext from "../context/DashboardContext";
 import Main from "./Main";
 import Navbar from "./Navbar";

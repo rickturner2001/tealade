@@ -1,11 +1,11 @@
 import { useContext, useRef } from "react";
-import { Product, ShopSection } from "@prisma/client";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { api } from "../../../utils/api";
 import Spinner from "../../Spinner";
 import sectionEditContext from "../../context/sectionEditContext";
 import SectionInsightsTable from "./SectionInsightsTable";
-import { SectionDataWithProducts } from "../../../types";
+import type { SectionDataWithProducts } from "../../../types";
+import Image from "next/image";
 
 const SectionMainEditor = ({
   sectionData,
@@ -36,10 +36,12 @@ const SectionMainEditor = ({
 
   return (
     <div className="flex w-full flex-col gap-x-4 gap-y-4 lg:flex-row">
-      <div className="flex w-full flex-col gap-x-4 lg:w-max lg:flex-row">
-        <div className="flex h-full w-full lg:w-64 ">
-          <div className="group relative h-full w-full">
-            <img
+      <div className="flex w-full flex-col gap-x-4 lg:w-full lg:flex-row">
+        <div className="q-full flex h-full ">
+          <div className="group relative mx-auto  h-64 w-64 lg:mx-0">
+            <Image
+              fill={true}
+              alt={sectionData.description}
               src={newThumbnail === "" ? sectionData.thumbnail : newThumbnail}
               className=" h-full w-full rounded-lg border object-cover shadow-sm lg:h-full lg:w-64 "
             />

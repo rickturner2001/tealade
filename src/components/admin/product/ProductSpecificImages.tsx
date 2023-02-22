@@ -1,6 +1,7 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
-import { NonEmptyArray } from "../../../types";
+import type { NonEmptyArray } from "../../../types";
+import Image from "next/image";
 
 const ProductSpecificImages = ({
   imageSet,
@@ -13,8 +14,9 @@ const ProductSpecificImages = ({
   return (
     <>
       <div className="">
-        <img
-          src={imageSet[currentImage]}
+        <Image
+          fill={true}
+          src={imageSet[currentImage] as string}
           alt={alt}
           className="w-full rounded-lg object-cover md:h-96 md:w-96 md:rounded-none"
         />
@@ -36,13 +38,17 @@ const ProductSpecificImages = ({
               <div className="flex w-full space-x-2">
                 <div className="relative rounded-xl">
                   <div className="absolute h-full w-full rounded-lg bg-white opacity-50 md:rounded-none"></div>
-                  <img
+                  <Image
+                    alt=""
+                    fill={true}
                     className="h-20 w-20 rounded-lg object-contain  md:rounded-none"
-                    src={imageSet[imageSet.length - 1]}
+                    src={imageSet[imageSet.length - 1] as string}
                   />
                 </div>
                 <div className="relatve rounded-xl border-gray-500 md:rounded-none">
-                  <img
+                  <Image
+                    alt=""
+                    fill={true}
                     className=" h-20 w-20 rounded-lg object-contain md:rounded-none"
                     src={imageSet[currentImage]}
                   />
@@ -50,9 +56,11 @@ const ProductSpecificImages = ({
                 <div className="relative rounded-xl">
                   <div className="absolute h-full w-full rounded-lg bg-white opacity-50 md:rounded-none"></div>
 
-                  <img
+                  <Image
                     className="h-20 w-20 rounded-lg object-contain md:rounded-none"
-                    src={imageSet[currentImage + 1]}
+                    src={imageSet[currentImage + 1] as string}
+                    fill={true}
+                    alt=""
                   />
                 </div>
               </div>
@@ -60,20 +68,26 @@ const ProductSpecificImages = ({
               <div className="flex w-full space-x-2">
                 <div className="relative rounded-xl">
                   <div className="absolute h-full w-full rounded-lg bg-white opacity-50 md:rounded-none"></div>
-                  <img
+                  <Image
                     className="h-20 w-20 rounded-lg object-contain md:rounded-none"
-                    src={imageSet[currentImage - 1]}
+                    fill={true}
+                    src={imageSet[currentImage - 1] as string}
+                    alt=""
                   />
                 </div>
                 <div className="relative rounded-xl  border-gray-500">
-                  <img
+                  <Image
+                    fill
                     className="h-20 w-20 rounded-lg object-contain md:rounded-none"
-                    src={imageSet[currentImage]}
+                    alt=""
+                    src={imageSet[currentImage] as string}
                   />
                 </div>
                 <div className="relative rounded-xl">
                   <div className="absolute h-full w-full rounded-lg bg-white opacity-50 md:rounded-none"></div>
-                  <img
+                  <Image
+                    alt=""
+                    fill
                     className="h-20 w-20 rounded-lg object-contain md:rounded-none"
                     src={imageSet[0]}
                   />
@@ -83,23 +97,29 @@ const ProductSpecificImages = ({
               <div className="flex w-full space-x-2">
                 <div className="relative rounded-xl">
                   <div className="absolute h-full w-full bg-white opacity-50"></div>
-                  <img
+                  <Image
+                    alt=""
                     className="h-20 w-20 rounded-lg object-contain md:rounded-none"
-                    src={imageSet[currentImage - 1]}
+                    fill
+                    src={imageSet[currentImage - 1] as string}
                   />
                 </div>
                 <div className="relative rounded-xl ">
-                  <img
+                  <Image
+                    alt=""
                     className="h-20 w-20 rounded-lg object-contain md:rounded-none"
-                    src={imageSet[currentImage]}
+                    fill
+                    src={imageSet[currentImage] as string}
                   />
                 </div>
 
                 <div className="relative rounded-xl">
                   <div className="absolute h-full w-full bg-white opacity-50"></div>
-                  <img
+                  <Image
+                    fill
+                    alt=""
                     className="h-20 w-20 rounded-lg object-contain md:rounded-none"
-                    src={imageSet[currentImage + 1]}
+                    src={imageSet[currentImage + 1] as string}
                   />
                 </div>
               </div>
@@ -110,11 +130,12 @@ const ProductSpecificImages = ({
                 if (idx !== currentImage) {
                   return (
                     <div key={idx} className="rounded-xl">
-                      <img
+                      <Image
                         className={
                           "h-12 w-12 rounded-lg object-contain md:rounded-none"
                         }
                         src={img}
+                        fill
                         alt={alt}
                       />
                     </div>

@@ -1,25 +1,20 @@
-import { useContext, useState } from "react";
-import Dashboard from "../../../components/admin/Dashboard";
-import { Language, StoreProductIncludeAll } from "../../../types";
+import { useContext } from "react";
+import { type StoreProductIncludeAll } from "../../../types";
 import { api } from "../../../utils/api";
-import discounts from "../discounts";
 import { useRouter } from "next/router";
 import LanguageContext from "../../../components/context/LanugageContext";
-import { ProductVariant } from "@prisma/client";
 import Spinner from "../../../components/Spinner";
 import { evaluatePriceRange, getProductDiscount } from "../section/[sid]";
 import DashboardPageWrapper from "../../../components/admin/layouts/DashboardPageWrapper";
+import Image from "next/image";
 
 const DiscountDisplaySectionWrapper = () => {
-  const [iseMenuOpen, setIsMenuOpen] = useState(false);
-  const [language, setLanguage] = useState<Language>("english");
-
   const router = useRouter();
 
   const { id: did } = router.query;
 
   return (
-    <DashboardPageWrapper>
+    <DashboardPageWrapper noContext={true}>
       {did ? <DiscountDisplaySection did={did as string} /> : <></>}
     </DashboardPageWrapper>
   );
@@ -28,7 +23,7 @@ const DiscountDisplaySectionWrapper = () => {
 const DiscountDisplaySection = ({ did }: { did: string }) => {
   const { data: discount } = api.discounts.getDiscountById.useQuery({ did });
   return (
-    <div className="mx-auto mt-12 flex w-full max-w-7xl flex-wrap items-center justify-center gap-x-2 gap-y-4">
+    <div className="mx-auto mt-12 flex w-full max-w-7xl flex-wrap items-center justify-center gap-x-2 gap-y-4 py-12">
       {discount &&
         discount.products.map((prod) => {
           return <ProductCard key={prod.pid} product={prod} did={did} />;
@@ -45,28 +40,7 @@ const ProductCard = ({
 }) => {
   const utils = api.useContext();
 
-  const { mutate: setProductToEditMutation, isLoading: loadProductToEdit } =
-    api.products.setProductToEdit.useMutation({
-      onSuccess: async () => {
-        await utils.products.invalidate();
-      },
-    });
-
   const { language } = useContext(LanguageContext);
-
-  const evaluatePrice = (variants: ProductVariant[]) => {
-    if (variants.length === 1) {
-      return [variants[0]?.price as number];
-    }
-    const min = Math.min(...variants.map((variant) => variant.price));
-    const max = Math.max(...variants.map((variant) => variant.price));
-
-    if (min === max) {
-      return [min];
-    }
-
-    return [min, max];
-  };
 
   const { mutate: removeProduct, isLoading: loadingRemoval } =
     api.products.removeDiscountByProductId.useMutation({
@@ -82,10 +56,10 @@ const ProductCard = ({
 
   return (
     <div
-      className={`relative z-10 flex  h-full w-full  max-w-sm flex-col  items-center justify-between space-y-8 rounded-2xl bg-white  p-4 py-12 shadow-md`}
+      className={`relative z-10 flex h-max  w-full  max-w-sm flex-col  items-center justify-between space-y-8 rounded-2xl bg-white  p-4 py-12 shadow-md`}
     >
-      <div className="flex h-full w-full flex-col justify-between gap-y-4">
-        <div className="mb-4 flex w-full flex-wrap items-center justify-center gap-x-1 gap-y-1">
+      <div className="flex h-full w-full flex-col items-center gap-y-4">
+        <div className="mb-4 flex h-max w-full flex-wrap items-center justify-center gap-x-1 gap-y-1">
           {product.sections.map((section) => {
             return (
               <span
@@ -97,8 +71,13 @@ const ProductCard = ({
             );
           })}
         </div>
-        <div className="flex items-center justify-center">
-          <img src={product.defaultThumbnail} className="h-48 object-contain" />
+        <div className="relative flex h-48 w-48 items-center justify-center">
+          <Image
+            fill
+            alt={product.name}
+            src={product.defaultThumbnail}
+            className="h-48 object-contain"
+          />
         </div>
         <ul className="mt-4 flex w-full flex-wrap items-center justify-center gap-x-1 gap-y-1">
           {product.tags.map((tag) => {

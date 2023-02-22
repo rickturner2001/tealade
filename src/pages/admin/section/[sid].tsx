@@ -1,8 +1,7 @@
 import { useRouter } from "next/router";
 import { api } from "../../../utils/api";
-import Dashboard from "../../../components/admin/Dashboard";
 import { useContext, useState } from "react";
-import type { Language, SectionDataWithProducts } from "../../../types";
+import type { SectionDataWithProducts } from "../../../types";
 import Spinner from "../../../components/Spinner";
 import sectionEditContext from "../../../components/context/sectionEditContext";
 import AddProductsDisplay from "../../../components/admin/section/AddProductsDisplay";
@@ -31,9 +30,7 @@ export const getProductDiscount = (
   if (typeof price === "number") {
     return ((price * (100 - discount)) / 100).toFixed(2);
   } else {
-    console.log("Price is split");
     const [startPrice, endPrice] = price.split("-");
-    console.log(startPrice, endPrice);
     const discountedStartPrice = (
       (parseInt(startPrice as string) * (100 - discount)) /
       100
@@ -65,8 +62,6 @@ const SectionView = ({ sid }: { sid: string }) => {
   const { data: sectionData } = api.sections.getSectionById.useQuery({
     sid: sid,
   });
-  const setLanguage = useState<Language>("english")[1];
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const [isEditingThumbnail, setIsEditingThumbnail] = useState(false);
   const [newThumbnail, setNewThumbnail] = useState("");

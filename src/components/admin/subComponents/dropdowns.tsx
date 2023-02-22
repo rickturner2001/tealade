@@ -1,12 +1,4 @@
-import {
-  type Dispatch,
-  Fragment,
-  type SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import type { Category } from "@prisma/client";
 import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
@@ -14,7 +6,6 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 export default function CategoryScrolldown({
   categories,
   defaultSelection,
-  selectedCategory,
   setSelectedCategory,
 }: {
   categories: Category[];
@@ -29,7 +20,7 @@ export default function CategoryScrolldown({
   }, [defaultSelection, setSelectedCategory]);
 
   return (
-    <div className="relative p-4 lg:w-1/3">
+    <div className="relative  lg:w-1/3">
       <button
         onClick={() => {
           setIsMenuOpen((prev) => !prev);

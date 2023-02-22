@@ -1,21 +1,18 @@
 import {
   Bars3Icon,
-  HeartIcon,
   MagnifyingGlassIcon,
-  ShoppingBagIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import StoreContext from "../context/StoreContext";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import ActionDropdown from "./navbar/ActionDropdown";
 
 const Navbar = () => {
   const { isMenuOpen, setIsMenuOpen } = useContext(StoreContext);
   return (
-    <nav className="flex w-full items-center justify-between bg-cyan-500 py-3 px-6 text-white">
+    <nav className="flex w-full items-center justify-between bg-teal-500 py-3 px-6 text-white">
       <Link
         href={"/"}
         className="block px-5 py-2.5 text-2xl uppercase tracking-wider hover:bg-white/20"
@@ -69,7 +66,7 @@ const InputSearch = () => {
       <div className="relative">
         <input
           id="default-search"
-          className="block w-full  bg-white/20 p-2.5  text-sm text-white placeholder:text-white focus:border-cyan-500 focus:outline-none focus:ring-cyan-500"
+          className="block w-full  bg-white/20 p-2.5  text-sm text-white placeholder:text-white focus:border-teal-500 focus:outline-none focus:ring-teal-500"
           placeholder="Search Mockups, Logos..."
           required
         />

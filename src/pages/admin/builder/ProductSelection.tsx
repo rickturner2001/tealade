@@ -1,8 +1,8 @@
 import { type Dispatch, type SetStateAction, useState } from "react";
-import type { StoreProduct } from "../../../types";
 import { api } from "../../../utils/api";
-import { Product, ProductVariant } from "@prisma/client";
-import { CheckCircleIcon, CheckIcon } from "@heroicons/react/24/solid";
+import type { Product, ProductVariant } from "@prisma/client";
+import { CheckIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
 
 const evaluatePriceRange = (variants: number[]) => {
   if (variants.length === 1) {
@@ -80,10 +80,15 @@ const SelectableProduct = ({
       }`}
     >
       <div className="flex w-full items-center space-x-4 ">
-        <img
-          src={product.defaultThumbnail}
-          className="h-24 w-24 rounded-md object-cover"
-        />
+        <div className="relative h-24 w-24">
+          <Image
+            fill
+            alt={product.name}
+            src={product.defaultThumbnail}
+            className=" rounded-md object-cover"
+          />
+        </div>
+
         <div className="relative flex flex-col text-sm">
           <p
             className={`font-medium ${

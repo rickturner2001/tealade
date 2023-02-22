@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Dispatch, Fragment, SetStateAction, useState } from "react";
+import { type Dispatch, Fragment, type SetStateAction } from "react";
 import { api } from "../../../../utils/api";
 import Spinner from "../../../Spinner";
 
@@ -24,10 +24,6 @@ const DiscountDeletionModal = ({
     });
   function closeModal() {
     setIsOpen(false);
-  }
-
-  function openModal() {
-    setIsOpen(true);
   }
 
   return (

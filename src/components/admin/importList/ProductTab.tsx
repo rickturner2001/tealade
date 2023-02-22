@@ -1,4 +1,3 @@
-import type { Category } from "@prisma/client";
 import { useContext, useState } from "react";
 import type { ProductWithTags } from "../../../types";
 import { api } from "../../../utils/api";

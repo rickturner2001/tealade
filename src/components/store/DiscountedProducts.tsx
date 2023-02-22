@@ -75,7 +75,7 @@ const DiscountedProducts = () => {
               )}
             </Link>
             <div className="mt-4 flex w-full gap-x-4 text-sm">
-              <button className="inline-flex w-full items-center justify-center gap-x-2 bg-cyan-500 py-2.5 text-center font-medium  text-white hover:bg-cyan-600">
+              <button className="inline-flex w-full items-center justify-center gap-x-2 bg-teal-500 py-2.5 text-center font-medium  text-white hover:bg-teal-600">
                 <ShoppingBagIcon className="h-4 w-4 stroke-2" /> Add to cart
               </button>
               <button className="group inline-flex w-full items-center justify-center gap-x-2 py-2.5  text-center font-medium text-gray-900 hover:bg-gray-100">

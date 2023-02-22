@@ -1,14 +1,14 @@
 import { useContext, useState } from "react";
 import Spinner from "../../Spinner";
 import { api } from "../../../utils/api";
-import { Product, ProductVariant } from "@prisma/client";
 import sectionEditContext from "../../context/sectionEditContext";
 import AddProductsAlert from "./alerts/AddProductsAlert";
-import { ProductWithDiscount } from "../../../types";
+import type { ProductWithDiscount } from "../../../types";
 import {
   evaluatePriceRange,
   getProductDiscount,
 } from "../../../pages/admin/section/[sid]";
+import Image from "next/image";
 
 const AddProductsDisplay = ({ existingPids }: { existingPids: string[] }) => {
   const { data: storeProducts } = api.products.getAllStoreProducts.useQuery();
@@ -66,8 +66,9 @@ const ListedProduct = ({ product }: { product: ProductWithDiscount }) => {
         isActive ? "ring-blue-300" : ""
       }`}
     >
-      <div className="min-h-80 aspect-w-1 aspect-h-1 lg:aspect-none w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-80">
-        <img
+      <div className="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-80 lg:aspect-none">
+        <Image
+          fill={true}
           src={product.defaultThumbnail}
           alt={product.name}
           className="h-full w-full object-cover object-center lg:h-full lg:w-full"

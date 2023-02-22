@@ -1,8 +1,4 @@
 import { useRouter } from "next/router";
-import { type Dispatch, type SetStateAction, useState } from "react";
-import type { Language } from "../../../types";
-import LanguageContext from "../../context/LanugageContext";
-import Dashboard from "../Dashboard";
 import ProductSpecifics from "./ProductSpecifics";
 import DashboardPageWrapper from "../layouts/DashboardPageWrapper";
 

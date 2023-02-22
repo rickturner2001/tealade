@@ -9,9 +9,10 @@ import {
   useEffect,
   useState,
 } from "react";
-import type { NonNullableArrayIndex, ProductWithTags } from "../../../../types";
+import type { ProductWithTags } from "../../../../types";
 import LanguageContext from "../../../context/LanugageContext";
 import SalesPriceMenu from "./SalesPriceMenu";
+import Image from "next/image";
 
 const copy = {
   en: {
@@ -136,7 +137,7 @@ const VariantRow = ({
   variantPrices,
   product,
 }: {
-  index: NonNullableArrayIndex<number[]>;
+  index: number;
   variantPrices: number[];
   variant: Readonly<ProductVariant>;
   setVariantPrices: Dispatch<SetStateAction<number[]>>;
@@ -176,7 +177,12 @@ const VariantRow = ({
   return (
     <tr className="border-t border-b p-4 text-center text-xs">
       <td className="p-2">
-        <img src={variant.thumbnail} className="w-20 object-cover" />
+        <Image
+          alt={variant.variantName}
+          src={variant.thumbnail}
+          fill
+          className="w-20 object-cover"
+        />
       </td>
       <td className="text- p-4 text-start">{variant.variantName}</td>
       <td className="p-4">{variant.height} cm</td>

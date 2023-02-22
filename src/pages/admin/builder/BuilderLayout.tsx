@@ -1,9 +1,9 @@
-import { EyeIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { api } from "../../../utils/api";
 import Spinner from "../../../components/Spinner";
-import { type Dispatch, type SetStateAction, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ProductSelection from "./ProductSelection";
 import Link from "next/link";
+import Image from "next/image";
 
 const BuilderLayout = () => {
   const utils = api.useContext();
@@ -15,26 +15,19 @@ const BuilderLayout = () => {
   const sectionNameRef = useRef<HTMLInputElement>(null);
   const [sectionThumbnail, setSectionThumbnail] = useState("");
 
-  const {
-    mutate: createSectionMutation,
-    isSuccess,
-    isError,
-    isLoading,
-  } = api.sections.createSectionWithProducts.useMutation({
-    onSuccess: async () => {
-      await utils.sections.getAllSesctions.invalidate();
-    },
-  });
+  const { mutate: createSectionMutation, isLoading } =
+    api.sections.createSectionWithProducts.useMutation({
+      onSuccess: async () => {
+        await utils.sections.getAllSesctions.invalidate();
+      },
+    });
 
-  const {
-    mutate: removeSectionMutation,
-    isLoading: isLoadingDeletion,
-    isError: isDeletionError,
-  } = api.sections.deleteSection.useMutation({
-    onSuccess: async () => {
-      await utils.sections.getAllSesctions.invalidate();
-    },
-  });
+  const { mutate: removeSectionMutation, isLoading: isLoadingDeletion } =
+    api.sections.deleteSection.useMutation({
+      onSuccess: async () => {
+        await utils.sections.getAllSesctions.invalidate();
+      },
+    });
 
   return (
     <div className="m-8 flex flex-wrap gap-x-4 gap-y-4 rounded-md shadow-md  ">
@@ -93,17 +86,20 @@ const BuilderLayout = () => {
           {sections.map((section) => {
             return (
               <div
-                className="flex h-max flex-col space-y-4 rounded-lg bg-white p-4"
+                className="mt-12 flex h-max flex-col space-y-4 rounded-lg bg-white p-4"
                 key={section.id}
               >
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-center text-sm font-medium text-gray-700 lg:text-left">
                   {section.label}
                 </p>
-                <img
-                  src={section.thumbnail}
-                  className="w-full rounded-lg object-contain md:h-64 md:w-64"
-                />
-
+                <div className="relative h-96  w-96 md:h-64 md:w-64 ">
+                  <Image
+                    fill
+                    alt={section.description}
+                    src={section.thumbnail}
+                    className="w-full rounded-lg object-cover"
+                  />
+                </div>
                 <div className="flex space-x-2">
                   <Link
                     href={`/admin/section/${section.id}`}
@@ -144,7 +140,9 @@ const BuilderLayout = () => {
                   <p className="text-sm font-medium text-gray-700">
                     {section.label}
                   </p>
-                  <img
+                  <Image
+                    alt={section.description}
+                    fill
                     src={section.thumbnail}
                     className="w-full rounded-lg object-contain md:h-64 md:w-64"
                   />

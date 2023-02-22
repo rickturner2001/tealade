@@ -8,10 +8,9 @@ import type {
   Shipment,
   ShopSection,
 } from "@prisma/client";
-import { Variant } from "framer-motion";
 
 export type NonEmptyArray<T> = [T, ...T[]];
-export type NonNullableArrayIndex<T> = T extends any[]
+export type NonNullableArrayIndex<T> = T extends T[]
   ? Required<T[number]>
   : never;
 

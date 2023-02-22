@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Dispatch, Fragment, SetStateAction, useState } from "react";
-import { ProductWithDiscount } from "../../../../types";
+import { type Dispatch, Fragment, type SetStateAction, useState } from "react";
+import type { ProductWithDiscount } from "../../../../types";
 import { api } from "../../../../utils/api";
 import Spinner from "../../../Spinner";
 
@@ -25,16 +25,13 @@ const OverrideDiscountModal = ({
 
   const utils = api.useContext();
 
-  const {
-    mutate: issueDiscountMutation,
-    isLoading,
-    isError,
-  } = api.discounts.issueSectionDiscount.useMutation({
-    onSuccess: async () => {
-      await utils.sections.invalidate();
-      setIsOpen(false);
-    },
-  });
+  const { mutate: issueDiscountMutation, isLoading } =
+    api.discounts.issueSectionDiscount.useMutation({
+      onSuccess: async () => {
+        await utils.sections.invalidate();
+        setIsOpen(false);
+      },
+    });
 
   return (
     <>

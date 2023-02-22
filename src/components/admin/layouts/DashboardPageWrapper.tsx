@@ -1,6 +1,9 @@
 import { Fragment, useState } from "react";
 import Dashboard from "../Dashboard";
 import type { SideMenuSection } from "../../../types";
+import CategoryScrolldown from "../subComponents/dropdowns";
+import { api } from "../../../utils/api";
+import type { Category } from "@prisma/client";
 
 const DashboardPageWrapper = ({
   children,
@@ -30,8 +33,21 @@ const DashboardPageWrapper = ({
 };
 
 const ContextMenu = () => {
+  const { data: categories } = api.products.getAllCategories.useQuery();
+
+  const [category, setCategory] = useState<Category | null>(null);
+
   return (
-    <div className="w-full bg-gradient-to-r from-blue-700 to-blue-500/80 py-6 "></div>
+    <div className="flex w-full justify-end bg-gradient-to-r from-blue-700 to-blue-500/80 px-8 py-6 ">
+      {categories && categories[0] && (
+        <CategoryScrolldown
+          categories={categories}
+          defaultSelection={categories[0]}
+          selectedCategory={category}
+          setSelectedCategory={setCategory}
+        />
+      )}
+    </div>
   );
 };
 

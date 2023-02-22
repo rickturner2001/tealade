@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { SectionDataWithProducts } from "../../../types";
+import type { SectionDataWithProducts } from "../../../types";
 import { api } from "../../../utils/api";
 import Spinner from "../../Spinner";
 import OverrideDiscountModal from "./modals/OverrideDiscountModal";
@@ -13,7 +13,6 @@ const DiscountInitializer = ({
   const {
     mutate: issueSectionDiscountMutation,
     isLoading: loadingSessionDiscount,
-    isSuccess: successfulSessionDiscount,
   } = api.discounts.issueSectionDiscount.useMutation({
     onSuccess: async () => {
       await utils.sections.invalidate();
@@ -25,8 +24,8 @@ const DiscountInitializer = ({
   const discountValueRef = useRef<HTMLInputElement>(null);
   const discountLabelRef = useRef<HTMLInputElement>(null);
 
-  const [isLabelError, setIsLabelError] = useState(false);
-  const [isValueError, setIsValueError] = useState(false);
+  const labelState = useState(false);
+  const valueState = useState(false);
 
   const productsWithDiscount = sectionData.products.filter(
     (prod) => prod.discount
@@ -41,10 +40,10 @@ const DiscountInitializer = ({
     const discountValue = discountValueRef?.current?.value;
 
     if (!discountLabel) {
-      setIsLabelError(true);
+      labelState[1](true);
       return;
     } else if (!discountValue || isNaN(+discountValue)) {
-      setIsValueError(true);
+      valueState[1](true);
       return;
     } else {
       issueSectionDiscountMutation({
@@ -52,8 +51,8 @@ const DiscountInitializer = ({
         value: +discountValue,
         pids: sectionData.products.map((prod) => prod.pid),
       });
-      setIsLabelError(false);
-      setIsValueError(false);
+      labelState[1](false);
+      valueState[1](false);
     }
   };
 

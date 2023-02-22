@@ -16,7 +16,7 @@ const CTA = () => {
           placeholder="Enter your email address"
           className="w-full p-2 text-gray-700 focus:outline-none "
         />
-        <button className="inline-flex w-full items-center justify-center gap-x-2 bg-cyan-500 px-5 py-2.5 font-medium lg:w-max lg:justify-start">
+        <button className="inline-flex w-full items-center justify-center gap-x-2 bg-teal-500 px-5 py-2.5 font-medium lg:w-max lg:justify-start">
           <EnvelopeIcon className="h-4 w-4 stroke-2" /> Subscribe
         </button>
       </div>

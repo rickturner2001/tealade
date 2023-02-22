@@ -1,4 +1,4 @@
-import { SectionDataWithProducts } from "../../../types";
+import type { SectionDataWithProducts } from "../../../types";
 
 const SectionInsightsTable = ({
   sectionData,

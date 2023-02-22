@@ -1,6 +1,7 @@
 import { CheckIcon } from "@heroicons/react/24/solid";
 import type { Dispatch, SetStateAction } from "react";
 import type { ProductWithTags } from "../../../../types";
+import Image from "next/image";
 
 const ProductImages = ({
   product,
@@ -39,9 +40,10 @@ const ProductImages = ({
                 </button>
               )}
             </div>
-            <img
+            <Image
               src={image}
               alt={product.description}
+              fill
               className={"h-72 object-contain"}
             />
           </div>

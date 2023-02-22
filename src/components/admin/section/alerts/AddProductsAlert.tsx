@@ -14,16 +14,13 @@ const AddProductsAlert = () => {
 
   const utils = api.useContext();
 
-  const {
-    mutate: addProductsMutation,
-    isLoading,
-    isError,
-  } = api.sections.addProductsToSection.useMutation({
-    onSuccess: async () => {
-      await utils.sections.invalidate();
-      setIsAddingProducts(false);
-    },
-  });
+  const { mutate: addProductsMutation, isLoading } =
+    api.sections.addProductsToSection.useMutation({
+      onSuccess: async () => {
+        await utils.sections.invalidate();
+        setIsAddingProducts(false);
+      },
+    });
 
   return (
     <div

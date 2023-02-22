@@ -1,19 +1,8 @@
 import { motion } from "framer-motion";
-import {
-  type Dispatch,
-  type SetStateAction,
-  useContext,
-  useState,
-} from "react";
-import type { Language } from "../../types";
-import {
-  ArrowsRightLeftIcon,
-  ChevronDownIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
+import { type Dispatch, type SetStateAction, useState } from "react";
+import { ChevronDownIcon, UserIcon } from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import LanguageContext from "../context/LanugageContext";
 import Link from "next/link";
 
 export default function Navbar({
@@ -22,7 +11,6 @@ export default function Navbar({
   setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const { status, data: sessionData } = useSession();
-  const { language } = useContext(LanguageContext);
 
   const [iseUserMenuOpen, setIsUserMenuOpen] = useState(false);
 

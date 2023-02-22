@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import SectionsContext from "../context/SectionsContext";
+import Spinner from "../Spinner";
 
 const SectionsDisplay = () => {
   const { data: sections } = api.sections.getAllSesctions.useQuery();
@@ -22,6 +23,17 @@ const SectionsDisplay = () => {
       setSelectedSection(sections[0]);
     }
   }, [sections, selectedSection]);
+
+  if (!sections) {
+    return (
+      <div
+        className=" flex h-[92vh] w-full items-center justify-center
+    "
+      >
+        <Spinner className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <SectionsContext.Provider
@@ -44,28 +56,35 @@ const SectionsDisplay = () => {
 
 const SectionsNav = ({ sections }: { sections: ShopSection[] }) => {
   const { selectedSection, setSelectedSection } = useContext(SectionsContext);
-  if (selectedSection) {
+  if (!selectedSection) {
     return (
-      <ul className="flex items-center justify-center gap-x-2">
-        {sections.map((section) => {
-          return (
-            <li
-              onClick={() => setSelectedSection(section)}
-              key={section.id}
-              className={`cursor-pointer   py-2.5 px-5 font-medium transition-colors duration-200 ${
-                selectedSection.id === section.id
-                  ? "bg-cyan-500 text-white"
-                  : "text-gray-900 hover:bg-gray-100"
-              }`}
-            >
-              {section.label}
-            </li>
-          );
-        })}
-      </ul>
+      <div
+        className=" flex h-[92vh] w-full items-center justify-center
+    "
+      >
+        <Spinner className="h-8 w-8 animate-spin" />
+      </div>
     );
   }
-  return <div></div>;
+  return (
+    <ul className="flex items-center justify-center gap-x-2">
+      {sections.map((section) => {
+        return (
+          <li
+            onClick={() => setSelectedSection(section)}
+            key={section.id}
+            className={`cursor-pointer   py-2.5 px-5 font-medium transition-colors duration-200 ${
+              selectedSection.id === section.id
+                ? "bg-cyan-500 text-white"
+                : "text-gray-900 hover:bg-gray-100"
+            }`}
+          >
+            {section.label}
+          </li>
+        );
+      })}
+    </ul>
+  );
 };
 
 const SectionDisplay = ({ sections }: { sections: ShopSection[] }) => {

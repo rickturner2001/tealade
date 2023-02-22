@@ -3,12 +3,20 @@ import { api } from "../../utils/api";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { HeartIcon } from "@heroicons/react/24/solid";
 import { evaluatePriceRange, getProductDiscount } from "./functions";
+import Spinner from "../Spinner";
 
 const LatestProducts = () => {
   const { data: products } = api.products.getLatestUpdatedProducts.useQuery();
 
   if (!products) {
-    return <div></div>;
+    return (
+      <div
+        className=" flex h-[92vh] w-full items-center justify-center
+    "
+      >
+        <Spinner className="h-8 w-8 animate-spin" />
+      </div>
+    );
   }
 
   return (

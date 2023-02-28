@@ -20,7 +20,7 @@ const ProductSpecificImages = ({
           className="w-full rounded-lg object-cover md:h-96 md:w-96 md:rounded-none"
         />
       </div>
-      <div className="flex items-center justify-center space-x-4">
+      <div className="flex items-center justify-center gap-x-4">
         <ChevronLeftIcon
           className="h-5 w-5 text-gray-600"
           onClick={() => {

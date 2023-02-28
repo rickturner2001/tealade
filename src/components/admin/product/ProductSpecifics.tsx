@@ -59,14 +59,15 @@ const ProductSpecifics = ({ pid }: { pid: string }) => {
       <div className="py-12 md:px-24">
         <div className="w-full rounded-xl bg-white py-8 px-6 shadow-lg md:px-24">
           {/* Outermost flex */}
-          <div className="flex flex-col items-start md:flex-row md:space-x-24">
+          <div className="flex flex-col items-start md:flex-row md:flex-wrap md:space-x-24">
             {/* left side */}
-            <div className="flex flex-col justify-center space-y-8 ">
+            <div className="flex w-full flex-1 flex-col items-center justify-center   gap-y-8">
               <ProductSpecificImages
                 imageSet={product.productImageSet}
                 alt={product.description}
               />
             </div>
+            <div className="my-12 w-full border border-gray-200"></div>
             {/* right side */}
             <div className="mt-16 w-full md:mt-0">
               <h2 className="text-2xl font-bold capitalize text-gray-800">
@@ -94,6 +95,8 @@ const ProductSpecifics = ({ pid }: { pid: string }) => {
                 <p className="py-2 text-2xl font-semibold text-gray-800">
                   ${product.sellPrice}
                 </p>
+
+                <div className="my-12 w-full border border-gray-200"></div>
                 <div className="mt-16 w-full md:mt-24">
                   <div className="flex w-full justify-center space-x-12 bg-gray-100 px-3 py-4 text-lg font-bold md:justify-start md:px-6">
                     <p

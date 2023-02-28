@@ -1,5 +1,5 @@
 import notFound from "../../../../public/media/images/not-found.png";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Link from "next/link";
 import { api } from "../../../utils/api";
 import Spinner from "../../../components/Spinner";
@@ -11,6 +11,7 @@ import {
   getProductDiscount,
 } from "../../../pages/admin/section/[sid]";
 import Image from "next/image";
+import ImageView from "./ImageView";
 
 const StoreProductGrid = () => {
   const { data: registeredProducts } =
@@ -139,6 +140,8 @@ const ProductCard = ({ product }: { product: StoreProductIncludeAll }) => {
 
   const { language } = useContext(LanguageContext);
 
+  const [isOpenImageView, setIsOpenImageView] = useState(false);
+
   const { mutate: removeProduct, isLoading: loadingRemoval } =
     api.products.deleteProduct.useMutation({
       onSuccess: () => {
@@ -168,14 +171,23 @@ const ProductCard = ({ product }: { product: StoreProductIncludeAll }) => {
           })}
         </div>
         <div className="flex items-center justify-center">
-          <div className="relative h-48 w-48">
-            <Image
-              fill={true}
-              alt={product.name}
-              src={product.defaultThumbnail}
-              className=" h-48 w-48 object-contain"
-            />
-          </div>
+          <ImageView
+            isOpen={isOpenImageView}
+            setIsOpen={setIsOpenImageView}
+            imageSet={product.imageSet}
+          >
+            <button
+              onClick={() => setIsOpenImageView(true)}
+              className="relative h-48 w-48"
+            >
+              <Image
+                fill={true}
+                alt={product.name}
+                src={product.defaultThumbnail}
+                className=" h-48 w-48 object-contain"
+              />
+            </button>
+          </ImageView>
         </div>
         <ul className="mt-4 flex w-full flex-wrap items-center justify-center gap-x-1 gap-y-1">
           {product.tags.map((tag) => {

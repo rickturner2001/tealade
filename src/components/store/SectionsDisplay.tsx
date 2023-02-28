@@ -70,7 +70,7 @@ const SectionsNav = ({ sections }: { sections: ShopSection[] }) => {
             key={section.id}
             className={`cursor-pointer   py-2.5 px-5 font-medium transition-colors duration-200 ${
               selectedSection.id === section.id
-                ? "bg-teal-500 text-white"
+                ? "bg-[#17212D] text-white"
                 : "text-gray-900 hover:bg-gray-100"
             }`}
           >
@@ -111,13 +111,13 @@ const SectionDisplay = ({ sections }: { sections: ShopSection[] }) => {
           >
             <div className="absolute top-0 right-0 z-30 flex h-full w-full items-center  bg-gradient-to-r from-black/80 p-12">
               <div className="w-full max-w-md">
-                <span className="block text-4xl font-bold uppercase text-teal-500">
+                <span className="block text-4xl font-bold uppercase text-[#F0C808]">
                   {section.label}
                 </span>
                 <span className="block py-2 text-lg font-medium text-white">
                   {section.description}
                 </span>
-                <button className="focus:ouline-none mt-4  bg-teal-500 py-2.5 px-5 text-white hover:bg-teal-600 focus:ring-4 focus:ring-teal-300">
+                <button className="focus:ouline-none mt-4  bg-[#F0C808] py-2.5 px-5 text-[#17212D] hover:bg-teal-600 focus:ring-4 focus:ring-teal-300">
                   View products
                 </button>
               </div>

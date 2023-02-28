@@ -185,9 +185,7 @@ const ProductCard = ({
         </span>
       )}
       <Link href={`/admin/product/${pid}`} className="h-full w-full">
-        <div className="relative flex h-48 items-center justify-center">
-          <Image fill alt="" src={image} className="h-48 object-contain" />
-        </div>
+        <img alt="" src={image} className="h-48 w-48 object-contain" />
         <div className="mt-4 flex  w-full flex-col items-center justify-center space-y-1 text-center">
           <p className="mt-4 w-full overflow-hidden truncate text-ellipsis text-sm font-semibold text-gray-800">
             {name}

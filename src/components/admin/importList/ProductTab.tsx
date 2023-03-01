@@ -8,6 +8,7 @@ import ProductDescription from "./tabs/ProductDescription";
 import ProductImages from "./tabs/ProductImages";
 import ProductVariants from "./tabs/ProductVariants";
 import TabMenu from "./tabs/TabMenu";
+import { ButtonPrimary, ButtonSupportPrimary } from "../buttons/Buttons";
 
 export type Tabs = "product" | "description" | "variants" | "images";
 
@@ -51,7 +52,7 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
   });
 
   return (
-    <>
+    <div className="w-full">
       <TabMenu
         productVariants={product.variants.map((variant) => {
           return {
@@ -105,59 +106,56 @@ const ProductTab = ({ product }: { product: ProductWithTags }) => {
         <></>
       )}
 
-      <div className="mt-4 flex w-full flex-col-reverse gap-y-2 px-4 pb-6 md:hidden">
-        {isLoading ? (
-          <button className="bold my-auto w-full   rounded-md bg-white py-3 px-8 text-sm  font-bold text-red-500 ring ring-gray-200 ">
-            Loading...
-            <Spinner className=" ml-2 inline h-4 w-4 animate-spin text-white" />
-          </button>
-        ) : (
-          <button
-            onClick={() => deleteProduct({ pid: product.pid })}
-            className="bold my-auto  w-full rounded-md  bg-red-100 py-3 px-8 text-sm font-medium text-red-900 hover:bg-red-200 "
-          >
-            {language === "english" ? "Remove product" : "Rimuovi prodotto"}
-          </button>
-        )}
-        {loadingFinalization ? (
-          <button className="bold my-auto  rounded-md bg-white py-3 px-8 text-sm  font-bold text-gray-800 ring ring-gray-200 ">
-            Loading...
-            <Spinner className=" ml-2 inline h-4 w-4 animate-spin text-white" />
-          </button>
-        ) : (
-          <button
-            onClick={() => {
-              const productVariants = product.variants.map((variant) => {
-                return {
-                  height: variant.height,
-                  image: variant.thumbnail,
-                  name: variant.variantName,
-                  price: variant.price,
-                  vid: variant.vid,
-                  width: variant.width,
-                };
-              });
+      <div className="mt-4 flex w-full flex-col-reverse gap-x-2 gap-y-2 px-4 pb-6 sm:flex-row xl:hidden">
+        <ButtonSupportPrimary
+          additionalStyles="w-full"
+          handler={
+            isLoading ? undefined : () => deleteProduct({ pid: product.pid })
+          }
+          label={isLoading ? "loading" : "Remove product"}
+        >
+          {isLoading ? <Spinner className="mr-2 h-4 w-4" /> : undefined}
+        </ButtonSupportPrimary>
 
-              finalizeListing({
-                description: productDescription,
-                imageSet: product.imageSet.filter((src, idx) => {
-                  if (productImages[idx]) {
-                    return src;
-                  }
-                }),
-                name: productNameValue,
-                pid: product.pid,
-                variants: productVariants,
-                sectionId: selectedSectionLabel.id,
-              });
-            }}
-            className="my-auto rounded-md bg-emerald-100 py-3 px-8 text-sm font-medium text-emerald-900 hover:bg-emerald-200 focus:ring-4 focus:ring-emerald-300  "
-          >
-            {language === "english" ? "Import to store" : "Importa sul negozio"}
-          </button>
-        )}
+        <ButtonPrimary
+          additionalStyles="w-full"
+          label={loadingFinalization ? "loading" : "Import to store"}
+          handler={
+            loadingFinalization
+              ? undefined
+              : () => {
+                  const productVariants = product.variants.map((variant) => {
+                    return {
+                      height: variant.height,
+                      image: variant.thumbnail,
+                      name: variant.variantName,
+                      price: variant.price,
+                      vid: variant.vid,
+                      width: variant.width,
+                    };
+                  });
+
+                  finalizeListing({
+                    description: productDescription,
+                    imageSet: product.imageSet.filter((src, idx) => {
+                      if (productImages[idx]) {
+                        return src;
+                      }
+                    }),
+                    name: productNameValue,
+                    pid: product.pid,
+                    variants: productVariants,
+                    sectionId: selectedSectionLabel.id,
+                  });
+                }
+          }
+        >
+          {loadingFinalization ? (
+            <Spinner className="mr-2 h-4 w-4" />
+          ) : undefined}
+        </ButtonPrimary>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -29,7 +29,7 @@ const ProductSelection = ({
   const { data: storeProducts } = api.products.getAllStoreProducts.useQuery();
 
   return (
-    <div className="flex h-96 w-full flex-col gap-y-4 gap-x-2 overflow-y-auto px-4 lg:flex-row  lg:flex-wrap">
+    <div className="flex h-96 w-full flex-col items-center justify-center gap-y-4 gap-x-2 overflow-y-auto px-4 lg:flex-row  lg:flex-wrap">
       {storeProducts &&
         storeProducts.map((prod) => {
           return (
@@ -75,19 +75,16 @@ const SelectableProduct = ({
           setIsActive((prev) => !prev);
         }
       }}
-      className={` relative z-10 flex w-full cursor-pointer select-none items-center justify-between rounded-md border p-3 shadow-md lg:w-96 ${
-        isActive ? "bg-sky-600 text-white " : "bg-white text-gray-900"
+      className={` relative z-10 flex h-40 w-full cursor-pointer select-none items-center justify-between  border p-3 shadow-md lg:w-96 ${
+        isActive ? "bg-neutral-800 text-white " : "bg-white text-gray-900"
       }`}
     >
       <div className="flex w-full items-center space-x-4 ">
-        <div className="relative h-24 w-24">
-          <Image
-            fill
-            alt={product.name}
-            src={product.defaultThumbnail}
-            className=" rounded-md object-cover"
-          />
-        </div>
+        <img
+          alt={product.name}
+          src={product.defaultThumbnail}
+          className=" h-24 w-24  object-cover"
+        />
 
         <div className="relative flex flex-col text-sm">
           <p
@@ -116,8 +113,8 @@ const SelectableProduct = ({
           }}
           className={`relative z-30 flex items-center justify-center rounded-full ${
             sectionThumbnail === product.defaultThumbnail
-              ? "bg-orange-400"
-              : "bg-sky-400"
+              ? "bg-primary-500"
+              : "bg-neutral-600"
           } p-1`}
         >
           <CheckIcon className="h-5 w-5" />

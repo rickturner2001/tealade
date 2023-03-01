@@ -4,6 +4,7 @@ import { ChevronDownIcon, UserIcon } from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { ButtonNoBg, ButtonPrimary } from "./buttons/Buttons";
 
 export default function Navbar({
   setIsMenuOpen,
@@ -15,19 +16,21 @@ export default function Navbar({
   const [iseUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-40 flex items-center justify-start border-b bg-gray-50 p-3 shadow-md md:justify-between md:p-6">
+    <nav className="sticky top-0 z-40 flex items-center   justify-between bg-neutral-900 p-3 shadow-md md:p-6">
       {/* Mobile Hamburger */}
       <div className="md:hidden">
         <button
           onClick={() => setIsMenuOpen((prev) => !prev)}
-          className="p-2 font-medium text-gray-800"
+          className="p-2 font-medium text-white"
         >
           <Bars3Icon className="h-6 w-6 " />
         </button>
       </div>
       {/* LOGO */}
       <div>
-        <p className="text-xl md:text-2xl">Tealade</p>
+        <p className="text-xl uppercase tracking-wider text-primary-500 md:text-2xl">
+          Tealade
+        </p>
       </div>
       <div className=" ml-6 flex items-center space-x-4 md:ml-0">
         <div className="relative h-full border-l border-gray-300" />
@@ -55,23 +58,23 @@ export default function Navbar({
             </motion.div>
             <button
               onClick={() => setIsUserMenuOpen((prev) => !prev)}
-              className="flex space-x-1"
+              className="flex items-center space-x-1 text-white"
             >
               <UserIcon className="h-5 w-5" />
               <p className="hidden md:block">{sessionData.user?.name}</p>
               <div className="jutify-center flex items-center">
-                <ChevronDownIcon className="h-3 w-3" />
+                <ChevronDownIcon className="h-4 w-4 stroke-2" />
                 {/* USER MENU */}
               </div>
             </button>
           </>
         ) : (
-          <Link
-            className="mr-2  rounded-lg border bg-gray-100 px-2 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-300 md:px-5 md:py-2 "
-            href={"/login"}
-          >
-            Sign in
-          </Link>
+          <ButtonNoBg
+            label="Sign in"
+            additionalStyles="text-white"
+            href="/login"
+            textSize="md"
+          />
         )}
       </div>
     </nav>

@@ -6,6 +6,7 @@ import sectionEditContext from "../../context/sectionEditContext";
 import SectionInsightsTable from "./SectionInsightsTable";
 import type { SectionDataWithProducts } from "../../../types";
 import Image from "next/image";
+import { ButtonPrimary, ButtonSupportSecondary } from "../buttons/Buttons";
 
 const SectionMainEditor = ({
   sectionData,
@@ -38,18 +39,17 @@ const SectionMainEditor = ({
     <div className="flex w-full flex-col gap-x-4 gap-y-4 lg:flex-row">
       <div className="flex w-full flex-col gap-x-4 lg:w-full lg:flex-row">
         <div className="q-full flex h-full ">
-          <div className="group relative mx-auto  h-64 w-64 lg:mx-0">
-            <Image
-              fill={true}
+          <div className="group relative  mx-auto w-full max-w-md lg:mx-0">
+            <img
               alt={sectionData.description}
               src={newThumbnail === "" ? sectionData.thumbnail : newThumbnail}
-              className=" h-full w-full rounded-lg border object-cover shadow-sm lg:h-full lg:w-64 "
+              className=" h-full w-full border object-cover shadow-sm "
             />
 
             <div
               onClick={() => setIsEditingThumbnail(true)}
               className="absolute
-            top-0 right-0 flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-lg bg-black/40 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+            top-0 right-0 flex h-full w-full cursor-pointer flex-col items-center justify-center bg-black/40 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
             >
               <svg
                 className="h-12 w-12 text-gray-200 opacity-50"
@@ -66,20 +66,20 @@ const SectionMainEditor = ({
         <div className="mt-4 flex w-full flex-col justify-end lg:mt-0">
           <label
             htmlFor="section-label"
-            className="mb-2 block p-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="mb-2 block p-2 text-sm font-medium text-gray-900 "
           >
             Section label
           </label>
           <input
             type="text"
             id="section-label"
-            className="gray-300 block w-full rounded-lg border bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 "
+            className="gray-300 block w-full border bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 "
             defaultValue={sectionData.label}
             ref={sectionLabelRef}
           />
           <label
             htmlFor="section-label"
-            className="mb-2 block p-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="mb-2 block p-2 text-sm font-medium text-gray-900 "
           >
             Section descirption
           </label>
@@ -88,56 +88,48 @@ const SectionMainEditor = ({
             defaultValue={sectionData.description}
             ref={sectionDescriptionRef}
             rows={4}
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 "
+            className="block w-full border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 "
           ></textarea>
           <div className="flex w-full  flex-col items-center space-y-6  ">
             <div className="flex  w-full flex-col items-center space-y-4 py-2 lg:items-start ">
               <div className="flex w-full flex-row gap-x-2 py-2">
-                <button
-                  onClick={() => setIsAddingProducts(true)}
-                  type="button"
-                  className="w-full rounded-lg bg-green-100 px-5 py-2.5 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 "
-                >
-                  Add products
-                </button>
-                {isLoading ? (
-                  <button
-                    type="button"
-                    className=" inline-flex w-full items-center justify-center rounded-lg  bg-blue-100 py-2.5 px-5 text-center font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <Spinner className="mr-2 h-4 w-4 animate-spin" />
-                    Loading
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      console.log(newThumbnail);
-                      changeSectionThumbnailMutation({
-                        thumbnail: newThumbnail,
-                        description:
-                          sectionDescriptionRef?.current?.value ??
-                          sectionData.description,
+                <ButtonSupportSecondary
+                  handler={() => setIsAddingProducts(true)}
+                  additionalStyles="w-full"
+                  label="Add Products"
+                  isLight
+                />
 
-                        sid: sectionId,
-                        label:
-                          sectionLabelRef?.current?.value ?? sectionData.label,
-                      });
-                    }}
-                    type="button"
-                    className={`block w-full rounded-lg  ${
-                      isSuccess
-                        ? "bg-green-100  text-green-900 hover:bg-green-200 focus:ring-green-500"
-                        : "bg-blue-100 text-blue-900 hover:bg-blue-200 focus:ring-blue-500"
-                    } py-2.5 px-5 text-center font-medium   focus:outline-none focus:ring-2 `}
-                  >
-                    save changes
-                  </button>
-                )}
+                <ButtonPrimary
+                  label="Save changes"
+                  additionalStyles="w-full text-center"
+                  isLight
+                  handler={
+                    isLoading
+                      ? undefined
+                      : () => {
+                          console.log(newThumbnail);
+                          changeSectionThumbnailMutation({
+                            thumbnail: newThumbnail,
+                            description:
+                              sectionDescriptionRef?.current?.value ??
+                              sectionData.description,
+
+                            sid: sectionId,
+                            label:
+                              sectionLabelRef?.current?.value ??
+                              sectionData.label,
+                          });
+                        }
+                  }
+                >
+                  {isLoading ? <Spinner className="mr-2 h-4 w-4" /> : undefined}
+                </ButtonPrimary>
               </div>
 
               {isError && (
                 <div
-                  className="mb-4 flex rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-800 dark:border-red-800 dark:bg-gray-800 dark:text-red-400"
+                  className="mb-4 flex border border-red-300 bg-red-50 p-4 text-sm text-red-800 "
                   role="alert"
                 >
                   <InformationCircleIcon className="mr-3 h-5 w-5 flex-shrink-0" />

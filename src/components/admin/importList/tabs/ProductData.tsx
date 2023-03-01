@@ -12,6 +12,7 @@ import LanguageContext from "../../../context/LanugageContext";
 import Spinner from "../../../Spinner";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import { ButtonSupportSecondary } from "../../buttons/Buttons";
 
 const ProductData = ({
   product,
@@ -68,13 +69,12 @@ const ProductData = ({
 
   const [currenteDeletionLabel, setCurrentDeletionLabel] = useState("");
   return (
-    <div className="flex w-full  flex-col items-start gap-x-24 px-12 py-12 md:flex-row">
-      <div className="relative h-72 w-72 rounded-lg md:rounded-none">
-        <Image
+    <div className="flex w-full  flex-col items-start gap-x-24 px-12 py-12 lg:flex-row">
+      <div className="relative w-full max-w-sm rounded-lg md:rounded-none">
+        <img
           src={product.defaultThumbnail}
           alt={product.description}
-          fill
-          className={"h-60 rounded-lg object-contain md:rounded-none"}
+          className={"h-full w-full rounded-lg object-contain md:rounded-none"}
         />
       </div>
       {/* FLEX RIGHT*/}
@@ -86,7 +86,7 @@ const ProductData = ({
           type="text"
           onChange={(e) => setProductNameValue(e.target.value)}
           id="productName"
-          className="w-full rounded-md bg-gray-100 p-2 text-xs text-gray-600 focus:outline-none md:text-sm"
+          className="w-full  border bg-gray-50 p-2 text-xs text-gray-600 focus:outline-none md:text-sm"
           defaultValue={productNameValue}
         />
         <label htmlFor="addtag" className="mt-8 mb-2 text-sm font-medium">
@@ -95,23 +95,43 @@ const ProductData = ({
         <div className="flex w-full flex-wrap items-center gap-y-2 space-x-2 ">
           {product.tags.map((tag) => {
             return (
-              <div
+              <ButtonSupportSecondary
+                isLabel
+                label={tag.label}
                 key={tag.label}
-                className="flex items-center rounded-md bg-orange-400 p-2 text-xs font-bold text-white md:p-3"
+                additionalStyles={
+                  !loadingDeletion ? "flex flex-row-reverse" : undefined
+                }
               >
-                <span>{tag.label}</span>
                 {loadingDeletion && currenteDeletionLabel === tag.label ? (
-                  <Spinner className="ml-2 inline h-4 w-4 animate-spin text-white" />
+                  <Spinner className="mr-4 ml-2 w-4" />
                 ) : (
                   <XMarkIcon
                     onClick={() => {
                       setCurrentDeletionLabel(tag.label);
                       deleteTagMutation({ label: tag.label, pid: product.pid });
                     }}
-                    className="ml-2 inline-flex h-4 w-4 stroke-2 text-white hover:text-gray-100"
+                    className="ml-2 h-5 w-5"
                   />
                 )}
-              </div>
+              </ButtonSupportSecondary>
+              // <div
+              //   key={tag.label}
+              //   className="flex items-center rounded-md bg-orange-400 p-2 text-xs font-bold text-white md:p-3"
+              // >
+              //   <span>{tag.label}</span>
+              //   {loadingDeletion && currenteDeletionLabel === tag.label ? (
+              //     <Spinner className="ml-2 inline h-4 w-4 animate-spin text-white" />
+              //   ) : (
+              //     <XMarkIcon
+              //       onClick={() => {
+              //         setCurrentDeletionLabel(tag.label);
+              //         deleteTagMutation({ label: tag.label, pid: product.pid });
+              //       }}
+              //       className="ml-2 inline-flex h-4 w-4 stroke-2 text-white hover:text-gray-100"
+              //     />
+              //   )}
+              // </div>
             );
           })}
           <input
@@ -141,26 +161,26 @@ const ProductData = ({
           {currentCopy.productCategory}
         </label>
         {/* Section Scrolldown */}
-        <div className="relative w-full lg:w-1/2">
+        <div className="relative w-full ">
           <button
             onClick={() => setIsSectionMenuOpen((prev) => !prev)}
             id="dropdownDefaultButton"
             data-dropdown-toggle="dropdown"
-            className="inline-flex  items-center   rounded-lg bg-blue-700 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="inline-flex w-full items-center justify-between bg-neutral-900 px-5 py-2.5 font-medium text-white"
             type="button"
           >
             {selectedSectionLabel.label === ""
               ? "Assign to a section"
               : selectedSectionLabel.label}
-            <ChevronDownIcon className="ml-2 h-4 w-4" />
+            <ChevronDownIcon className="ml-2 h-4 w-4 stroke-2" />
           </button>
           {isSectionMenuOpen && (
             <div
               id="dropdown"
-              className="absolute top-14 right-0  z-10 w-full divide-y divide-gray-100 rounded-lg border bg-white shadow dark:bg-gray-700"
+              className="absolute top-14 right-0  z-10 w-full divide-y divide-gray-100  border bg-white shadow "
             >
               <ul
-                className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                className="py-2 text-sm text-gray-700 "
                 aria-labelledby="dropdownDefaultButton"
               >
                 {sections &&

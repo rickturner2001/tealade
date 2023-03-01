@@ -40,10 +40,9 @@ const ProductImages = ({
                 </button>
               )}
             </div>
-            <Image
+            <img
               src={image}
               alt={product.description}
-              fill
               className={"h-72 object-contain"}
             />
           </div>

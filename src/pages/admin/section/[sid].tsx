@@ -106,7 +106,7 @@ const MainContainer = ({
     );
   }
   return (
-    <div className=" gap    flex w-full flex-col gap-y-4 bg-gradient-to-b from-sky-400 to-sky-200 p-4  text-sm">
+    <div className=" gap    flex w-full flex-col gap-y-4 bg-neutral-700 p-4  text-sm">
       {!isAddingProducts && !isEditingThumbnail && (
         <SectionEdit sectionData={sectionData} />
       )}

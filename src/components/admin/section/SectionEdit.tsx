@@ -21,17 +21,17 @@ const SectionEdit = ({
   return (
     <div className=" mx-auto w-full max-w-7xl px-2 py-16 sm:px-0">
       <Tab.Group>
-        <Tab.List className="flex w-full space-x-1 rounded-xl bg-blue-900/20 p-1">
+        <Tab.List className="flex w-full space-x-1  bg-primary-900/10 p-1">
           {Object.keys(tabs).map((tab) => (
             <Tab
               key={tab}
               className={({ selected }) =>
                 classNames(
-                  "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700",
-                  "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
+                  "w-full py-2.5 text-sm font-medium leading-5 text-primary-700",
+                  "ring-white ring-opacity-60 ring-offset-2 ring-offset-primary-400 focus:outline-none focus:ring-2",
                   selected
                     ? "bg-white shadow"
-                    : "text-blue-100 hover:bg-white/[0.12] hover:text-white"
+                    : "text-primary-100 hover:bg-white/[0.12] hover:text-white"
                 )
               }
             >
@@ -46,8 +46,8 @@ const SectionEdit = ({
                 <Tab.Panel
                   key={tab}
                   className={classNames(
-                    "flex gap-x-4 rounded-xl bg-white p-3",
-                    "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
+                    "xl flex gap-x-4 bg-white p-3",
+                    "ring-white ring-opacity-60 ring-offset-2 ring-offset-primary-400 focus:outline-none focus:ring-2"
                   )}
                 >
                   <SectionMainEditor sectionData={sectionData} />
@@ -58,8 +58,8 @@ const SectionEdit = ({
                 <Tab.Panel
                   key={tab}
                   className={classNames(
-                    "flex gap-x-4 rounded-xl bg-white p-3",
-                    "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2"
+                    "flex gap-x-4 bg-white p-3",
+                    "ring-white ring-opacity-60 ring-offset-2 ring-offset-primary-400 focus:outline-none focus:ring-2"
                   )}
                 >
                   <DiscountInitializer sectionData={sectionData} />

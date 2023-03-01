@@ -112,7 +112,7 @@ const OverrideDiscountModal = ({
                                 id={prod.pid}
                                 type="checkbox"
                                 value=""
-                                className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:ring-offset-gray-700 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-700"
+                                className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
                                 onChange={() => {
                                   if (discountsToOverride.includes(prod.pid)) {
                                     setDiscountsToOverride((prev) =>

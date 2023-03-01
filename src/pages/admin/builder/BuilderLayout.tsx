@@ -4,6 +4,12 @@ import { useRef, useState } from "react";
 import ProductSelection from "./ProductSelection";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  ButtonPrimary,
+  ButtonSecondary,
+  ButtonSupportPrimary,
+  ButtonSupportSecondary,
+} from "../../../components/admin/buttons/Buttons";
 
 const BuilderLayout = () => {
   const utils = api.useContext();
@@ -30,10 +36,10 @@ const BuilderLayout = () => {
     });
 
   return (
-    <div className="m-8 flex flex-wrap gap-x-4 gap-y-4 rounded-md shadow-md  ">
+    <div className="m-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-4   ">
       {sections && sections.length < 4 ? (
         <>
-          <div className="relative   flex h-max w-full flex-col justify-between rounded-md border bg-white p-6 shadow-sm">
+          <div className="relative   flex h-max w-full flex-col justify-between  border bg-white p-6 shadow-sm">
             <div className=" w-full">
               <span className=" inline-block p-2 text-sm font-medium">
                 Section Label
@@ -55,74 +61,73 @@ const BuilderLayout = () => {
                 />
               </div>
             </div>
-            {!isLoading ? (
-              <button
-                onClick={() => {
-                  const sectionLabel = sectionNameRef?.current?.value;
+            <ButtonPrimary
+              label="Add section"
+              handler={
+                isLoading
+                  ? undefined
+                  : () => {
+                      const sectionLabel = sectionNameRef?.current?.value;
 
-                  if (sectionLabel && selectedProducts.length) {
-                    createSectionMutation({
-                      label: sectionLabel,
-                      pids: selectedProducts,
-                      thumbnail: sectionThumbnail,
-                    });
-                    setSelectedProducts([]);
-                    setSectionThumbnail("");
-                    sectionNameRef.current.value = "";
-                  }
-                }}
-                className={`focus:ring-300 flex w-full items-center  justify-center self-center rounded-lg bg-blue-100 py-2.5  px-5 text-center text-sm font-medium text-blue-900 hover:bg-blue-200 focus:ring-2 focus:ring-blue-300 `}
-              >
-                <span className="w-full text-center">Add section</span>
-              </button>
-            ) : (
-              <button className=" relative flex w-full items-center justify-center space-x-2  rounded-lg bg-blue-100 px-5 py-2.5 text-sm font-bold text-blue-900 hover:bg-blue-200  focus:ring-4 focus:ring-blue-300">
-                <Spinner className="h-5 w-5 animate-spin" />
-                <span>Loading</span>
-              </button>
-            )}
+                      if (sectionLabel && selectedProducts.length) {
+                        createSectionMutation({
+                          label: sectionLabel,
+                          pids: selectedProducts,
+                          thumbnail: sectionThumbnail,
+                        });
+                        setSelectedProducts([]);
+                        setSectionThumbnail("");
+                        sectionNameRef.current.value = "";
+                      }
+                    }
+              }
+            >
+              {isLoading ? <Spinner className="mr-2 h-4 w-4" /> : undefined}
+            </ButtonPrimary>
           </div>
 
           {sections.map((section) => {
             return (
               <div
-                className="mt-12 flex h-max flex-col space-y-4 rounded-lg bg-white p-4"
+                className="mt-12 flex w-full max-w-md  flex-col space-y-4  bg-white p-4"
                 key={section.id}
               >
                 <p className="text-center text-sm font-medium text-gray-700 lg:text-left">
                   {section.label}
                 </p>
-                <div className="relative h-96  w-96 md:h-64 md:w-64 ">
-                  <Image
-                    fill
+                <div className="aspect-1 w-full max-w-lg">
+                  <img
                     alt={section.description}
                     src={section.thumbnail}
-                    className="w-full rounded-lg object-cover"
+                    className="aspect-square h-full w-full object-cover "
                   />
                 </div>
+
                 <div className="flex space-x-2">
-                  <Link
+                  <ButtonSupportSecondary
+                    isLight
+                    additionalStyles="w-full text-center"
                     href={`/admin/section/${section.id}`}
-                    className="block w-1/2 rounded-lg border bg-blue-100 py-2.5 px-5 text-center text-sm font-medium text-blue-900  hover:bg-blue-200  focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    label="Edit"
+                  />
+
+                  <ButtonSupportPrimary
+                    isLight
+                    additionalStyles="w-full text-center"
+                    label="Delete"
+                    handler={
+                      isLoadingDeletion
+                        ? undefined
+                        : () => {
+                            removeSectionMutation({ sid: section.id });
+                            setCurrentDeletion(section.id);
+                          }
+                    }
                   >
-                    Edit
-                  </Link>
-                  {isLoadingDeletion && currentDeletion === section.id ? (
-                    <button className="flex w-1/2 items-center rounded-lg bg-red-100 px-5 py-2.5 text-center  text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-300">
-                      <Spinner className="h-5 w-5 animate-spin" />
-                      <span className="ml-4">Loading</span>
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        removeSectionMutation({ sid: section.id });
-                        setCurrentDeletion(section.id);
-                      }}
-                      className="w-1/2 items-center rounded-lg bg-red-100 px-5 py-2.5 text-center text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-300"
-                    >
-                      Delete
-                    </button>
-                  )}
+                    {isLoadingDeletion ? (
+                      <Spinner className="mr-2 h-4 w-4" />
+                    ) : undefined}
+                  </ButtonSupportPrimary>
                 </div>
               </div>
             );
@@ -179,7 +184,7 @@ const BuilderLayout = () => {
               <div role="status">
                 <svg
                   aria-hidden="true"
-                  className="mr-2 inline h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
+                  className="mr-2 inline h-8 w-8 animate-spin fill-blue-600 text-gray-200 "
                   viewBox="0 0 100 101"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"

@@ -24,31 +24,16 @@ const DashboardPageWrapper = ({
       setIsMenuOpen={setIsMenuOpen}
       title="Import list"
     >
-      <Fragment>
-        {!noContext && <ContextMenu />}
-        {children}
-      </Fragment>
+      <Fragment>{children}</Fragment>
     </Dashboard>
   );
 };
 
-const ContextMenu = () => {
+export const CategoriesScrolldownWrapper = () => {
   const { data: categories } = api.products.getAllCategories.useQuery();
-
-  const [category, setCategory] = useState<Category | null>(null);
-
-  return (
-    <div className="flex w-full justify-end bg-gradient-to-r from-blue-700 to-blue-500/80 px-8 py-6 ">
-      {categories && categories[0] && (
-        <CategoryScrolldown
-          categories={categories}
-          defaultSelection={categories[0]}
-          selectedCategory={category}
-          setSelectedCategory={setCategory}
-        />
-      )}
-    </div>
-  );
+  if (categories && categories[0])
+    return <CategoryScrolldown categories={categories} />;
+  return <></>;
 };
 
 export default DashboardPageWrapper;

@@ -9,7 +9,7 @@ const ThumbnailEditAlert = () => {
     <>
       <div
         id="alert-additional-content-1"
-        className=" mx-auto mb-4 h-max w-full max-w-7xl  rounded-lg border-blue-500 bg-blue-100 p-4 text-blue-800 dark:border-blue-800 dark:bg-gray-800 dark:text-blue-400"
+        className=" mx-auto mb-4 h-max w-full max-w-7xl  rounded-lg border-blue-500 bg-blue-100 p-4 text-blue-800 "
         role="alert"
       >
         <div className="flex items-center">

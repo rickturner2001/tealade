@@ -20,9 +20,9 @@ const ImportList = () => {
                 <motion.div
                   layout
                   key={prod.pid}
-                  className="px-6 py-12 md:px-24"
+                  className="px-6 py-12 md:px-12"
                 >
-                  <div className="w-full rounded-xl bg-white shadow-lg">
+                  <div className="w-full  bg-white shadow-lg">
                     <ProductTab product={prod} />
                   </div>
                 </motion.div>
@@ -31,14 +31,11 @@ const ImportList = () => {
           })
         ) : (
           <div className="flex w-full flex-col items-center justify-center px-6 py-12 md:px-24">
-            <div className="relative h-96 w-96">
-              <Image
-                src={notFound.src}
-                fill
-                className=" mb-12 h-96 object-cover"
-                alt="not found"
-              />
-            </div>
+            <img
+              src={notFound.src}
+              className=" w-69 mb-12 h-96 object-cover"
+              alt="not found"
+            />
             <div className="flex flex-col items-center justify-center">
               <p className="text-center text-2xl font-bold">
                 Could not find any products

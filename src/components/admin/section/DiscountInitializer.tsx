@@ -3,6 +3,7 @@ import type { SectionDataWithProducts } from "../../../types";
 import { api } from "../../../utils/api";
 import Spinner from "../../Spinner";
 import OverrideDiscountModal from "./modals/OverrideDiscountModal";
+import { ButtonNoBg } from "../buttons/Buttons";
 
 const DiscountInitializer = ({
   sectionData,
@@ -57,7 +58,7 @@ const DiscountInitializer = ({
   };
 
   return (
-    <div className="flex flex-col items-center rounded-lg border border-gray-200 bg-white text-gray-900 shadow ">
+    <div className="flex flex-col items-center border border-gray-200 bg-white text-gray-900 shadow ">
       <div className="flex flex-col justify-between p-4 leading-normal">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">
           Discount Initializer
@@ -80,7 +81,7 @@ const DiscountInitializer = ({
               ref={discountLabelRef}
               type="text"
               id="discount-id"
-              className="w-full rounded-lg border py-2.5 px-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-300"
+              className="w-full border py-2.5 px-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-300"
               placeholder="e.g. Summer Discount"
             />
           </div>
@@ -92,41 +93,40 @@ const DiscountInitializer = ({
               ref={discountValueRef}
               type="text"
               id="amount-id"
-              className="w-full rounded-lg border py-2.5 px-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-300"
+              className="w-full border py-2.5 px-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-300"
               placeholder="e.g. 20"
             />
           </div>
         </div>
-        {loadingSessionDiscount ? (
-          <button className="mt-2 inline-flex w-full items-center justify-center rounded-lg bg-gray-900 py-3 text-center font-bold text-white">
-            <Spinner className="mr-2 h-4 w-4 animate-spin" />
-            loading
-          </button>
-        ) : (
-          <OverrideDiscountModal
-            discountLabel={discountLabelRef?.current?.value}
-            discountValue={discountValueRef?.current?.value}
-            discountedProducts={productsWithDiscount}
-            isOpen={isModalOpen}
-            setIsOpen={setIsModalOpen}
-            undiscountedProducts={productsWithoutDiscount.map(
-              (prod) => prod.pid
-            )}
+
+        <OverrideDiscountModal
+          discountLabel={discountLabelRef?.current?.value}
+          discountValue={discountValueRef?.current?.value}
+          discountedProducts={productsWithDiscount}
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+          undiscountedProducts={productsWithoutDiscount.map((prod) => prod.pid)}
+        >
+          <ButtonNoBg
+            additionalStyles="w-full text-center bg-neutral-900 text-white"
+            label={"Issue discount"}
+            handler={
+              loadingSessionDiscount
+                ? undefined
+                : () => {
+                    if (productsWithDiscount.length) {
+                      setIsModalOpen(true);
+                    } else {
+                      handleSubmission();
+                    }
+                  }
+            }
           >
-            <button
-              onClick={() => {
-                if (productsWithDiscount.length) {
-                  setIsModalOpen(true);
-                } else {
-                  handleSubmission();
-                }
-              }}
-              className="mt-2 w-full rounded-lg bg-gray-900 py-3 font-bold text-white"
-            >
-              Issue Discount
-            </button>
-          </OverrideDiscountModal>
-        )}
+            {loadingSessionDiscount ? (
+              <Spinner className="mr-2 h-4 w-4" />
+            ) : undefined}
+          </ButtonNoBg>
+        </OverrideDiscountModal>
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import {
 } from "react";
 import { api } from "../../../utils/api";
 import LanguageContext from "../../context/LanugageContext";
+import { ButtonNoBg, ButtonPrimary } from "../buttons/Buttons";
 
 const shipmentCopy = {
   en: {
@@ -99,27 +100,25 @@ const ShipmentTable = ({
   return (
     <div className="mt-8 flex w-full flex-col px-3 md:px-12">
       <div className="mb-6 flex w-full justify-end space-x-4">
-        <button
-          onClick={() => setShpmentSelection("economy")}
-          className={`rounded-lg border border-gray-800 ${
+        <ButtonNoBg
+          additionalStyles={
             shipmentSelection === "economy"
-              ? "bg-gray-800 text-white"
-              : "bg-transparent text-gray-800"
-          } py-2 px-4 text-sm font-bold  hover:bg-gray-800 hover:text-white`}
-        >
-          {currentCopy.selectEconomy}
-        </button>
+              ? "bg-primary-500 text-gray-900 focus:ring-primary-300"
+              : "text-gray-900 focus:ring-primary-300"
+          }
+          label="Select economy"
+          handler={() => setShpmentSelection("economy")}
+        />
         {shipmentData.data.length > 1 && (
-          <button
-            onClick={() => setShpmentSelection("regular")}
-            className={`rounded-lg border ${
+          <ButtonNoBg
+            additionalStyles={
               shipmentSelection === "regular"
-                ? "bg-blue-500 text-white"
-                : "bg-transparent text-blue-500"
-            } border-blue-500 py-2 px-4 text-sm font-bold  hover:bg-blue-500 hover:text-white`}
-          >
-            {currentCopy.selectRegular}
-          </button>
+                ? "bg-primary-500 text-gray-900 focus:ring-primary-300"
+                : "text-gray-900 focus:ring-primary-300"
+            }
+            label="Select regular"
+            handler={() => setShpmentSelection("regular")}
+          />
         )}
       </div>
       <table className="`w-full mt-8">

@@ -134,6 +134,10 @@ export const productRouter = createTRPCRouter({
         variants: true,
         shipments: true,
       },
+
+      orderBy: {
+        updatedAt: "desc",
+      },
     });
   }),
 

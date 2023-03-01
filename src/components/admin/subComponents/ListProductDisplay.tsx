@@ -11,6 +11,7 @@ import Link from "next/link";
 import { api } from "../../../utils/api";
 import Spinner from "../../../components/Spinner";
 import Image from "next/image";
+import FindProductCard from "../cards/FindProductCard";
 
 const ListProductDisplay = ({
   pageNumber,
@@ -86,17 +87,13 @@ const ListProductDisplay = ({
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-x-12 gap-y-12 py-6  px-12 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 px-4 py-12 md:px-6">
         {data.data.list.map((prod) => {
           return (
-            <ProductCard
+            <FindProductCard
               key={prod.pid}
-              category={prod.categoryName}
-              pid={prod.pid}
-              image={prod.productImage}
-              name={prod.productNameEn}
+              product={prod}
               registeredProducts={registeredProducts}
-              price={prod.sellPrice}
             />
           );
         })}

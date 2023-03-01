@@ -12,7 +12,7 @@ import ActionDropdown from "./navbar/ActionDropdown";
 const Navbar = () => {
   const { isMenuOpen, setIsMenuOpen } = useContext(StoreContext);
   return (
-    <nav className="flex w-full items-center justify-between bg-[#17212D] py-3 px-6 text-white">
+    <nav className="flex w-full items-center justify-between bg-neutral-900 py-3 px-6 text-white">
       <Link
         href={"/"}
         className="block px-5 py-2.5 text-2xl uppercase tracking-wider hover:bg-white/20"

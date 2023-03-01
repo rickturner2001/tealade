@@ -4,6 +4,7 @@ import { api } from "../../../../utils/api";
 import LanguageContext from "../../../context/LanugageContext";
 import Spinner from "../../../Spinner";
 import type { Tabs } from "../ProductTab";
+import { ButtonPrimary, ButtonSupportPrimary } from "../../buttons/Buttons";
 
 type VariantListing = {
   height: number;
@@ -83,13 +84,13 @@ const TabMenu = ({
 
   return (
     <div className="border-b border-gray-200 text-center text-sm font-medium text-gray-500 ">
-      <ul className="-mb-px flex flex-wrap py-2 px-2 md:py-4">
+      <ul className=" flex flex-wrap py-2 px-2 lg:py-4">
         <li>
           <button
             onClick={() => setCurrentTab("product")}
-            className={`active inline-block rounded-t-lg  p-2 py-4 text-sm md:p-4 ${
+            className={`active inline-block rounded-t-lg  p-2 py-4 text-sm lg:p-4 ${
               currentTab === "product"
-                ? "  font-bold text-blue-600 "
+                ? "  font-bold text-support-primary-600 "
                 : "border-transparent hover:border-gray-300 hover:text-gray-600"
             } `}
           >
@@ -101,7 +102,7 @@ const TabMenu = ({
             onClick={() => setCurrentTab("description")}
             className={`active inline-block rounded-t-lg  p-2 py-4 text-sm md:p-4 ${
               currentTab === "description"
-                ? "  font-bold text-blue-600 "
+                ? "  font-bold text-support-primary-600 "
                 : "border-transparent hover:border-gray-300 hover:text-gray-600"
             } `}
             aria-current="page"
@@ -114,7 +115,7 @@ const TabMenu = ({
             onClick={() => setCurrentTab("variants")}
             className={`active inline-block rounded-t-lg  p-2 py-4 text-sm md:p-4 ${
               currentTab === "variants"
-                ? "  font-bold text-blue-600 "
+                ? "  font-bold text-support-primary-600 "
                 : "border-transparent hover:border-gray-300 hover:text-gray-600"
             } `}
           >
@@ -126,58 +127,46 @@ const TabMenu = ({
             onClick={() => setCurrentTab("images")}
             className={`active inline-block rounded-t-lg  p-2 py-4 text-sm md:p-4 ${
               currentTab === "images"
-                ? "  font-bold text-blue-600 "
+                ? "  font-bold text-support-primary-600 "
                 : "border-transparent hover:border-gray-300 hover:text-gray-600"
             } `}
           >
             {currentCopy.images}
           </button>
         </li>
-        <li className="my-auto ml-auto mr-4 hidden space-x-4 md:flex">
-          {isLoading ? (
-            <button className="mr-2 mb-2 rounded-lg  bg-red-100 py-2.5 px-5 text-sm font-medium text-red-900 hover:bg-red-200  focus:z-10 focus:outline-none focus:ring-4 focus:ring-red-300 ">
-              Loading...
-              <Spinner className=" ml-2 inline h-4 w-4 animate-spin text-white" />
-            </button>
-          ) : (
-            <button
-              onClick={() => deleteProduct({ pid: pid })}
-              className="mr-2 mb-2 rounded-lg bg-red-100 px-5 py-2.5 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus:ring-4 focus:ring-red-300 "
-            >
-              {currentCopy.removeProduct}
-            </button>
-          )}
-          {loadingFinalization ? (
-            <button className="mr-2 mb-2 rounded-lg  bg-blue-100 py-2.5 px-5 text-sm font-medium text-blue-900  hover:bg-blue-200 focus:z-10 focus:outline-none focus:ring-4 focus:ring-blue-300 ">
-              Loading...
-              <Spinner className=" ml-2 inline h-4 w-4 animate-spin text-white" />
-            </button>
-          ) : (
-            <button
-              className="mr-2 mb-2 rounded-lg bg-green-100 px-5 py-2.5 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus:ring-4 focus:ring-green-300 "
-              onClick={() => {
-                finalizeListing({
-                  description: productDescription,
-                  imageSet: productImages,
-                  name: productNameValue,
-                  pid: pid,
-                  sectionId: sectionLabel.id,
-                  variants: productVariants.map((variant) => {
-                    return {
-                      height: variant.height,
-                      image: variant.image,
-                      name: variant.name,
-                      price: variant.price,
-                      vid: variant.vid,
-                      width: variant.width,
-                    };
-                  }),
-                });
-              }}
-            >
-              {currentCopy.importToStore}
-            </button>
-          )}
+        <li className="my-auto ml-auto mr-4 hidden space-x-4 xl:flex">
+          <ButtonSupportPrimary
+            label="Remove product"
+            handler={() => deleteProduct({ pid: pid })}
+          >
+            {isLoading ? <Spinner className="mr-2 h-4 w-4" /> : undefined}
+          </ButtonSupportPrimary>
+          <ButtonPrimary
+            handler={() => {
+              finalizeListing({
+                description: productDescription,
+                imageSet: productImages,
+                name: productNameValue,
+                pid: pid,
+                sectionId: sectionLabel.id,
+                variants: productVariants.map((variant) => {
+                  return {
+                    height: variant.height,
+                    image: variant.image,
+                    name: variant.name,
+                    price: variant.price,
+                    vid: variant.vid,
+                    width: variant.width,
+                  };
+                }),
+              });
+            }}
+            label={loadingFinalization ? "loading" : "Import to store"}
+          >
+            {loadingFinalization ? (
+              <Spinner className="mr-2 h-4 w-4" />
+            ) : undefined}
+          </ButtonPrimary>
         </li>
       </ul>
       {isError && (

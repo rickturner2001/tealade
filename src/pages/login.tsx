@@ -30,9 +30,9 @@ const SignIn = () => {
   return (
     <div className="flex h-screen w-screen flex-col ">
       <Navbar setIsMenuOpen={menuState[1]} />
-      <div className="relative flex h-full items-center justify-center bg-gradient-to-r from-teal-400 to-blue-400">
+      <div className="relative flex h-full items-center justify-center bg-neutral-800">
         <div className="relative z-20 max-w-7xl rounded-md border bg-white p-8">
-          <h1 className="mb-2 text-2xl font-bold text-teal-900 md:mb-4 md:text-4xl">
+          <h1 className="mb-2 text-2xl font-bold text-gray-800 md:mb-4 md:text-4xl">
             Sign up with email
           </h1>
           <p className="text-sm md:text-base">
@@ -41,27 +41,27 @@ const SignIn = () => {
               onClick={() => {
                 signIn("google").catch((e) => console.error(e));
               }}
-              className=" text-sm font-medium text-teal-600 underline underline-offset-2 md:text-base"
+              className=" text-sm font-medium text-primary-600 underline underline-offset-2 md:text-base"
             >
               google
             </button>{" "}
             instead
           </p>
           <div className="mb-8 mt-8 flex flex-col space-y-1 md:mb-8 md:mt-12">
-            <label className="font-medium text-teal-600">full name</label>
+            <label className="font-medium text-gray-800">full name</label>
             <input
-              className="w-full rounded-lg border border-teal-800 p-3 shadow-sm shadow-blue-500/20 placeholder:text-gray-600 focus:outline-none"
+              className="w-full rounded-lg border border-secondary-800 p-3 shadow-sm shadow-secondary-500/20 placeholder:text-gray-600 focus:outline-none"
               placeholder="Your full name"
             />
           </div>
           <div className="flex flex-col space-y-1">
-            <label className="font-medium text-teal-600">
+            <label className="font-medium text-gray-800">
               email address<span className="ml-0.5 text-red-500">*</span>
             </label>
             <input
               ref={emailRef}
               className={`w-full rounded-lg border  p-3 shadow-sm shadow-blue-500/20 ${
-                isMissingEmail ? "border-red-600" : "border-teal-800"
+                isMissingEmail ? "border-red-600" : "border-secondary-800"
               } placeholder:text-gray-600 focus:outline-none`}
               placeholder="Your email address"
             />
@@ -93,7 +93,7 @@ const SignIn = () => {
                 }
               })()
             }
-            className="mt-12 inline-flex w-full items-center justify-center  rounded-md bg-teal-500 py-3 text-center font-bold text-white"
+            className="mt-12 inline-flex w-full items-center justify-center  rounded-md bg-primary-500 py-3 text-center font-bold text-white"
           >
             {isButtonClick && (
               <Spinner className=" mr-2 inline h-4 w-4 animate-spin text-white" />

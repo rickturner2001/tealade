@@ -175,12 +175,11 @@ const VariantRow = ({
     });
   }, [index, inputValue, setVariantPrices]);
   return (
-    <tr className="border-t border-b p-4 text-center text-xs">
+    <tr className="w-full border-t border-b p-4 text-center text-xs">
       <td className="p-2">
-        <Image
+        <img
           alt={variant.variantName}
           src={variant.thumbnail}
-          fill
           className="w-20 object-cover"
         />
       </td>

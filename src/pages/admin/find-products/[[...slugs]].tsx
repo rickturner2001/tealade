@@ -1,6 +1,9 @@
 import { useRouter } from "next/router";
 import ListProductDisplay from "../../../components/admin/subComponents/ListProductDisplay";
-import DashboardPageWrapper from "../../../components/admin/layouts/DashboardPageWrapper";
+import DashboardPageWrapper, {
+  CategoriesScrolldownWrapper,
+} from "../../../components/admin/layouts/DashboardPageWrapper";
+import CategoryScrolldown from "../../../components/admin/subComponents/dropdowns";
 
 const ListingWrapper = ({
   pageNumber,
@@ -13,7 +16,12 @@ const ListingWrapper = ({
 }) => {
   return (
     <DashboardPageWrapper>
-      <ListProductDisplay category={category} pageNumber={pageNumber} />
+      <>
+        <div className="flex justify-center bg-neutral-700 p-4 md:justify-end">
+          <CategoriesScrolldownWrapper />
+        </div>
+        <ListProductDisplay category={category} pageNumber={pageNumber} />
+      </>
     </DashboardPageWrapper>
   );
 };

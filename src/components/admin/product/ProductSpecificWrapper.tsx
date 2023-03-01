@@ -19,7 +19,7 @@ export const LoadingProductList = () => {
         role="status"
         className="h-[91vh] w-full animate-pulse space-y-8 p-24 md:flex md:items-center md:space-y-0 md:space-x-8"
       >
-        <div className="flex h-[40vh] w-[20vw] items-center justify-center rounded bg-gray-300 dark:bg-gray-700 sm:w-96">
+        <div className="flex h-[40vh] w-[20vw] items-center justify-center rounded bg-gray-300 sm:w-96">
           <svg
             className="h-12 w-12 text-gray-200"
             xmlns="http://www.w3.org/2000/svg"

@@ -85,7 +85,7 @@ const SmallScreensSidebar = ({
     <motion.aside
       initial={{ translateX: "-100%" }}
       animate={isMenuOpen ? { translateX: "0%" } : { translateX: "-100%" }}
-      className=" fixed left-0 right-0 z-40 flex h-[92.1vh] w-full flex-col space-y-6 border-r bg-gray-50 py-6 px-4 shadow-lg md:hidden "
+      className=" fixed left-0 right-0 z-40 flex h-[92.1vh] w-full flex-col space-y-6 border-r bg-gray-50 py-6 px-4 shadow-lg lg:hidden "
       transition={{ type: "tween" }}
     >
       <ButtonSupportSecondary
@@ -174,7 +174,7 @@ const WideScreensSidebar = ({
   const currentCopy = language === "english" ? copy.en : copy.ita;
 
   return (
-    <aside className=" sticky top-24 left-0 hidden h-[90.5vh] w-96 flex-col space-y-6 border-r bg-gray-50 py-6 px-4 shadow-lg md:flex">
+    <aside className=" sticky top-24 left-0 hidden h-[90.5vh] w-96 flex-col space-y-6 border-r bg-gray-50 py-6 px-4 shadow-lg lg:flex">
       <ButtonSupportSecondary label="Store" href="/">
         <ShoppingBagIcon className="mr-2 h-5 w-5" />
       </ButtonSupportSecondary>

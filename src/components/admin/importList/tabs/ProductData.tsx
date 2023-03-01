@@ -69,12 +69,14 @@ const ProductData = ({
 
   const [currenteDeletionLabel, setCurrentDeletionLabel] = useState("");
   return (
-    <div className="flex w-full  flex-col items-start gap-x-24 px-12 py-12 lg:flex-row">
+    <div className="flex w-full  flex-col items-center justify-center gap-x-24 px-12 py-12 lg:flex-row">
       <div className="relative w-full max-w-sm rounded-lg md:rounded-none">
         <img
           src={product.defaultThumbnail}
           alt={product.description}
-          className={"h-full w-full rounded-lg object-contain md:rounded-none"}
+          className={
+            "mb-12 h-full w-full  object-contain md:rounded-none lg:mb-0"
+          }
         />
       </div>
       {/* FLEX RIGHT*/}

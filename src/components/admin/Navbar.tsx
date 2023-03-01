@@ -18,7 +18,7 @@ export default function Navbar({
   return (
     <nav className="sticky top-0 z-40 flex items-center   justify-between bg-neutral-900 p-3 shadow-md md:p-6">
       {/* Mobile Hamburger */}
-      <div className="md:hidden">
+      <div className="lg:hidden">
         <button
           onClick={() => setIsMenuOpen((prev) => !prev)}
           className="p-2 font-medium text-white"
@@ -61,7 +61,7 @@ export default function Navbar({
               className="flex items-center space-x-1 text-white"
             >
               <UserIcon className="h-5 w-5" />
-              <p className="hidden md:block">{sessionData.user?.name}</p>
+              <p className="hidden lg:block">{sessionData.user?.name}</p>
               <div className="jutify-center flex items-center">
                 <ChevronDownIcon className="h-4 w-4 stroke-2" />
                 {/* USER MENU */}

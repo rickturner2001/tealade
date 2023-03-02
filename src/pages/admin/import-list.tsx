@@ -10,12 +10,6 @@ import TabMenu from "../../components/admin/importedProducts/Tabs";
 
 type ProductTabs = "general" | "variants" | "images";
 
-// const importList = () => {
-//   return <ImportList />;
-// };
-
-// export default importList;
-
 const ImportList = () => {
   const { data: products } = api.products.getAllImportedProducts.useQuery();
 
@@ -49,19 +43,5 @@ const ImportList = () => {
     </AdminDashboardLayout>
   );
 };
-
-// const ProductCardDisplay = ({ product }: { product: ProductWithTags }) => {
-//   const [currentTab, setTab] = useState<ProductTabs>("general");
-//   switch (currentTab) {
-//     case "general":
-//       return <GeneralProductTab />;
-
-//     case "images":
-//       return <ImagesProductTab />;
-
-//     case "variants":
-//       return <VariantsProductTab />;
-//   }
-// };
 
 export default ImportList;

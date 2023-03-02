@@ -4,6 +4,7 @@ import { ProductWithTags } from "../../../types";
 import GeneralProductTab from "./GeneralProductTab";
 import VariantsProductTab from "./VariantsProductTab";
 import { Dispatch, SetStateAction, createContext, useState } from "react";
+import ImagesProductTab from "./ImagesProductTab";
 
 type Shipment = {
   courier: string;
@@ -36,6 +37,8 @@ interface ProductTabContextValue {
   setSection: Dispatch<SetStateAction<string>>;
   setShipments: Dispatch<SetStateAction<Shipment[]>>;
   setVariants: Dispatch<SetStateAction<Variant[]>>;
+  setMargin: Dispatch<SetStateAction<number>>;
+  margin: number;
 }
 
 export const ProductTabContext = createContext<ProductTabContextValue>({
@@ -60,6 +63,8 @@ export const ProductTabContext = createContext<ProductTabContextValue>({
   productName: "",
   productSection: "",
   shipments: [],
+  margin: 0,
+  setMargin: () => {},
 
   variants: [],
   setDefaultThumbnail: () => {},
@@ -93,6 +98,8 @@ const TabMenu = ({ product }: { product: ProductWithTags }) => {
     })
   );
 
+  const [margin, setMargin] = useState(0);
+
   const [productSection, setProductSection] = useState("");
   const [shipments, setShipments] = useState<Shipment[]>(
     product.shipments.map((ship) => {
@@ -116,6 +123,8 @@ const TabMenu = ({ product }: { product: ProductWithTags }) => {
         setShipments: setShipments,
         setVariants: setVariants,
         shipments: shipments,
+        margin: margin,
+        setMargin: setMargin,
         variants: variants,
       }}
     >
@@ -133,7 +142,7 @@ const TabMenu = ({ product }: { product: ProductWithTags }) => {
             label: "Variants",
             children: <VariantsProductTab />,
           },
-          { key: "3", label: "Images", children: "Product images" },
+          { key: "3", label: "Images", children: <ImagesProductTab /> },
         ]}
       />
     </ProductTabContext.Provider>

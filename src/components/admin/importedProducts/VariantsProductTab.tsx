@@ -1,19 +1,22 @@
 import { useContext, useState } from "react";
 import { ProductTabContext } from "./Tabs";
-import { Card, Col, Form, Image, InputNumber, Table } from "antd";
+import { Card, Col, Divider, Form, Image, InputNumber, Table } from "antd";
 import Meta from "antd/lib/card/Meta";
-import { PrismaClientExtensionError } from "@prisma/client/runtime";
 
 const columns: { title: string; dataIndex: string; key: string }[] = [
   { title: "", dataIndex: "thumbnail", key: "1" },
   { title: "Name", dataIndex: "name", key: "2" },
   { title: "Price", dataIndex: "price", key: "3" },
+  { title: "Margin", dataIndex: "margin", key: "3" },
 ];
 
 const VariantsProductTab = () => {
   const [isMarginError, setIsMarginError] = useState(false);
-  const [marginValue, setMarginValue] = useState(0);
-  const { variants } = useContext(ProductTabContext);
+  const {
+    variants,
+    margin: marginValue,
+    setMargin: setMarginValue,
+  } = useContext(ProductTabContext);
 
   const dataSource = variants.map((variant, idx) => {
     const price = marginValue
@@ -23,10 +26,11 @@ const VariantsProductTab = () => {
     return {
       key: idx,
       thumbnail: (
-        <Image src={variant.image} height={50} className="h-12 w-12" />
+        <Image src={variant.image} height={50} alt="" className="h-12 w-12" />
       ),
       name: variant.name,
       price: price.toFixed(2),
+      margin: (price - variant.price).toFixed(2),
     };
   });
   return (
@@ -53,6 +57,28 @@ const VariantsProductTab = () => {
       </div>
       <div className="block md:hidden">
         <Col className="space-y-6">
+          <Divider />
+          <Form.Item
+            label="Margin (%)"
+            className="w-full md:ml-auto md:max-w-sm"
+          >
+            <InputNumber
+              className="w-full"
+              placeholder="e.g. 40"
+              status={isMarginError ? "error" : ""}
+              onChange={(e) => {
+                console.log(e);
+                if (!e) {
+                  setMarginValue(0);
+                  setIsMarginError(true);
+                } else {
+                  setIsMarginError(false);
+                  setMarginValue(e as number);
+                }
+              }}
+            />
+          </Form.Item>
+          <Divider />
           {variants.map((variant) => {
             const price = marginValue
               ? (variant.price * marginValue) / 100 + variant.price
@@ -61,12 +87,14 @@ const VariantsProductTab = () => {
               <Card
                 className="mx-auto w-full max-w-xs"
                 key={variant.vid}
-                cover={<img alt="example" src={variant.image} />}
+                cover={<Image alt="" src={variant.image} />}
               >
-                <Meta
-                  title={variant.name}
-                  description={"$" + price.toFixed(2)}
-                />
+                <Meta title={variant.name} />
+                <Divider />
+                <span className="inline-flex w-full items-center justify-center gap-4 text-center text-base">
+                  ${variant.price}
+                  <span className="font-medium text-green-500">(${price})</span>
+                </span>
               </Card>
             );
           })}

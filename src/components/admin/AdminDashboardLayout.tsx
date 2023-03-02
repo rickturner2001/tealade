@@ -43,7 +43,11 @@ const AdminDashboardLayout = ({
     {
       key: "3",
       label: "Imported products",
-      icon: <BuildingStorefrontIcon className="h-4 w-4 stroke-2" />,
+      icon: (
+        <Link href={"/admin"}>
+          <BuildingStorefrontIcon className="h-4 w-4 stroke-2" />
+        </Link>
+      ),
     },
     {
       key: "4",

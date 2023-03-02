@@ -33,6 +33,16 @@ const GeneralProductTab = () => {
     },
   });
 
+  const {
+    mutate: removeProduct,
+    isLoading: loadingRemoval,
+    isError: errorRemoval,
+  } = api.products.deleteProduct.useMutation({
+    onSuccess: async () => {
+      await utils.products.getAllImportedProducts.invalidate();
+    },
+  });
+
   return (
     <div className="flex w-full flex-col items-center gap-4 md:flex-row">
       <Image
@@ -90,10 +100,17 @@ const GeneralProductTab = () => {
           })}
         </div>
         <div className="flex flex-col justify-end gap-2 md:flex-row">
-          <Button danger type="primary" className="w-full md:w-max">
+          <Button
+            danger
+            type="primary"
+            className="w-full md:w-max"
+            loading={loadingRemoval}
+            onClick={() => removeProduct({ pid: product.pid })}
+          >
             Remove product
           </Button>
           <Button
+            loading={loadingRegistration}
             type="primary"
             className=" w-full bg-blue-500 md:w-max"
             onClick={() => {

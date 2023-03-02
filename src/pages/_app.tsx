@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { api } from "../utils/api";
 
 import "../styles/globals.css";
+import { App, ConfigProvider } from "antd";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -12,7 +13,17 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <ConfigProvider
+        theme={{
+          token: {
+            // colorPrimary: "#F0B429",
+          },
+        }}
+      >
+        <App>
+          <Component {...pageProps} />
+        </App>
+      </ConfigProvider>
     </SessionProvider>
   );
 };

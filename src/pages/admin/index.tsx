@@ -41,6 +41,7 @@ import {
 import type { StoreProductIncludeAll } from "../../types";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { isError } from "@tanstack/react-query";
+import Link from "next/link";
 
 const ImportedProducts = () => {
   const { data: registeredProducts } =

@@ -2,9 +2,9 @@ import { motion } from "framer-motion";
 import { type ShopSection } from "@prisma/client";
 import { api } from "../../utils/api";
 import { useContext, useEffect, useState } from "react";
-import SectionsContext from "../context/SectionsContext";
 import Spinner from "../Spinner";
 import Image from "next/image";
+import SectionsContext from "../context/SectionsContext";
 
 const SectionsDisplay = () => {
   const { data: sections } = api.sections.getAllSesctions.useQuery();

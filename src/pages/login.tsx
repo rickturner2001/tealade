@@ -1,13 +1,9 @@
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import Navbar from "../components/admin/Navbar";
-import Spinner from "../components/Spinner";
-import { Button, Form, Input, InputRef, Space, Typography } from "antd";
+import { Button, Form, Input, type InputRef, Typography } from "antd";
 import AdminDashboardLayout from "../components/admin/AdminDashboardLayout";
 import BreadcrumbItem from "antd/lib/breadcrumb/BreadcrumbItem";
-// import loginBg from "../../public/media/images/bg.jpg";
 
 const { Title, Text } = Typography;
 

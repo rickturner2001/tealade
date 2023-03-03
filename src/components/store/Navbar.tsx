@@ -4,10 +4,10 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useContext } from "react";
-import StoreContext from "../context/StoreContext";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import ActionDropdown from "./navbar/ActionDropdown";
+import StoreContext from "../context/StoreContext";
 
 const Navbar = () => {
   const { isMenuOpen, setIsMenuOpen } = useContext(StoreContext);

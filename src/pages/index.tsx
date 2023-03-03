@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import Navbar from "../components/store/Navbar";
-import StoreContext from "../components/context/StoreContext";
 import { useState } from "react";
 import SectionsDisplay from "../components/store/SectionsDisplay";
 import Banner from "../components/store/Banner";
@@ -12,36 +11,28 @@ import Footer from "../components/store/Footer";
 import Head from "next/head";
 
 const Home: NextPage = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return (
     <>
       <Head>
         <title>Tealade | Shop the Latest Fashion Trends Online</title>
       </Head>
-      <StoreContext.Provider
-        value={{
-          isMenuOpen: isMenuOpen,
-          setIsMenuOpen: setIsMenuOpen,
-        }}
-      >
-        <Banner />
-        <Navbar />
-        <SectionsDisplay />
-        <div className="mx-auto my-16 w-full max-w-7xl border-t border-t-gray-300"></div>
-        <Features />
 
-        <div className="mx-auto my-16 w-full max-w-7xl border-t border-t-gray-300"></div>
-        <DiscountedProducts />
+      <Banner />
+      <Navbar />
+      <SectionsDisplay />
+      <div className="mx-auto my-16 w-full max-w-7xl border-t border-t-gray-300"></div>
+      <Features />
 
-        <div className="mx-auto my-16 w-full max-w-7xl border-t border-t-gray-300"></div>
-        <LatestProducts />
+      <div className="mx-auto my-16 w-full max-w-7xl border-t border-t-gray-300"></div>
+      <DiscountedProducts />
 
-        <div className="mx-auto my-16 w-full max-w-7xl border-t border-t-gray-300"></div>
-        <CTA />
+      <div className="mx-auto my-16 w-full max-w-7xl border-t border-t-gray-300"></div>
+      <LatestProducts />
 
-        <Footer />
-      </StoreContext.Provider>
+      <div className="mx-auto my-16 w-full max-w-7xl border-t border-t-gray-300"></div>
+      <CTA />
+
+      <Footer />
     </>
   );
 };

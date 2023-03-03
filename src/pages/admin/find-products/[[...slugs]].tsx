@@ -18,6 +18,7 @@ import { api } from "../../../utils/api";
 import { useState } from "react";
 import type { CjProduct } from "../../../types";
 import Meta from "antd/lib/card/Meta";
+import Link from "next/link";
 
 const ListingWrapper = ({
   pageNumber,
@@ -180,10 +181,12 @@ const ProductCard = ({
       className="w-full max-w-md md:max-w-xs"
       cover={<Image alt={product.productNameEn} src={product.productImage} />}
     >
-      <Meta title={product.productNameEn} className="text-center" />
-      <p className="mt-2 text-center text-base font-medium">
-        ${product.sellPrice}
-      </p>
+      <Link href={`/admin/product/${product.pid}`}>
+        <Meta title={product.productNameEn} className="text-center" />
+        <p className="mt-2 text-center text-base font-medium">
+          ${product.sellPrice}
+        </p>
+      </Link>
     </Card>
   );
 };

@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Breadcrumb, Space, type MenuProps } from "antd";
+import {
+  Breadcrumb,
+  Space,
+  type MenuProps,
+  Button,
+  Avatar,
+  Dropdown,
+} from "antd";
 import { Layout, Menu } from "antd";
 import {
   ArchiveBoxArrowDownIcon,
@@ -9,6 +16,9 @@ import {
 } from "@heroicons/react/24/outline";
 
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
+
+import { UserOutlined } from "@ant-design/icons";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -19,7 +29,7 @@ const AdminDashboardLayout = ({
   breadCrumbs: JSX.Element[];
   children: JSX.Element;
 }) => {
-  const [collapsed, setCollapsed] = useState(true);
+  const { data, status } = useSession();
 
   const menuItems: MenuProps["items"] = [
     {
@@ -55,13 +65,25 @@ const AdminDashboardLayout = ({
       icon: <WrenchScrewdriverIcon className="h-4 w-4 stroke-2" />,
     },
   ];
+
+  const dropdownItems: MenuProps["items"] = [
+    {
+      label: (
+        <Button
+          type="primary"
+          onClick={() => void (async () => await signOut())()}
+          className="bg-blue-500"
+        >
+          Sign out
+        </Button>
+      ),
+      key: "sign out",
+    },
+  ];
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-      >
+      <Sider collapsedWidth={0} collapsible>
         <div
           style={{
             height: 32,
@@ -72,11 +94,33 @@ const AdminDashboardLayout = ({
         <Menu theme="dark" mode="inline" items={menuItems} />
       </Sider>
       <Layout className="site-layout">
-        <Header style={{ padding: 0 }}>
-          <Space align="center" className="w-full justify-center">
-            <h1 className="text-center text-lg font-medium uppercase tracking-widest text-white">
+        <Header className="bg-white px-8">
+          <Space align="center" className="w-full items-center justify-between">
+            <span className="invisible hidden md:visible md:block"></span>
+            <h1 className="text-lg font-medium uppercase tracking-widest text-neutral-900 md:text-center ">
               Tealade
             </h1>
+            {status === "authenticated" ? (
+              <Dropdown trigger={["click"]} menu={{ items: dropdownItems }}>
+                <Avatar
+                  icon={
+                    data.user?.image ? (
+                      <img
+                        className="h-full w-full"
+                        alt="user icon"
+                        src={data.user.image}
+                      />
+                    ) : (
+                      <UserOutlined />
+                    )
+                  }
+                />
+              </Dropdown>
+            ) : (
+              <Button href="/login" type="primary" className="bg-blue-500">
+                Sign up
+              </Button>
+            )}
           </Space>
         </Header>
         <Content style={{ margin: "0 16px" }}>

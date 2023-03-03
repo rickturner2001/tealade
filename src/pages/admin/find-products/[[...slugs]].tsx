@@ -79,8 +79,9 @@ const ListingWrapper = ({
         <Space className="w-full justify-center py-12" align="center">
           {products && (
             <Pagination
+              pageSize={40}
               defaultCurrent={pageNumber}
-              total={pageNumber + 20}
+              total={999}
               // eslint-disable-next-line @typescript-eslint/no-misused-promises
               onChange={(e) =>
                 router.push(
@@ -166,6 +167,7 @@ const ProductCard = ({
           <Spin />
         ) : registeredPids.includes(product.pid) ? (
           <DeleteOutlined
+            color="red"
             key="remove"
             onClick={() => removeProduct({ pid: product.pid })}
           />

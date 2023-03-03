@@ -17,6 +17,7 @@
 import BreadcrumbItem from "antd/lib/breadcrumb/BreadcrumbItem";
 import AdminDashboardLayout from "../../components/admin/AdminDashboardLayout";
 import {
+  Alert,
   Badge,
   Card,
   Col,
@@ -38,10 +39,14 @@ import {
   getProductDiscount,
 } from "../../components/admin/functions";
 import type { StoreProductIncludeAll } from "../../types";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { isError } from "@tanstack/react-query";
 
 const ImportedProducts = () => {
   const { data: registeredProducts } =
     api.products.getAllStoreProducts.useQuery();
+
+  const [isError, setIsError] = useState(false);
   return (
     <AdminDashboardLayout
       breadCrumbs={[<BreadcrumbItem key={1}>Imported Products</BreadcrumbItem>]}
@@ -49,6 +54,15 @@ const ImportedProducts = () => {
       <>
         <Divider />
 
+        {isError && (
+          <Alert
+            message="Error! Only admins can interact with products"
+            onClose={() => setIsError(false)}
+            type="error"
+            closable
+            className="my-12"
+          />
+        )}
         {!registeredProducts ? (
           <Row className="gap-8">
             {[1, 2, 3, 4].map((idx) => (
@@ -63,7 +77,13 @@ const ImportedProducts = () => {
         ) : (
           <Row className="gap-8">
             {registeredProducts.map((prod) => {
-              return <ProductCardDisplay key={prod.pid} product={prod} />;
+              return (
+                <ProductCardDisplay
+                  key={prod.pid}
+                  setIsError={setIsError}
+                  product={prod}
+                />
+              );
             })}
           </Row>
         )}
@@ -73,20 +93,41 @@ const ImportedProducts = () => {
 };
 
 const ProductCardDisplay = ({
+  setIsError,
   product,
 }: {
+  setIsError: Dispatch<SetStateAction<boolean>>;
   product: StoreProductIncludeAll;
 }) => {
   const utils = api.useContext();
 
-  const { mutate: removeProduct, isLoading: loadingRemoval } =
-    api.products.deleteProduct.useMutation({
-      onSuccess: async () => {
-        await utils.products
-          .invalidate()
-          .catch((error) => console.error(error));
-      },
-    });
+  const {
+    mutate: moveProducstToEdits,
+    isLoading: loadingProductEdit,
+    isError: editsError,
+  } = api.products.setProductToEdit.useMutation({
+    onSuccess: async () => {
+      await utils.products.invalidate();
+    },
+  });
+
+  const {
+    mutate: removeProduct,
+    isLoading: loadingRemoval,
+    isError,
+  } = api.products.deleteProduct.useMutation({
+    onSuccess: async () => {
+      await utils.products.invalidate().catch((error) => console.error(error));
+    },
+  });
+
+  useEffect(() => {
+    if (isError || editsError) {
+      setIsError(true);
+    } else {
+      setIsError(false);
+    }
+  }, [isError, editsError, setIsError]);
 
   const priceRange = evaluatePriceRange(
     product.variants.map((variant) => variant.price)
@@ -99,7 +140,14 @@ const ProductCardDisplay = ({
   return (
     <Card
       actions={[
-        <EditOutlined key="edit" />,
+        loadingProductEdit ? (
+          <Spin />
+        ) : (
+          <EditOutlined
+            onClick={() => moveProducstToEdits({ pid: product.pid })}
+            key="edit"
+          />
+        ),
         loadingRemoval ? (
           <Spin />
         ) : (

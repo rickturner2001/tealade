@@ -1,24 +1,33 @@
 import { ProductTag } from "@prisma/client";
-import { Button, Divider, Form, Image, Input, Select, Spin, Tag } from "antd";
+import {
+  Button,
+  Divider,
+  Form,
+  Image,
+  Input,
+  InputRef,
+  Select,
+  Spin,
+  Tag,
+} from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import { api } from "../../../utils/api";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { ProductTabContext } from "./Tabs";
-
+import { DeleteOutlined } from "@ant-design/icons";
 const GeneralProductTab = () => {
   const { data: sections } = api.sections.getAllSesctions.useQuery();
 
   const {
     product,
     setProductName,
+    margin,
     productName,
     setProductDescription,
     productSection,
     setSection,
     productDescription,
-    defaultThumbnail,
     imagesSet,
-    shipments,
     variants,
   } = useContext(ProductTabContext);
 
@@ -42,6 +51,21 @@ const GeneralProductTab = () => {
       await utils.products.getAllImportedProducts.invalidate();
     },
   });
+
+  const { mutate: addNewTag, isLoading: loadingTag } =
+    api.products.addNewTag.useMutation({
+      onSuccess: async () => {
+        await utils.products.getAllImportedProducts.invalidate();
+      },
+    });
+  const { mutate: removeTag, isLoading: loadingRemoveTag } =
+    api.products.deleteTag.useMutation({
+      onSuccess: async () => {
+        await utils.products.getAllImportedProducts.invalidate();
+      },
+    });
+
+  const labelRef = useRef<InputRef>(null);
 
   return (
     <div className="flex w-full flex-col items-center gap-4 md:flex-row">
@@ -72,13 +96,55 @@ const GeneralProductTab = () => {
         </div>
         <Divider />
         <Form.Item label="Tags" name={"Tags"}>
-          <Input
-            placeholder="Trendy"
-            className=""
-            onKeyDown={(e) => {
-              if (e.key === "Enter") console.log("eh");
-            }}
-          />
+          <div className="flex gap-2">
+            <Input
+              placeholder="Trendy"
+              ref={labelRef}
+              className=""
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && labelRef?.current?.input?.value) {
+                  addNewTag({
+                    label: labelRef.current.input.value,
+                    pid: product.pid,
+                  });
+                  labelRef.current.input.value = "";
+                }
+              }}
+            />
+            <Button
+              onClick={() => {
+                if (labelRef?.current?.input?.value) {
+                  addNewTag({
+                    label: labelRef.current.input.value,
+                    pid: product.pid,
+                  });
+                  labelRef.current.input.value = "";
+                }
+              }}
+              loading={loadingTag}
+              className="bg-blue-500"
+              type="primary"
+            >
+              Add Tag
+            </Button>
+          </div>
+          <div className="mt-4 flex w-full flex-wrap items-center">
+            {product.tags.map((tag) => {
+              return (
+                <Button
+                  size="small"
+                  loading={loadingRemoveTag}
+                  onClick={() =>
+                    removeTag({ label: tag.label, pid: product.pid })
+                  }
+                  key={tag.label}
+                >
+                  {tag.label}
+                </Button>
+              );
+            })}
+          </div>
+          <Divider />
         </Form.Item>
         <Form.Item label="Section">
           {sections ? (
@@ -94,11 +160,6 @@ const GeneralProductTab = () => {
           )}
         </Form.Item>
 
-        <div className="flex w-full  flex-wrap">
-          {product.tags.map((tag) => {
-            return <Tag key={tag.label}>{tag.label}</Tag>;
-          })}
-        </div>
         <div className="flex flex-col justify-end gap-2 md:flex-row">
           <Button
             danger
@@ -120,7 +181,16 @@ const GeneralProductTab = () => {
                 name: productName,
                 pid: product.pid,
                 sectionId: productSection,
-                variants: variants,
+                variants: variants.map((variant) => {
+                  return {
+                    height: variant.height,
+                    image: variant.image,
+                    name: variant.name,
+                    price: variant.price + variant.price * (margin / 100),
+                    vid: variant.vid,
+                    width: variant.width,
+                  };
+                }),
               });
             }}
           >

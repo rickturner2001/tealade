@@ -2,18 +2,14 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { Button, Form, Input, type InputRef, Typography } from "antd";
-import AdminDashboardLayout from "../components/admin/AdminDashboardLayout";
 import BreadcrumbItem from "antd/lib/breadcrumb/BreadcrumbItem";
+import Navbar from "../components/store/Navbar";
 
 const { Title, Text } = Typography;
 
 const SignIn = () => {
   const { status } = useSession();
   const router = useRouter();
-
-  const menuState = useState(false);
-  const [isButtonClick, setIsButtonClick] = useState(false);
-  const [isMissingEmail, setIsMissingEmail] = useState(false);
 
   const emailRef = useRef<InputRef>(null);
 
@@ -40,9 +36,8 @@ const SignIn = () => {
   };
 
   return (
-    <AdminDashboardLayout
-      breadCrumbs={[<BreadcrumbItem key={"login"}>Login</BreadcrumbItem>]}
-    >
+    <>
+      <Navbar />
       <div className="mx-auto flex h-[70vh]  w-full max-w-lg flex-col items-center justify-center">
         <div className="w-full rounded-xl bg-white p-8 shadow-md">
           <Title className="text-center">Sign in to Tealade</Title>
@@ -88,7 +83,7 @@ const SignIn = () => {
           </Form>
         </div>
       </div>
-    </AdminDashboardLayout>
+    </>
   );
 };
 

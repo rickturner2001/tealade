@@ -1,20 +1,11 @@
-import { motion } from "framer-motion";
-import { CheckIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
-import { signIn } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { Button, Result } from "antd";
 
 const VerifyRequest = () => {
   const router = useRouter();
 
   const [currentEmail, setCurrentEmail] = useState<string | null>();
-  const [isChangingEmail, setIsChangingEmail] = useState(false);
-
-  const [isButtonClicked, setIsButtonClicked] = useState(false);
-
-  const newEmailRef = useRef<HTMLInputElement>(null);
-
   useEffect(() => {
     setCurrentEmail(localStorage.getItem("emailVerification"));
   }, []);
